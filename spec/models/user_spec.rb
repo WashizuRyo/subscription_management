@@ -1,31 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  before do
-    @user = User.new(name: "Example user", email: "user@example.com")
-  end
+  let!(:user) { FactoryBot.build(:user) }
 
-  it "is valid with valid attributes" do
-    expect(@user).to be_valid
-  end
-
-  it "is invalid without name" do
-    @user.name = nil
-    expect(@user).to_not be_valid
-  end
-
-  it "is invalid without email" do
-    @user.email = nil
-    expect(@user).to_not be_valid
-  end
-
-  it "is invalid with name too long" do
-      @user.name = "a" * 51
-      expect(@user).to_not be_valid
-  end
-
-  it "is invalid with email too long" do
-    @user.email = "a" * 244 + "@example.com"
-    expect(@user).to_not be_valid
-  end
+  it { is_expected.to validate_presence_of :name }
+  it { is_expected.to validate_presence_of :email }
+  it { is_expected.to validate_length_of(:name).is_at_most(50) }
+  it { is_expected.to validate_length_of(:email).is_at_most(255) }
 end
