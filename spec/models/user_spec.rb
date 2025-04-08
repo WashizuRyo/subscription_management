@@ -29,4 +29,17 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  it "email addresses should be unique" do
+    duplicate_user = user.dup
+    user.save
+    expect(duplicate_user).to_not be_valid
+  end
+
+  it "email addresses should be saved as lowercase" do
+    mixed_case_email = "FoO@example.COM"
+    user.email = mixed_case_email
+    user.save
+    expect(user.email).to eq mixed_case_email.downcase
+  end
 end
