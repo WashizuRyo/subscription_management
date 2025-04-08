@@ -4,11 +4,7 @@ RSpec.describe "Users", type: :system do
   scenario "user cannot signup with invalid information" do
     visit signup_path
     expect {
-      # fill_in "名前", with: " "
-      # fill_in "メールアドレス", with: "user@invalid"
-      # fill_in "パスワード", with: "foo"
-      # fill_in "パスワード確認", with: "bar"
-      fill_in_signup_form("名前", "メールアドレス", "パスワード", "パスワード確認")
+      fill_in_signup_form(" ", "user@invalid", "foo", "bar")
       click_button "アカウントを作成する"
 
       aggregate_failures do
@@ -21,14 +17,6 @@ RSpec.describe "Users", type: :system do
       end
     }.to_not change(User, :count)
   end
-
-  # scenario "user can signup with valid infomation" do
-  #   visit signup_path
-  #
-  #   expect {
-  #     fill_
-  #   }
-  # end
 
   def fill_in_signup_form(name, email, password, password_confirmation)
     fill_in "名前", with: name
