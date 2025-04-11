@@ -45,4 +45,8 @@ RSpec.describe User, type: :model do
     user.save
     expect(user.email).to eq mixed_case_email.downcase
   end
+
+  it "authenticated? should return false for a user with nil digest" do
+    expect(user.authenticated?("")).to be_falsy
+  end
 end

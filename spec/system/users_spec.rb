@@ -80,6 +80,13 @@ RSpec.describe "Users", type: :system do
           expect(page).to have_link("ログイン", href: login_path)
           expect(page).to_not have_link("ログアウト", href: logout_path)
         end
+
+        # 二個目のタブでログアウトをクッリクするユーザをシュミレート
+        page.driver.submit :delete, logout_path, {}
+        aggregate_failures do
+          expect(page).to have_link("ログイン", href: login_path)
+          expect(page).to_not have_link("ログアウト", href: logout_path)
+        end
       end
     end
   end
