@@ -51,7 +51,7 @@ RSpec.describe "Users", type: :system do
     end
   end
 
-  scenario "user can login with valid information" do
+  scenario "user can login with valid information followed by logout" do
     visit login_path
 
     fill_in_login_form(user.email, user.password)
@@ -61,6 +61,12 @@ RSpec.describe "Users", type: :system do
       expect(page).to have_current_path user_path(user)
       expect(page).to_not have_link("ログイン", href: login_path)
       expect(page).to have_link("ログアウト", href: logout_path)
+    end
+
+    click_link "ログアウト"
+    aggregate_failures do
+      expect(page).to have_link("ログイン", href: login_path)
+      expect(page).to_not have_link("ログアウト", href: logout_path)
     end
   end
 
