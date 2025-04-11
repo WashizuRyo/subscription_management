@@ -12,6 +12,7 @@
   </head>
 
   <body>
+    <%= render 'layouts/header' %>
     <%= yield %>
     <% flash.each do |message_type, message| %>
       <div><%= message %></div>

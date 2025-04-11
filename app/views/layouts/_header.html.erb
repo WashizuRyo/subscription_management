@@ -1,0 +1,9 @@
+<ul>
+  <li><%= link_to "ホーム", root_path %></li>
+  <% if logged_in %>
+    <li><%= link_to "プロフィール", current_user %></li>
+    <li><%= link_to "ログアウト", logout_path, data: { "turbo-method": :delete} %></li>
+  <% else %>
+    <li><%= link_to "ログイン", login_path %></li>
+  <% end %>
+</ul>
