@@ -36,6 +36,20 @@ RSpec.describe "Users", type: :system do
     end
   end
 
+  scenario "user cannot login with invalid information" do
+    visit login_path
+
+    fill_in "メールアドレス", with: "user@invalid"
+    fill_in "パスワード", with: "password"
+    click_button "ログイン"
+
+    aggregate_failures do
+      expect(page).to have_content("無効なパスワードまたはメールアドレスです")
+      visit root_path
+      expect(page).to_not have_content("無効なパスワードまたはメールアドレスです")
+    end
+  end
+
   def fill_in_signup_form(name, email, password, password_confirmation)
     fill_in "名前", with: name
     fill_in "メールアドレス", with: email
