@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
+  let(:user) { FactoryBot.create(:user) }
   scenario "user cannot signup with invalid information" do
     visit signup_path
     expect {
@@ -36,11 +37,10 @@ RSpec.describe "Users", type: :system do
     end
   end
 
-  scenario "user cannot login with invalid information" do
+  scenario "user cannot login with valid email, invalid password information" do
     visit login_path
 
-    fill_in "メールアドレス", with: "user@invalid"
-    fill_in "パスワード", with: "password"
+    fill_in_login_form(user.email, "invalid")
     click_button "ログイン"
 
     aggregate_failures do
@@ -50,10 +50,28 @@ RSpec.describe "Users", type: :system do
     end
   end
 
+  scenario "user can login with valid information" do
+    visit login_path
+
+    fill_in_login_form(user.email, user.password)
+    click_button "ログイン"
+
+    aggregate_failures do
+      expect(page).to have_current_path user_path(user)
+      expect(page).to_not have_link("ログイン", href: login_path)
+      expect(page).to have_link("ログアウト", href: logout_path)
+    end
+  end
+
   def fill_in_signup_form(name, email, password, password_confirmation)
     fill_in "名前", with: name
     fill_in "メールアドレス", with: email
     fill_in "パスワード", with: password
     fill_in "パスワード確認", with: password_confirmation
+  end
+
+  def fill_in_login_form(email, password)
+    fill_in "メールアドレス", with: email
+    fill_in "パスワード", with: password
   end
 end
