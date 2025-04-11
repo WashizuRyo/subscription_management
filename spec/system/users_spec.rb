@@ -34,6 +34,7 @@ RSpec.describe "Users", type: :system do
       expect(page).to have_content "サインアップに成功しました！"
       expect(page).to have_http_status(:success)
       expect(page).to have_current_path "/users/#{User.find_by(email: "valid@example.com").id}"
+      expect(page).to have_link("ログアウト", href: logout_path)
     end
   end
 
