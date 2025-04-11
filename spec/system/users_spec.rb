@@ -48,6 +48,7 @@ RSpec.describe "Users", type: :system do
       expect(page).to have_content("無効なパスワードまたはメールアドレスです")
       visit root_path
       expect(page).to_not have_content("無効なパスワードまたはメールアドレスです")
+      expect(page).to have_link("ログイン", href: login_path)
     end
   end
 
