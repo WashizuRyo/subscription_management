@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_13_041224) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_054706) do
   create_table "subscriptions", force: :cascade do |t|
-    t.string "subscriptions_name"
+    t.string "subscription_name"
     t.string "plan_name"
     t.decimal "price", precision: 10, scale: 2
     t.date "start_date"
