@@ -1,9 +1,9 @@
-<% if @user.errors.any? %>
+<% if object.errors.any? %>
   <div>
-    エラーが発生しました。(<%= @user.errors.count %>個)
+    エラーが発生しました。(<%= object.errors.count %>個)
   </div>
   <ul>
-    <% @user.errors.full_messages.each do |message| %>
+    <% object.errors.full_messages.each do |message| %>
       <li><%= message %></li>
     <% end %>
   </ul>
