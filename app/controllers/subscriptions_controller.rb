@@ -21,7 +21,7 @@ class SubscriptionsController < ApplicationController
     @user = User.find_by(id: params[:user_id])
     unless @user == current_user
       flash[:danger] = "権限がありません"
-      redirect_to root_path, status: :forbidden
+      redirect_to root_path
     end
   end
 
