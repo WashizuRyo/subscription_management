@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Subscriptions", type: :system do
   let(:user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
 
   it "user can create subscription" do
     login_as user
@@ -20,6 +21,17 @@ RSpec.describe "Subscriptions", type: :system do
     aggregate_failures do
       expect(page).to have_current_path "/"
       expect(page).to have_content "サブスクリプションが登録されました"
+    end
+  end
+
+  it "user redirect to root_path when access to other user /uses/:id/subscriptions/new" do
+    login_as user
+
+    visit new_user_subscription_path(other_user)
+
+    aggregate_failures do
+      expect(page).to have_content "権限がありません"
+      expect(page).to have_current_path root_path
     end
   end
 end
