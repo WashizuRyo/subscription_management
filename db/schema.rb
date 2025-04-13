@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_11_101018) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_041224) do
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "subscriptions_name"
+    t.string "plan_name"
+    t.decimal "price", precision: 10, scale: 2
+    t.date "start_date"
+    t.date "end_date"
+    t.date "billing_date"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -20,4 +33,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_11_101018) do
     t.string "remember_digest"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "subscriptions", "users"
 end
