@@ -1,7 +1,8 @@
 class SubscriptionsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
-  before_action :get_subscription
+  before_action :get_subscription, only: %i[edit update]
+
   def new
     @subscription = current_user.subscriptions.new
   end
