@@ -3,6 +3,10 @@ class SubscriptionsController < ApplicationController
   before_action :correct_user
   before_action :get_subscription, only: %i[edit update]
 
+  def index
+    @subscriptions = current_user.subscriptions
+  end
+
   def new
     @subscription = current_user.subscriptions.new
   end
