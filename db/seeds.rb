@@ -9,6 +9,39 @@
 #   end
 
 User.create!(name: "Tester",
-                        email: "tester@example.com",
-                        password: "password",
-                        password_confirmation: "password")
+             email: "tester@example.com",
+             password: "password",
+             password_confirmation: "password"
+)
+
+user = User.first
+subscriptions = [
+  {
+    subscription_name: "Netflix",
+    plan_name: "スタンダード",
+    price: 1490,
+    start_date: Date.today - 2.months,
+    end_date: Date.today + 10.months,
+    billing_date: Date.today.beginning_of_month
+  },
+  {
+    subscription_name: "Amazon Prime",
+    plan_name: "年間プラン",
+    price: 4900,
+    start_date: Date.today - 3.months,
+    end_date: Date.today + 9.months,
+    billing_date: Date.today - 3.months
+  },
+  {
+    subscription_name: "Spotify",
+    plan_name: "プレミアム",
+    price: 980,
+    start_date: Date.today - 1.month,
+    end_date: Date.today + 11.months,
+    billing_date: Date.today.beginning_of_month
+  }
+]
+
+subscriptions.each do |subscription_data|
+  user.subscriptions.create!(subscription_data)
+end
