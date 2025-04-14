@@ -1,0 +1,12 @@
+<h1>サブスクリプション一覧</h1>
+
+<div>
+  <% if @subscriptions.any? %>
+    <%= render @subscriptions %>
+  <% else %>
+    <div>
+      <h3>登録されたサブスクリプションはありません</h3>
+      <%= link_to "新規作成", new_user_subscription_path(current_user) %>
+    </div>
+  <% end %>
+</div>
