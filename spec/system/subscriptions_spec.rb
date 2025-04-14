@@ -50,6 +50,42 @@ RSpec.describe "Subscriptions", type: :system do
     end
   end
 
+  it "displays all subscriptions with edit links on the index page" do
+    subscription1 = FactoryBot.create(:subscription,
+                                      subscription_name: "Amazon Prime",
+                                      price: 2000,
+                                      user: user)
+    subscription2 = FactoryBot.create(:subscription,
+                                      subscription_name: "Hulu",
+                                      price: 4000,
+                                      user: user)
+
+    login_as user
+
+    visit user_subscriptions_path(user)
+
+    aggregate_failures do
+      expect(page).to have_content subscription1.subscription_name
+      expect(page).to have_content subscription1.price
+      expect(page).to have_link("編集", href: edit_user_subscription_path(user, id: subscription1))
+
+      expect(page).to have_content subscription2.subscription_name
+      expect(page).to have_content subscription2.price
+      expect(page).to have_link("編集", href: edit_user_subscription_path(user, id: subscription2))
+    end
+  end
+
+  it "displays '登録されたサブスクリプションはありません' and new links on the index page" do
+    login_as user
+
+    visit user_subscriptions_path(user)
+
+    aggregate_failures do
+      expect(page).to have_content "登録されたサブスクリプションはありません"
+      expect(page).to have_link("新規作成", href: new_user_subscription_path(user))
+    end
+  end
+
   def fill_in_subscription_form(price = 1000,
                                 subscription_name = "Netflix",
                                 plan_name = "スタンダード",
