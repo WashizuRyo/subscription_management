@@ -1,0 +1,11 @@
+<div>
+  <h3><%= subscription.subscription_name %></h3>
+  <p>プラン: <%= subscription.plan_name %></p>
+  <p>料金: <%= subscription.price %></p>
+  <p>開始日: <%= subscription.start_date %></p>
+  <p>終了日: <%= subscription.end_date %></p>
+  <p>請求日: <%= subscription.billing_date %></p>
+  <div>
+    <%= link_to "編集", edit_user_subscription_path(current_user, id: subscription.id) %>
+  </div>
+</div>
