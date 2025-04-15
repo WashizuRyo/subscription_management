@@ -1,7 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
-  before_action :get_subscription, only: %i[edit update]
+  before_action :get_subscription, only: %i[edit update destroy]
 
   def index
     @subscriptions = current_user.subscriptions
@@ -34,6 +34,16 @@ class SubscriptionsController < ApplicationController
       redirect_to root_path
     else
       render "edit", status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @subscription.destroy
+      flash[:success] = "サブスクリプションを削除しました"
+      redirect_to user_subscriptions_path(current_user)
+    else
+      flash[:danger] = "サブスクリプションの削除に失敗しました"
+      redirect_to user_subscription_path(current_user)
     end
   end
 
