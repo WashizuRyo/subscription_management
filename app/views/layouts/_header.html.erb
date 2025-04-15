@@ -1,6 +1,7 @@
 <ul>
   <li><%= link_to "ホーム", root_path %></li>
   <% if logged_in? %>
+    <li><%= link_to "サブスクリプション", user_subscriptions_path(current_user) %></li>
     <li><%= link_to "プロフィール", current_user %></li>
     <li><%= link_to "ログアウト", logout_path, data: { "turbo-method": :delete} %></li>
   <% else %>
