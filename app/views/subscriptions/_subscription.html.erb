@@ -7,5 +7,10 @@
   <p>請求日: <%= subscription.billing_date %></p>
   <div>
     <%= link_to "編集", edit_user_subscription_path(current_user, id: subscription.id) %>
+    <%= button_to "削除",
+                  user_subscription_path(current_user, id: subscription.id),
+                  method: :delete,
+                  data: { turbo_confirm: "#{subscription.subscription_name}を削除してもよろしいですか?"}
+    %>
   </div>
 </div>
