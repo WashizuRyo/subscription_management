@@ -99,4 +99,18 @@ RSpec.describe "Subscriptions", type: :system do
     fill_in "終了日", with: end_date
     fill_in "請求日", with: billing_date
   end
+
+  it "displays 'サブスクリプションを削除しました' when subscription deleted" do
+    subscription
+    login_as user
+
+    visit user_subscriptions_path(user)
+
+    expect do
+      expect(page).to have_content subscription.subscription_name
+      click_button "削除"
+      expect(page).to have_content "サブスクリプションを削除しました"
+      expect(page).to_not have_content subscription.subscription_name
+    end.to change(Subscription, :count).by(-1)
+  end
 end
