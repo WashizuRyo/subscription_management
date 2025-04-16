@@ -4,4 +4,8 @@ FactoryBot.define do
     sequence(:email) { |n| "tester#{n}@example.com" }
     password { "password" }
   end
+
+  trait :with_subscriptions do
+    after(:create) { |user| create_list(:subscription, 5, user: user) }
+  end
 end
