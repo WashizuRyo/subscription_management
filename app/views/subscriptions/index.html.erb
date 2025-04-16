@@ -1,6 +1,29 @@
 <h1>サブスクリプション一覧</h1>
 
 <div>
+  <%= form_with(url: user_subscriptions_path(current_user), method: :get) do |f| %>
+    <%= f.search_field :subscription_name, placeholder: "サブスクリプションを検索", value: params[:subscription_name] %>
+      <div>
+        <div>
+          <%= f.label :first_column, "並び替え（優先）" %>
+          <div>
+            <%= f.select :first_column, [["選択してください", ""], %w[サブスクリプション名 subscription_name], %w[料金 price]], selected: params[:first_column] || ""%>
+            <%= f.select :first_direction, [%w[昇順 asc], %w[降順 desc]], selected: params[:first_direction] || "asc"%>
+          </div>
+        </div>
+        <%= f.label :second_column, "並び替え（第2条件）" %>
+        <div>
+          <div>
+            <%= f.select :second_column, [["選択してください", ""], %w[サブスクリプション名 subscription_name], %w[料金 price], %w[開始日 start_date]], selected: params[:second_column] || ""%>
+            <%= f.select :second_direction, [%w[降順 desc], %w[昇順 asc]], selected: params[:second_direction] || "asc"%>
+          </div>
+        </div>
+      </div>
+      <%= f.submit "検索" %>
+    <% end %>
+  <div>
+</div>
+
   <% if @subscriptions.any? %>
     <%= render @subscriptions %>
   <% else %>
