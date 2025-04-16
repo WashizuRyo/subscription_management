@@ -4,7 +4,26 @@ class SubscriptionsController < ApplicationController
   before_action :get_subscription, only: %i[edit update destroy]
 
   def index
-    @subscriptions = current_user.subscriptions
+    subscription_name = search_subscription_params[:subscription_name]
+    first_column = search_subscription_params[:first_column]
+    first_direction = search_subscription_params[:first_direction]
+    second_column = search_subscription_params[:second_column]
+    second_direction = search_subscription_params[:second_direction]
+
+    orders = []
+    orders << { first_column => first_direction == "asc" ? "asc" : "desc" } if first_column.present?
+    orders << { second_column => second_direction == "asc" ? "asc" : "desc" } if second_column.present?
+
+    begin
+      validated_orders = Subscription.allowed_sort_orders(orders) if orders.present?
+    rescue ArgumentError => e
+      flash.now[:danger] = e
+      @subscriptions = current_user.subscriptions
+      render "index"
+    end
+
+    @subscriptions = current_user.search_subscriptions(subscription_name: subscription_name,
+                                                       order_by: validated_orders)
   end
 
   def new
@@ -68,5 +87,13 @@ class SubscriptionsController < ApplicationController
 
   def get_subscription
     @subscription = Subscription.find_by(id: params[:id])
+  end
+
+  def search_subscription_params
+    params.permit(:subscription_name,
+                                         :first_column,
+                                         :first_direction,
+                                         :second_column,
+                                         :second_direction)
   end
 end

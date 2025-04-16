@@ -37,4 +37,21 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  def search_subscriptions(subscription_name: nil, order_by: [])
+    result = subscriptions
+
+    if subscription_name.present?
+      result = result.where(
+        "subscription_name LIKE :subscription_name",
+        subscription_name: "%#{subscription_name}%"
+      )
+    end
+
+    if order_by.present?
+      result = result.order(order_by)
+    end
+
+    result
+  end
 end

@@ -9,6 +9,29 @@ class Subscription < ApplicationRecord
   validates :billing_date, presence: true
   validate :end_date_after_start_date
 
+  ALLOWED_COLUMNS = %w[subscription_name price]
+  ALLOWED_DIRECTIONS = %w[asc desc]
+
+  def self.allowed_sort_orders(orders)
+    valid_orders = []
+
+    orders.each do |order|
+      column, direction = order.first
+
+      unless ALLOWED_COLUMNS.include?(column)
+        raise ArgumentError, "無効なカラム名です: #{column}"
+      end
+
+      unless ALLOWED_DIRECTIONS.include?(direction)
+        raise ArgumentError, "無効なソート方向です: #{direction}"
+      end
+
+      valid_orders << { column => direction }
+    end
+
+    valid_orders
+  end
+
   private
 
   def end_date_after_start_date
