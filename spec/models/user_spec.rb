@@ -49,4 +49,59 @@ RSpec.describe User, type: :model do
   it "authenticated? should return false for a user with nil digest" do
     expect(user.authenticated?("")).to be_falsy
   end
+
+  it "returns subscriptions that match the subscription_name" do
+    FactoryBot.create(:subscription,
+                                     subscription_name: "Netflix",
+                                     price: 10000,
+                                     plan_name: "standard",
+                                     user: user)
+
+    result = user.search_subscriptions(subscription_name: "Netflix").first
+
+    aggregate_failures do
+      expect(result.subscription_name).to eq "Netflix"
+      expect(result.price).to eq 10000
+      expect(result.plan_name).to eq "standard"
+    end
+  end
+
+  it "returns subscriptions that sorted by order" do
+    FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix")
+    FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix")
+    FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net")
+
+    result = user.search_subscriptions(subscription_name: "net", order_by: [ { "price" => "desc" } ])
+
+    aggregate_failures do
+      expect(result.first.price).to eq 30
+      expect(result.second.price).to eq 20
+      expect(result.third.price).to eq 10
+    end
+  end
+
+  it "returns subscriptions that sorted by orders" do
+    FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix", plan_name: "standard")
+    FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix", plan_name: "standard")
+    FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net", plan_name: "standard")
+    first_column = "plan_name"
+    first_direction = "asc"
+    second_column = "price"
+    second_direction = "asc"
+    orders = [ { first_column => first_direction }, { second_column => second_direction } ]
+
+    result = user.search_subscriptions(subscription_name: "net", order_by: orders)
+
+    aggregate_failures do
+      expect(result.first.price).to eq 10
+      expect(result.second.price).to eq 20
+      expect(result.third.price).to eq 30
+    end
+  end
+
+  let(:user) { FactoryBot.create(:user, :with_subscriptions) }
+  it "returns all subscriptions when args not exits" do
+    result = user.search_subscriptions
+    expect(result.length).to eq 5
+  end
 end
