@@ -4,7 +4,8 @@ class SubscriptionsController < ApplicationController
   before_action :get_subscription, only: %i[edit update destroy]
 
   def index
-    subscription_name = search_subscription_params[:subscription_name]
+    search_column = search_subscription_params[:search_column]
+    search_value = search_subscription_params[:search_value]
     first_column = search_subscription_params[:first_column]
     first_direction = search_subscription_params[:first_direction]
     second_column = search_subscription_params[:second_column]
@@ -22,7 +23,8 @@ class SubscriptionsController < ApplicationController
       render "index"
     end
 
-    @subscriptions = current_user.search_subscriptions(subscription_name: subscription_name,
+    @subscriptions = current_user.search_subscriptions(search_column: search_column,
+                                                       search_value: search_value,
                                                        order_by: validated_orders)
   end
 
@@ -90,7 +92,8 @@ class SubscriptionsController < ApplicationController
   end
 
   def search_subscription_params
-    params.permit(:subscription_name,
+    params.permit(:search_column,
+                                         :search_value,
                                          :first_column,
                                          :first_direction,
                                          :second_column,

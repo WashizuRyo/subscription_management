@@ -38,13 +38,13 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  def search_subscriptions(subscription_name: nil, order_by: [])
+  def search_subscriptions(search_column: nil, search_value: nil, order_by: [])
     result = subscriptions
 
-    if subscription_name.present?
+    if search_column.present? && search_value.present?
       result = result.where(
-        "subscription_name LIKE :subscription_name",
-        subscription_name: "%#{subscription_name}%"
+        "#{search_column} LIKE :search_value",
+        search_value: "%#{search_value}%"
       )
     end
 
