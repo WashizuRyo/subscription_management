@@ -2,8 +2,9 @@
 
 <div>
   <%= form_with(url: user_subscriptions_path(current_user), method: :get) do |f| %>
-    <%= f.search_field :subscription_name, placeholder: "サブスクリプションを検索", value: params[:subscription_name] %>
       <div>
+        <%= f.label :search_column, "検索するカラム" %>
+        <%= f.select :search_column, [["選択してください", ""],  %w[サブスクリプション名 subscription_name], %w[料金 price]] %>
         <div>
           <%= f.label :first_column, "並び替え（優先）" %>
           <div>
