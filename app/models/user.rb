@@ -46,7 +46,7 @@ class User < ApplicationRecord
     end
 
     unless ALLOWED_COLUMNS.include?(search_column)
-      raise ArgumentError, "無効なカラム名です #{search_column}"
+      raise ArgumentError, "無効なカラム名です: #{search_column}"
     end
 
     if search_column.present? && search_value.present?

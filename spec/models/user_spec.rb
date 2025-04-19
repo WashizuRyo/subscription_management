@@ -109,4 +109,11 @@ RSpec.describe User, type: :model do
     result = user.search_subscriptions
     expect(result.length).to eq 5
   end
+
+  it "returns Argument Error when search_column is not allowed" do
+    expect do
+      user.search_subscriptions(search_column: "invalid",
+                                search_value: "Amazon")
+    end.to raise_error(ArgumentError, "無効なカラム名です: invalid")
+  end
 end
