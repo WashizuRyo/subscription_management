@@ -41,7 +41,7 @@ class User < ApplicationRecord
   def search_subscriptions(search_column: nil, search_value: nil, page: 1, order_by: [])
     result = subscriptions
 
-    if search_column.nil? && search_value.nil?
+    if search_column.nil? && search_value.nil? || search_column == ""
       return result.paginate(page: page, per_page: 5)
     end
 
