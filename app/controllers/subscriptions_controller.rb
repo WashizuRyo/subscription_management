@@ -24,7 +24,7 @@ class SubscriptionsController < ApplicationController
                                                          order_by: validated_orders)
     rescue ArgumentError => e
       flash.now[:danger] = e
-      @subscriptions = current_user.subscriptions
+      @subscriptions = current_user.subscriptions.paginate(page: page, per_page: 5)
       render "index"
     end
   end

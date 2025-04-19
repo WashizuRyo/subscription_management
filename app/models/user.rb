@@ -42,7 +42,7 @@ class User < ApplicationRecord
     result = subscriptions
 
     if search_column.nil? && search_value.nil?
-      return result
+      return result.paginate(page: page, per_page: 5)
     end
 
     unless ALLOWED_COLUMNS.include?(search_column)
