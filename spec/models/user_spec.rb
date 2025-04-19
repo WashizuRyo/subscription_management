@@ -85,17 +85,17 @@ RSpec.describe User, type: :model do
     end
 
     it "returns subscriptions that sorted by orders" do
-      FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix", plan_name: "standard")
-      FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix", plan_name: "standard")
-      FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net", plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 10, plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 20, plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 30, plan_name: "standard")
       first_column = "plan_name"
       first_direction = "asc"
       second_column = "price"
       second_direction = "asc"
       orders = [ { first_column => first_direction }, { second_column => second_direction } ]
 
-      result = user.search_subscriptions(search_column: "subscription_name",
-                                         search_value: "net",
+      result = user.search_subscriptions(search_column: "plan_name",
+                                         search_value: "standard",
                                          order_by: orders)
 
       aggregate_failures do

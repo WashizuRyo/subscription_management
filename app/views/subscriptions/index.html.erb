@@ -7,6 +7,7 @@
           <%= f.label :search_column, "検索するカラム" %>
           <%= f.select :search_column, [["選択してください", ""],
                                         %w[サブスクリプション名 subscription_name],
+                                        %w[プラン名 plan_name],
                                         %w[料金 price],
                                         %w[開始日 start_date],
                                         %w[終了日 end_date],
@@ -19,6 +20,7 @@
           <div>
             <%= f.select :first_column, [["選択してください", ""],
                                          %w[サブスクリプション名 subscription_name],
+                                         %w[プラン名 plan_name],
                                          %w[料金 price],
                                          %w[開始日 start_date],
                                          %w[終了日 end_date],
@@ -29,7 +31,9 @@
         <%= f.label :second_column, "並び替え（第2条件）" %>
         <div>
           <div>
-            <%= f.select :second_column, [["選択してください", ""], %w[サブスクリプション名 subscription_name],
+            <%= f.select :second_column, [["選択してください", ""],
+                                          %w[サブスクリプション名 subscription_name],
+                                          %w[プラン名 plan_name],
                                           %w[料金 price],
                                           %w[開始日 start_date],
                                           %w[終了日 end_date],
