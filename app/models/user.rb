@@ -41,7 +41,13 @@ class User < ApplicationRecord
   def search_subscriptions(search_column: nil, search_value: nil, page: 1, order_by: [])
     result = subscriptions
 
-    if search_column.nil? && search_value.nil? || search_column == ""
+    # ソートのみクエリに設定された場合
+    if search_column == "" && order_by.present?
+      return result.order(order_by).paginate(page: page, per_page: 5)
+    end
+
+    # 引数が渡されなかった場合
+    if search_column.nil? && search_value.nil?
       return result.paginate(page: page, per_page: 5)
     end
 
