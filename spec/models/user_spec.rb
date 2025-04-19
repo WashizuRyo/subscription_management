@@ -117,5 +117,19 @@ RSpec.describe User, type: :model do
                                   search_value: "Amazon")
       end.to raise_error(ArgumentError, "無効なカラム名です: invalid")
     end
+
+    it "returns subscriptions that exactly match when search_column is 'price'" do
+      FactoryBot.create(:subscription, user: user, price: 9000)
+      FactoryBot.create(:subscription, user: user, price: 900)
+      FactoryBot.create(:subscription, user: user, price: 90)
+
+      result = user.search_subscriptions(search_column: "price",
+                                         search_value: 90)
+
+      aggregate_failures do
+        expect(result.length).to eq 1
+        expect(result.first.price).to eq 90
+      end
+    end
   end
 end
