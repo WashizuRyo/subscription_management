@@ -49,7 +49,12 @@ class User < ApplicationRecord
       raise ArgumentError, "無効なカラム名です: #{search_column}"
     end
 
-    if search_column.present? && search_value.present?
+    if search_column == "price"
+      result = result.where(
+        "#{search_column} LIKE :search_value",
+        search_value: search_value
+      )
+    else
       result = result.where(
         "#{search_column} LIKE :search_value",
         search_value: "%#{search_value}%"
