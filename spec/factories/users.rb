@@ -8,4 +8,8 @@ FactoryBot.define do
   trait :with_subscriptions do
     after(:create) { |user| create_list(:subscription, 5, user: user) }
   end
+
+  trait :with_many_subscriptions do
+    after(:create) { |user| create_list(:subscription, 20, user: user) }
+  end
 end

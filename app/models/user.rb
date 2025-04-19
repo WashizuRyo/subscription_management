@@ -38,7 +38,7 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  def search_subscriptions(search_column: nil, search_value: nil, order_by: [])
+  def search_subscriptions(search_column: nil, search_value: nil, page: 1, order_by: [])
     result = subscriptions
 
     if search_column.nil? && search_value.nil?
@@ -65,6 +65,6 @@ class User < ApplicationRecord
       result = result.order(order_by)
     end
 
-    result
+    result.paginate(page: page, per_page: 5)
   end
 end

@@ -50,6 +50,7 @@
 
   <% if @subscriptions.any? %>
     <%= render @subscriptions %>
+    <%= will_paginate @subscriptions%>
   <% else %>
     <div>
       <h3>登録されたサブスクリプションはありません</h3>

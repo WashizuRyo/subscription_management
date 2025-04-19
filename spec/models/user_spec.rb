@@ -78,6 +78,7 @@ RSpec.describe User, type: :model do
                                          order_by: [ { "price" => "desc" } ])
 
       aggregate_failures do
+        expect(result.length).to eq 3
         expect(result.first.price).to eq 30
         expect(result.second.price).to eq 20
         expect(result.third.price).to eq 10
@@ -99,6 +100,7 @@ RSpec.describe User, type: :model do
                                          order_by: orders)
 
       aggregate_failures do
+        expect(result.length).to eq 3
         expect(result.first.price).to eq 10
         expect(result.second.price).to eq 20
         expect(result.third.price).to eq 30
@@ -129,6 +131,16 @@ RSpec.describe User, type: :model do
       aggregate_failures do
         expect(result.length).to eq 1
         expect(result.first.price).to eq 90
+      end
+    end
+
+    it "returns 5 subscriptions when page is 1" do
+      FactoryBot.create(:user, :with_many_subscriptions)
+
+      result = user.search_subscriptions(page: 1)
+
+      aggregate_failures do
+        expect(result.length).to eq 5
       end
     end
   end
