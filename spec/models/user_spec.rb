@@ -143,5 +143,12 @@ RSpec.describe User, type: :model do
         expect(result.length).to eq 5
       end
     end
+
+    it "returns 5 subscriptions when search_column is ''(blank)" do
+      user = FactoryBot.create(:user, :with_subscriptions)
+
+      result = user.search_subscriptions(search_column: "")
+      expect(result.length).to eq 5
+    end
   end
 end
