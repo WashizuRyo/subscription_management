@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "Users", type: :system do
   let(:user) { FactoryBot.create(:user) }
 
-  describe "user signup" do
-    context "invalid information" do
-      scenario "user cannot signup" do
+  describe "sign up" do
+    context "with invalid information" do
+      scenario "shows error messages" do
         visit signup_path
         expect {
           fill_in_signup_form(" ", "user@invalid", "foo", "bar")
@@ -23,8 +23,8 @@ RSpec.describe "Users", type: :system do
       end
     end
 
-    context "valid information" do
-      scenario "user can signup" do
+    context "with valid information" do
+      scenario "shows success messages" do
         visit signup_path
 
         expect {
@@ -45,9 +45,9 @@ RSpec.describe "Users", type: :system do
     end
   end
 
-  describe "user login and logout" do
-    context "with valid email, invalid password information" do
-      scenario "user cannot login" do
+  describe "login" do
+    context "with valid email and invalid password" do
+      scenario "shows error messages" do
         visit login_path
 
         fill_in_login_form(user.email, "invalid")
@@ -63,7 +63,7 @@ RSpec.describe "Users", type: :system do
     end
 
     context "with valid information" do
-      scenario "user can login followed by logout" do
+      scenario "logs in and logs out the user successfully" do
         visit login_path
 
         fill_in_login_form(user.email, user.password)
