@@ -10,6 +10,7 @@ class SubscriptionsController < ApplicationController
     first_direction = search_subscription_params[:first_direction]
     second_column = search_subscription_params[:second_column]
     second_direction = search_subscription_params[:second_direction]
+    page = search_subscription_params[:page] || 1
 
     orders = []
     orders << { first_column => first_direction == "asc" ? "asc" : "desc" } if first_column.present?
@@ -19,6 +20,7 @@ class SubscriptionsController < ApplicationController
       validated_orders = Subscription.allowed_sort_orders(orders) if orders.present?
       @subscriptions = current_user.search_subscriptions(search_column: search_column,
                                                          search_value: search_value,
+                                                         page: page,
                                                          order_by: validated_orders)
     rescue ArgumentError => e
       flash.now[:danger] = e
@@ -92,10 +94,11 @@ class SubscriptionsController < ApplicationController
 
   def search_subscription_params
     params.permit(:search_column,
-                                         :search_value,
-                                         :first_column,
-                                         :first_direction,
-                                         :second_column,
-                                         :second_direction)
+                  :search_value,
+                  :first_column,
+                  :first_direction,
+                  :second_column,
+                  :second_direction,
+                  :page)
   end
 end
