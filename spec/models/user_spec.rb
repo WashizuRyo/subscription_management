@@ -57,7 +57,8 @@ RSpec.describe User, type: :model do
                                      plan_name: "standard",
                                      user: user)
 
-    result = user.search_subscriptions(subscription_name: "Netflix").first
+    result = user.search_subscriptions(search_column: "subscription_name",
+                                       search_value: "Netflix").first
 
     aggregate_failures do
       expect(result.subscription_name).to eq "Netflix"
@@ -71,7 +72,9 @@ RSpec.describe User, type: :model do
     FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix")
     FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net")
 
-    result = user.search_subscriptions(subscription_name: "net", order_by: [ { "price" => "desc" } ])
+    result = user.search_subscriptions(search_column: "subscription_name",
+                                       search_value: "net",
+                                       order_by: [ { "price" => "desc" } ])
 
     aggregate_failures do
       expect(result.first.price).to eq 30
@@ -90,7 +93,7 @@ RSpec.describe User, type: :model do
     second_direction = "asc"
     orders = [ { first_column => first_direction }, { second_column => second_direction } ]
 
-    result = user.search_subscriptions(subscription_name: "net", order_by: orders)
+    result = user.search_subscriptions(search_column: "net", order_by: orders)
 
     aggregate_failures do
       expect(result.first.price).to eq 10
