@@ -107,8 +107,8 @@ RSpec.describe User, type: :model do
       end
     end
 
-    let(:user) { FactoryBot.create(:user, :with_subscriptions) }
     it "returns all subscriptions when args not exits" do
+      user = FactoryBot.create(:user, :with_subscriptions)
       result = user.search_subscriptions
       expect(result.length).to eq 5
     end
@@ -135,7 +135,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns 5 subscriptions when page is 1" do
-      FactoryBot.create(:user, :with_many_subscriptions)
+      user = FactoryBot.create(:user, :with_many_subscriptions)
 
       result = user.search_subscriptions(page: 1)
 
