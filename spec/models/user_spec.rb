@@ -93,7 +93,9 @@ RSpec.describe User, type: :model do
     second_direction = "asc"
     orders = [ { first_column => first_direction }, { second_column => second_direction } ]
 
-    result = user.search_subscriptions(search_column: "net", order_by: orders)
+    result = user.search_subscriptions(search_column: "subscription_name",
+                                       search_value: "net",
+                                       order_by: orders)
 
     aggregate_failures do
       expect(result.first.price).to eq 10
