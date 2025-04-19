@@ -17,15 +17,14 @@ class SubscriptionsController < ApplicationController
 
     begin
       validated_orders = Subscription.allowed_sort_orders(orders) if orders.present?
+      @subscriptions = current_user.search_subscriptions(search_column: search_column,
+                                                         search_value: search_value,
+                                                         order_by: validated_orders)
     rescue ArgumentError => e
       flash.now[:danger] = e
       @subscriptions = current_user.subscriptions
       render "index"
     end
-
-    @subscriptions = current_user.search_subscriptions(search_column: search_column,
-                                                       search_value: search_value,
-                                                       order_by: validated_orders)
   end
 
   def new
