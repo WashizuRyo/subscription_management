@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "search_subscriptions" do
-    it "returns subscriptions that match the subscription_name" do
+    it "returns subscriptions that match the search_column" do
       FactoryBot.create(:subscription,
                                        subscription_name: "Netflix",
                                        price: 10000,
