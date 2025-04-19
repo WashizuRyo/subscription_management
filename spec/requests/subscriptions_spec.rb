@@ -32,9 +32,11 @@ RSpec.describe "Subscriptions", type: :request do
       end
     end
 
-    it "redirects to login_path when not logged in" do
-      get user_subscriptions_path(user)
-      expect(response).to redirect_to login_path
+    context "not logged in" do
+      it "redirects to login_path when not logged in" do
+        get user_subscriptions_path(user)
+        expect(response).to redirect_to login_path
+      end
     end
   end
 end

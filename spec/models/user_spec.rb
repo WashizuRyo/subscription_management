@@ -50,70 +50,72 @@ RSpec.describe User, type: :model do
     expect(user.authenticated?("")).to be_falsy
   end
 
-  it "returns subscriptions that match the subscription_name" do
-    FactoryBot.create(:subscription,
-                                     subscription_name: "Netflix",
-                                     price: 10000,
-                                     plan_name: "standard",
-                                     user: user)
+  describe "search_subscriptions" do
+    it "returns subscriptions that match the subscription_name" do
+      FactoryBot.create(:subscription,
+                                       subscription_name: "Netflix",
+                                       price: 10000,
+                                       plan_name: "standard",
+                                       user: user)
 
-    result = user.search_subscriptions(search_column: "subscription_name",
-                                       search_value: "Netflix").first
+      result = user.search_subscriptions(search_column: "subscription_name",
+                                         search_value: "Netflix").first
 
-    aggregate_failures do
-      expect(result.subscription_name).to eq "Netflix"
-      expect(result.price).to eq 10000
-      expect(result.plan_name).to eq "standard"
+      aggregate_failures do
+        expect(result.subscription_name).to eq "Netflix"
+        expect(result.price).to eq 10000
+        expect(result.plan_name).to eq "standard"
+      end
     end
-  end
 
-  it "returns subscriptions that sorted by order" do
-    FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix")
-    FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix")
-    FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net")
+    it "returns subscriptions that sorted by order" do
+      FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix")
+      FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix")
+      FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net")
 
-    result = user.search_subscriptions(search_column: "subscription_name",
-                                       search_value: "net",
-                                       order_by: [ { "price" => "desc" } ])
+      result = user.search_subscriptions(search_column: "subscription_name",
+                                         search_value: "net",
+                                         order_by: [ { "price" => "desc" } ])
 
-    aggregate_failures do
-      expect(result.first.price).to eq 30
-      expect(result.second.price).to eq 20
-      expect(result.third.price).to eq 10
+      aggregate_failures do
+        expect(result.first.price).to eq 30
+        expect(result.second.price).to eq 20
+        expect(result.third.price).to eq 10
+      end
     end
-  end
 
-  it "returns subscriptions that sorted by orders" do
-    FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix", plan_name: "standard")
-    FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix", plan_name: "standard")
-    FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net", plan_name: "standard")
-    first_column = "plan_name"
-    first_direction = "asc"
-    second_column = "price"
-    second_direction = "asc"
-    orders = [ { first_column => first_direction }, { second_column => second_direction } ]
+    it "returns subscriptions that sorted by orders" do
+      FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix", plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix", plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net", plan_name: "standard")
+      first_column = "plan_name"
+      first_direction = "asc"
+      second_column = "price"
+      second_direction = "asc"
+      orders = [ { first_column => first_direction }, { second_column => second_direction } ]
 
-    result = user.search_subscriptions(search_column: "subscription_name",
-                                       search_value: "net",
-                                       order_by: orders)
+      result = user.search_subscriptions(search_column: "subscription_name",
+                                         search_value: "net",
+                                         order_by: orders)
 
-    aggregate_failures do
-      expect(result.first.price).to eq 10
-      expect(result.second.price).to eq 20
-      expect(result.third.price).to eq 30
+      aggregate_failures do
+        expect(result.first.price).to eq 10
+        expect(result.second.price).to eq 20
+        expect(result.third.price).to eq 30
+      end
     end
-  end
 
-  let(:user) { FactoryBot.create(:user, :with_subscriptions) }
-  it "returns all subscriptions when args not exits" do
-    result = user.search_subscriptions
-    expect(result.length).to eq 5
-  end
+    let(:user) { FactoryBot.create(:user, :with_subscriptions) }
+    it "returns all subscriptions when args not exits" do
+      result = user.search_subscriptions
+      expect(result.length).to eq 5
+    end
 
-  it "returns Argument Error when search_column is not allowed" do
-    expect do
-      user.search_subscriptions(search_column: "invalid",
-                                search_value: "Amazon")
-    end.to raise_error(ArgumentError, "無効なカラム名です: invalid")
+    it "returns Argument Error when search_column is not allowed" do
+      expect do
+        user.search_subscriptions(search_column: "invalid",
+                                  search_value: "Amazon")
+      end.to raise_error(ArgumentError, "無効なカラム名です: invalid")
+    end
   end
 end
