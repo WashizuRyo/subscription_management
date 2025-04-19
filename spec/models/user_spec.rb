@@ -141,11 +141,19 @@ RSpec.describe User, type: :model do
       expect(result.length).to eq 5
     end
 
-    it "returns 5 subscriptions when search_column is ''(blank)" do
-      user = FactoryBot.create(:user, :with_subscriptions)
+    it "returns subscriptions when search_column is ''(blank) and order_by is present" do
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:subscription, user: user, price: 10)
+      FactoryBot.create(:subscription, user: user, price: 100)
+      FactoryBot.create(:subscription, user: user, price: 1000)
 
-      result = user.search_subscriptions(search_column: "")
-      expect(result.length).to eq 5
+      result = user.search_subscriptions(search_column: "", order_by: [ { "price": "desc" } ])
+      aggregate_failures do
+        expect(result.length).to eq 3
+        expect(result.first.price).to eq 1000
+        expect(result.second.price).to eq 100
+        expect(result.third.price).to eq 10
+      end
     end
   end
 end
