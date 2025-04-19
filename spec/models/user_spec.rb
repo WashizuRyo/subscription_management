@@ -138,10 +138,7 @@ RSpec.describe User, type: :model do
       user = FactoryBot.create(:user, :with_many_subscriptions)
 
       result = user.search_subscriptions(page: 1)
-
-      aggregate_failures do
-        expect(result.length).to eq 5
-      end
+      expect(result.length).to eq 5
     end
 
     it "returns 5 subscriptions when search_column is ''(blank)" do
