@@ -45,3 +45,20 @@ subscriptions = [
 subscriptions.each do |subscription_data|
   user.subscriptions.create!(subscription_data)
 end
+
+tags = [
+  { name: "動画配信" },
+  { name: "音楽" },
+  { name: "書籍" },
+  { name: "学習" },
+  { name: "運動・フィットネス" },
+  { name: "ファッション" },
+  { name: "美容" },
+  { name: "食事・宅配" },
+  { name: "ビジネスツール" },
+  { name: "クラウドストレージ" }
+]
+
+tags.each do |tag_date|
+  Tag.create!(tag_date)
+end

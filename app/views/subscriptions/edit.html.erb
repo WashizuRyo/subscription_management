@@ -23,6 +23,13 @@
     <%= f.label :billing_date, "請求日" %>
     <%= f.date_field :billing_date %>
 
+    <% @tags.each do |tag| %>
+      <div>
+        <%= check_box_tag "subscription[tag_ids][]", tag.id, @subscription.tags.include?(tag), id: "tag_#{tag.id}" %>
+        <%= label_tag "tag_#{tag.id}", tag.name %>
+      </div>
+    <% end %>
+
     <%= f.submit "送信する" %>
 
   <% end %>

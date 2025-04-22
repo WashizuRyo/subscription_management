@@ -47,6 +47,8 @@ class SubscriptionsController < ApplicationController
     if @subscription.nil?
       flash[:danger] = "サブスクリプションが見つかりませんでした"
       redirect_to root_path
+    else
+      @tags = Tag.all
     end
   end
 
@@ -85,7 +87,8 @@ class SubscriptionsController < ApplicationController
                                          :price,
                                          :start_date,
                                          :end_date,
-                                         :billing_date)
+                                         :billing_date,
+                                         tag_ids: [])
   end
 
   def get_subscription
