@@ -1,0 +1,11 @@
+<div id=<%= "tag_#{tag.id}" %>>
+  <h3><%= tag.name %></h3>
+  <div>
+    <%= link_to "編集", edit_user_tag_path(current_user, id: tag.id) %>
+    <%= button_to "削除",
+                  user_tag_path(current_user, id: tag.id),
+                  method: :delete,
+                  data: { turbo_confirm: "#{tag.name}を削除してもよろしいですか?"}
+    %>
+  </div>
+</div>

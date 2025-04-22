@@ -1,5 +1,7 @@
 class Subscription < ApplicationRecord
   belongs_to :user
+  has_many :subscription_tags
+  has_many :tags, through: :subscription_tags
 
   validates :subscription_name, presence: true
   validates :plan_name, presence: true

@@ -1,0 +1,8 @@
+<h1>タグ編集</h1>
+
+<%= form_with(model: [@user, @tag]) do |f| %>
+  <%= f.label :name, "名前" %>
+  <%= f.text_field :name %>
+
+  <%= f.submit "送信する" %>
+<% end %>

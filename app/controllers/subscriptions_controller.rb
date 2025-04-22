@@ -47,6 +47,8 @@ class SubscriptionsController < ApplicationController
     if @subscription.nil?
       flash[:danger] = "サブスクリプションが見つかりませんでした"
       redirect_to root_path
+    else
+      @tags = Tag.all
     end
   end
 
@@ -71,21 +73,14 @@ class SubscriptionsController < ApplicationController
 
   private
 
-  def correct_user
-    @user = User.find_by(id: params[:user_id])
-    unless @user == current_user
-      flash[:danger] = "権限がありません"
-      redirect_to root_path
-    end
-  end
-
   def subscription_params
     params.require(:subscription).permit(:subscription_name,
                                          :plan_name,
                                          :price,
                                          :start_date,
                                          :end_date,
-                                         :billing_date)
+                                         :billing_date,
+                                         tag_ids: [])
   end
 
   def get_subscription

@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_13_054706) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_22_021138) do
+  create_table "subscription_tags", force: :cascade do |t|
+    t.integer "subscription_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_subscription_tags_on_subscription_id"
+    t.index ["tag_id"], name: "index_subscription_tags_on_tag_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.string "subscription_name"
     t.string "plan_name"
@@ -24,6 +33,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_054706) do
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -34,5 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_054706) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "subscription_tags", "subscriptions"
+  add_foreign_key "subscription_tags", "tags"
   add_foreign_key "subscriptions", "users"
 end
