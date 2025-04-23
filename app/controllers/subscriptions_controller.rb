@@ -17,11 +17,10 @@ class SubscriptionsController < ApplicationController
     orders << { second_column => second_direction == "asc" ? "asc" : "desc" } if second_column.present?
 
     begin
-      validated_orders = Subscription.allowed_sort_orders(orders) if orders.present?
       @subscriptions = current_user.search_subscriptions(search_column: search_column,
                                                          search_value: search_value,
                                                          page: page,
-                                                         order_by: validated_orders)
+                                                         order_by: orders)
     rescue ArgumentError => e
       flash.now[:danger] = e
       @subscriptions = current_user.subscriptions.paginate(page: page, per_page: 5)
