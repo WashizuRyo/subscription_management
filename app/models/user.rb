@@ -39,7 +39,7 @@ class User < ApplicationRecord
   end
 
   def search_subscriptions(search_column: nil, search_value: nil, page: 1, order_by: [])
-    validated_orders = Subscription.allowed_sort_orders(order_by) if order_by.present?
+    validated_orders = Subscription.validate_orders(order_by) if order_by.present?
     result = subscriptions
 
     # ソートのみクエリに設定された場合

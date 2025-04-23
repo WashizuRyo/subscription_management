@@ -14,7 +14,7 @@ class Subscription < ApplicationRecord
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
   ALLOWED_DIRECTIONS = %w[asc desc]
 
-  def self.allowed_sort_orders(orders)
+  def self.validate_orders(orders)
     valid_orders = []
 
     orders.each do |order|
