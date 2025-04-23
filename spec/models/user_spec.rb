@@ -147,7 +147,7 @@ RSpec.describe User, type: :model do
       FactoryBot.create(:subscription, user: user, price: 100)
       FactoryBot.create(:subscription, user: user, price: 1000)
 
-      result = user.search_subscriptions(search_column: "", order_by: [ { "price": "desc" } ])
+      result = user.search_subscriptions(search_column: "", order_by: [ { "price" => "desc" } ])
       aggregate_failures do
         expect(result.length).to eq 3
         expect(result.first.price).to eq 1000
