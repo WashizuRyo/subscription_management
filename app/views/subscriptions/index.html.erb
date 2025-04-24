@@ -26,7 +26,9 @@
                                        %w[開始日 start_date],
                                        %w[終了日 end_date],
                                        %w[請求日 billing_date]] %>
-          <%= f.select :first_direction, [%w[降順 desc], %w[昇順 asc]] %>
+          <%= f.select :first_direction, [["選択してください", ""],
+                                          %w[降順 desc],
+                                          %w[昇順 asc]], selected: "desc" %>
         </div>
       </div>
       <%= f.label :second_column, "並び替え（第2条件）" %>
@@ -39,7 +41,9 @@
                                         %w[開始日 start_date],
                                         %w[終了日 end_date],
                                         %w[請求日 billing_date]] %>
-          <%= f.select :second_direction, [%w[降順 desc], %w[昇順 asc]] %>
+          <%= f.select :second_direction, [["選択してください", ""],
+                                           %w[降順 desc],
+                                           %w[昇順 asc]], selected: "desc" %>
         </div>
       </div>
     </div>
