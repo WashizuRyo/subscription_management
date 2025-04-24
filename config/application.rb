@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module SubscriptionManagement
   class Application < Rails::Application
+    config.autoload_paths += %W[#{config.root}/app/forms]
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
     config.i18n.default_locale = :ja
