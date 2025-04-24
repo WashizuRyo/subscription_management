@@ -2,47 +2,51 @@
 <%= link_to "新規作成", new_user_subscription_path(current_user) %>
 
 <div>
-  <%= form_with(url: user_subscriptions_path(current_user), method: :get) do |f| %>
+  <%= form_with(model: @search_subscription_form, url: user_subscriptions_path(current_user),scope: :q, method: :get) do |f| %>
+    <div>
+      <div>
+        <%= f.label :search_column, "検索するカラム" %>
+        <%= f.select :search_column, [["選択してください", ""],
+                                      %w[サブスクリプション名 subscription_name],
+                                      %w[プラン名 plan_name],
+                                      %w[料金 price],
+                                      %w[開始日 start_date],
+                                      %w[終了日 end_date],
+                                      %w[請求日 billing_date]] %>
+        <%= f.label :search_value, "検索値" %>
+        <%= f.search_field :search_value, placeholder: "検索値を入力してください" %>
+      </div>
+      <div>
+        <%= f.label :first_column, "並び替え（優先）" %>
+        <div>
+          <%= f.select :first_column, [["選択してください", ""],
+                                       %w[サブスクリプション名 subscription_name],
+                                       %w[プラン名 plan_name],
+                                       %w[料金 price],
+                                       %w[開始日 start_date],
+                                       %w[終了日 end_date],
+                                       %w[請求日 billing_date]] %>
+          <%= f.select :first_direction, [["選択してください", ""],
+                                          %w[降順 desc],
+                                          %w[昇順 asc]], selected: "desc" %>
+        </div>
+      </div>
+      <%= f.label :second_column, "並び替え（第2条件）" %>
       <div>
         <div>
-          <%= f.label :search_column, "検索するカラム" %>
-          <%= f.select :search_column, [["選択してください", ""],
+          <%= f.select :second_column, [["選択してください", ""],
                                         %w[サブスクリプション名 subscription_name],
                                         %w[プラン名 plan_name],
                                         %w[料金 price],
                                         %w[開始日 start_date],
                                         %w[終了日 end_date],
-                                        %w[請求日 billing_date]], selected: params[:search_column]%>
-          <%= f.label :search_value, "検索値" %>
-          <%= f.search_field :search_value, placeholder: "検索値を入力してください", value: params[:search_value]  %>
-        </div>
-        <div>
-          <%= f.label :first_column, "並び替え（優先）" %>
-          <div>
-            <%= f.select :first_column, [["選択してください", ""],
-                                         %w[サブスクリプション名 subscription_name],
-                                         %w[プラン名 plan_name],
-                                         %w[料金 price],
-                                         %w[開始日 start_date],
-                                         %w[終了日 end_date],
-                                         %w[請求日 billing_date]], selected: params[:first_column] || ""%>
-            <%= f.select :first_direction, [%w[昇順 asc], %w[降順 desc]], selected: params[:first_direction] || "asc"%>
-          </div>
-        </div>
-        <%= f.label :second_column, "並び替え（第2条件）" %>
-        <div>
-          <div>
-            <%= f.select :second_column, [["選択してください", ""],
-                                          %w[サブスクリプション名 subscription_name],
-                                          %w[プラン名 plan_name],
-                                          %w[料金 price],
-                                          %w[開始日 start_date],
-                                          %w[終了日 end_date],
-                                          %w[請求日 billing_date]], selected: params[:second_column] || ""%>
-            <%= f.select :second_direction, [%w[降順 desc], %w[昇順 asc]], selected: params[:second_direction] || "asc"%>
-          </div>
+                                        %w[請求日 billing_date]] %>
+          <%= f.select :second_direction, [["選択してください", ""],
+                                           %w[降順 desc],
+                                           %w[昇順 asc]], selected: "desc" %>
         </div>
       </div>
+    </div>
       <%= link_to "クリア", user_subscriptions_path(current_user) %>
       <%= f.submit "検索" %>
     <% end %>

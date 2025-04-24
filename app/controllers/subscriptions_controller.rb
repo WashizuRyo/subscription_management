@@ -4,28 +4,8 @@ class SubscriptionsController < ApplicationController
   before_action :get_subscription, only: %i[edit update destroy]
 
   def index
-    search_column = search_subscription_params[:search_column]
-    search_value = search_subscription_params[:search_value]
-    first_column = search_subscription_params[:first_column]
-    first_direction = search_subscription_params[:first_direction]
-    second_column = search_subscription_params[:second_column]
-    second_direction = search_subscription_params[:second_direction]
-    page = search_subscription_params[:page] || 1
-
-    orders = []
-    orders << { first_column => first_direction == "asc" ? "asc" : "desc" } if first_column.present?
-    orders << { second_column => second_direction == "asc" ? "asc" : "desc" } if second_column.present?
-
-    begin
-      @subscriptions = current_user.search_subscriptions(search_column: search_column,
-                                                         search_value: search_value,
-                                                         page: page,
-                                                         order_by: orders)
-    rescue ArgumentError => e
-      flash.now[:danger] = e
-      @subscriptions = current_user.subscriptions.paginate(page: page, per_page: 5)
-      render "index"
-    end
+    @search_subscription_form = SearchSubscriptionForm.new(search_subscription_params, current_user: current_user)
+    @subscriptions = @search_subscription_form.search_subscriptions
   end
 
   def new
@@ -87,7 +67,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def search_subscription_params
-    params.permit(:search_column,
+    params.fetch(:q, {}).permit(:search_column,
                   :search_value,
                   :first_column,
                   :first_direction,
