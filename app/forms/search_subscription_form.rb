@@ -21,41 +21,38 @@ class SearchSubscriptionForm
             allow_blank: true
 
   def initialize(attributes = {}, current_user:)
+    blank_to_nil(attributes)
     super(attributes)
     @current_user = current_user
   end
 
   def search_subscriptions
-    validated_orders = build_orders
-    result = @current_user.subscriptions
+    orders = build_orders
+    user_subscriptions = @current_user.subscriptions
 
-    if search_column.nil? && search_value.nil?
-      return result.paginate(page: page, per_page: 5)
-    end
-
-    # ソートのみクエリに設定された場合
-    if search_column == "" && validated_orders.present?
-      return result.order(validated_orders).paginate(page: page, per_page: 5)
-    end
+    return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
+    return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if only_sort_params_present?
 
     if search_column == "price"
-      result = result.where(
+      user_subscriptions = user_subscriptions.where(
         "#{search_column} LIKE :search_value",
         search_value: search_value
       )
     else
-      result = result.where(
+      user_subscriptions = user_subscriptions.where(
         "#{search_column} LIKE :search_value",
         search_value: "%#{search_value}%"
       )
     end
 
-    if validated_orders.present?
-      result = result.order(validated_orders)
+    if orders.present?
+      user_subscriptions = user_subscriptions.order(orders)
     end
 
-    result.paginate(page: page, per_page: 5)
+    user_subscriptions.paginate(page: page, per_page: 5)
   end
+
+  private
 
   def build_orders
     return [] unless self.valid?
@@ -64,5 +61,18 @@ class SearchSubscriptionForm
     orders << { first_column => first_direction } if first_column.present?
     orders << { second_column => second_direction } if second_column.present?
     orders
+  end
+
+  def blank_to_nil(attributes)
+    attributes.each do |key, value|
+      attributes[key] = value.presence
+    end end
+
+  def search_params_nil?
+    search_column.nil? ||  search_value.nil?
+  end
+
+  def only_sort_params_present?
+    orders.present?
   end
 end
