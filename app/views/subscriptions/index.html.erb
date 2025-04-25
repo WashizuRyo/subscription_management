@@ -3,6 +3,7 @@
 
 <div>
   <%= form_with(model: @search_subscription_form, url: user_subscriptions_path(current_user),scope: :q, method: :get) do |f| %>
+    <%= render "shared/error_messages", object: @search_subscription_form %>
     <div>
       <div>
         <%= f.label :search_column, "検索するカラム" %>
