@@ -27,34 +27,34 @@ class SearchSubscriptionForm
 
   def search_subscriptions
     orders = build_orders
-    result = @current_user.subscriptions
+    user_subscriptions = @current_user.subscriptions
 
     if search_column.nil? && search_value.nil?
-      return result.paginate(page: page, per_page: 5)
+      return user_subscriptions.paginate(page: page, per_page: 5)
     end
 
     # ソートのみクエリに設定された場合
     if search_column == "" && orders.present?
-      return result.order(orders).paginate(page: page, per_page: 5)
+      return user_subscriptions.order(orders).paginate(page: page, per_page: 5)
     end
 
     if search_column == "price"
-      result = result.where(
+      user_subscriptions = user_subscriptions.where(
         "#{search_column} LIKE :search_value",
         search_value: search_value
       )
     else
-      result = result.where(
+      user_subscriptions = user_subscriptions.where(
         "#{search_column} LIKE :search_value",
         search_value: "%#{search_value}%"
       )
     end
 
     if orders.present?
-      result = result.order(orders)
+      user_subscriptions = user_subscriptions.order(orders)
     end
 
-    result.paginate(page: page, per_page: 5)
+    user_subscriptions.paginate(page: page, per_page: 5)
   end
 
   def build_orders
