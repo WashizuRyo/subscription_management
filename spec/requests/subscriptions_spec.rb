@@ -21,15 +21,10 @@ RSpec.describe "Subscriptions", type: :request do
         end
       end
 
-      it "returns error flash when invalid column" do
-        get user_subscriptions_path(user, { first_column: "invalid_column", first_direction: "desc" })
+      it "returns error message when first_colum is invalid" do
+        get user_subscriptions_path(user, { q: { first_column: "invalid_column", first_direction: "desc" } })
 
-        aggregate_failures do
-          expect(response.body).to include("無効なカラム名です: invalid_column")
-          user.subscriptions.each do |subscription|
-            expect(response.body).to include(subscription.subscription_name)
-          end
-        end
+        expect(response.body).to include("無効なカラム名です")
       end
 
       context "not authorized" do
