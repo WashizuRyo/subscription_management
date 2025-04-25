@@ -30,12 +30,11 @@ class SearchSubscriptionForm
     orders = build_orders
     user_subscriptions = @current_user.subscriptions
 
-    if search_column.nil? && search_value.nil?
+    if search_params_blank?
       return user_subscriptions.paginate(page: page, per_page: 5)
     end
 
-    # ソートのみクエリに設定された場合
-    if search_column == "" && orders.present?
+    if sort_params_present?
       return user_subscriptions.order(orders).paginate(page: page, per_page: 5)
     end
 
@@ -74,4 +73,11 @@ class SearchSubscriptionForm
       attributes[key] = value.presence
     end end
 
+  def search_params_blank?
+    search_column.nil? && search_value.nil?
+  end
+
+  def sort_params_present?
+    search_column.nil? && orders.present?
+  end
 end
