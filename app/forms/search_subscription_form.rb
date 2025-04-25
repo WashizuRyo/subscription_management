@@ -66,7 +66,8 @@ class SearchSubscriptionForm
   def blank_to_nil(attributes)
     attributes.each do |key, value|
       attributes[key] = value.presence
-    end end
+    end
+  end
 
   def search_params_nil?
     search_column.nil? ||  search_value.nil?
