@@ -31,7 +31,7 @@ class SearchSubscriptionForm
     user_subscriptions = @current_user.subscriptions
 
     return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
-    return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if sort_params_present?
+    return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if only_sort_params_present?
 
     if search_column == "price"
       user_subscriptions = user_subscriptions.where(
@@ -72,7 +72,7 @@ class SearchSubscriptionForm
     search_column.nil? ||  search_value.nil?
   end
 
-  def sort_params_present?
-    search_column.nil? && orders.present?
+  def only_sort_params_present?
+    orders.present?
   end
 end
