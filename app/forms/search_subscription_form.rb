@@ -27,6 +27,8 @@ class SearchSubscriptionForm
   end
 
   def search_subscriptions
+    return [] unless self.valid?
+
     @orders = build_orders
     user_subscriptions = @current_user.subscriptions
 
@@ -55,8 +57,6 @@ class SearchSubscriptionForm
   private
 
   def build_orders
-    return [] unless self.valid?
-
     orders = []
     orders << { first_column => first_direction } if first_column.present?
     orders << { second_column => second_direction } if second_column.present?
