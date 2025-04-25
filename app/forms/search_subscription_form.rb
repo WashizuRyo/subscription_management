@@ -30,7 +30,7 @@ class SearchSubscriptionForm
     orders = build_orders
     user_subscriptions = @current_user.subscriptions
 
-    return user_subscriptions.paginate(page: page, per_page: 5) if search_params_blank?
+    return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
     return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if sort_params_present?
 
     if search_column == "price"
@@ -68,8 +68,8 @@ class SearchSubscriptionForm
       attributes[key] = value.presence
     end end
 
-  def search_params_blank?
-    search_column.nil? && search_value.nil?
+  def search_params_nil?
+    search_column.nil? ||  search_value.nil?
   end
 
   def sort_params_present?
