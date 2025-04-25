@@ -51,6 +51,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
   end
 
   describe "search_subscriptions" do
+    let(:user) { FactoryBot.create(:user) }
+
     it "returns subscriptions without filtering when search params are blank" do
       user = FactoryBot.create(:user, :with_subscriptions)
       form = FactoryBot.build(:search_subscription_form,
@@ -61,7 +63,6 @@ RSpec.describe SearchSubscriptionForm, type: :model do
     end
 
     it "returns subscriptions without filtering when only sorting params are present" do
-      user = FactoryBot.create(:user)
       sub1 = FactoryBot.create(:subscription, user: user, price: 100)
       sub2 = FactoryBot.create(:subscription, user: user, price: 200)
       sub3 = FactoryBot.create(:subscription, user: user, price: 300)
@@ -74,6 +75,79 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       expect(subscriptions[0]).to eq sub1
       expect(subscriptions[1]).to eq sub2
       expect(subscriptions[2]).to eq sub3
+    end
+
+    it "returns subscriptions that exactly match when search_column is 'price'" do
+      FactoryBot.create(:subscription, user: user, price: 9000)
+      FactoryBot.create(:subscription, user: user, price: 900)
+      FactoryBot.create(:subscription, user: user, price: 90)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "price",
+                              search_value: 90)
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.price).to eq 90
+    end
+
+    it "returns subscriptions that match the search_column / search_value" do
+      FactoryBot.create(:subscription,
+                        subscription_name: "Netflix",
+                        price: 10000,
+                        plan_name: "standard",
+                        user: user)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "subscription_name",
+                              search_value: "Netflix")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.subscription_name).to eq "Netflix"
+      expect(subscriptions.first.price).to eq 10000
+    end
+
+    it "returns subscriptions that sorted by order" do
+      FactoryBot.create(:subscription, user: user, price: 10, subscription_name: "Netflix")
+      FactoryBot.create(:subscription, user: user, price: 20, subscription_name: "netflix")
+      FactoryBot.create(:subscription, user: user, price: 30, subscription_name: "Net")
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "subscription_name",
+                              search_value: "net",
+                              first_column: "price",
+                              first_direction: "desc")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 3
+      expect(subscriptions.first.price).to eq 30
+      expect(subscriptions.second.price).to eq 20
+      expect(subscriptions.third.price).to eq 10
+    end
+
+    it "returns subscriptions that sorted by orders" do
+      FactoryBot.create(:subscription, user: user, price: 10, plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 20, plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 30, plan_name: "standard")
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "plan_name",
+                              search_value: "standard",
+                              first_column: "plan_name",
+                              first_direction: "asc",
+                              second_column: "price",
+                              second_direction: "asc")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 3
+      expect(subscriptions.first.price).to eq 10
+      expect(subscriptions.second.price).to eq 20
+      expect(subscriptions.third.price).to eq 30
     end
   end
 end
