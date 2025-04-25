@@ -21,6 +21,7 @@ class SearchSubscriptionForm
             allow_blank: true
 
   def initialize(attributes = {}, current_user:)
+    blank_to_nil(attributes)
     super(attributes)
     @current_user = current_user
   end
@@ -57,6 +58,8 @@ class SearchSubscriptionForm
     user_subscriptions.paginate(page: page, per_page: 5)
   end
 
+  private
+
   def build_orders
     return [] unless self.valid?
 
@@ -65,4 +68,10 @@ class SearchSubscriptionForm
     orders << { second_column => second_direction } if second_column.present?
     orders
   end
+
+  def blank_to_nil(attributes)
+    attributes.each do |key, value|
+      attributes[key] = value.presence
+    end end
+
 end
