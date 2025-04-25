@@ -27,11 +27,11 @@ class SearchSubscriptionForm
   end
 
   def search_subscriptions
-    orders = build_orders
+    @orders = build_orders
     user_subscriptions = @current_user.subscriptions
 
     return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
-    return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if only_sort_params_present?
+    return user_subscriptions.order(@orders).paginate(page: page, per_page: 5) if only_sort_params_present?
 
     if search_column == "price"
       user_subscriptions = user_subscriptions.where(
@@ -45,8 +45,8 @@ class SearchSubscriptionForm
       )
     end
 
-    if orders.present?
-      user_subscriptions = user_subscriptions.order(orders)
+    if @orders.present?
+      user_subscriptions = user_subscriptions.order(@orders)
     end
 
     user_subscriptions.paginate(page: page, per_page: 5)
@@ -73,6 +73,6 @@ class SearchSubscriptionForm
   end
 
   def only_sort_params_present?
-    orders.present?
+    @orders.present? && search_params_nil?
   end
 end
