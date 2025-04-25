@@ -30,13 +30,8 @@ class SearchSubscriptionForm
     orders = build_orders
     user_subscriptions = @current_user.subscriptions
 
-    if search_params_blank?
-      return user_subscriptions.paginate(page: page, per_page: 5)
-    end
-
-    if sort_params_present?
-      return user_subscriptions.order(orders).paginate(page: page, per_page: 5)
-    end
+    return user_subscriptions.paginate(page: page, per_page: 5) if search_params_blank?
+    return user_subscriptions.order(orders).paginate(page: page, per_page: 5) if sort_params_present?
 
     if search_column == "price"
       user_subscriptions = user_subscriptions.where(
