@@ -26,7 +26,7 @@ class SearchSubscriptionForm
   end
 
   def search_subscriptions
-    validated_orders = build_orders
+    orders = build_orders
     result = @current_user.subscriptions
 
     if search_column.nil? && search_value.nil?
@@ -34,8 +34,8 @@ class SearchSubscriptionForm
     end
 
     # ソートのみクエリに設定された場合
-    if search_column == "" && validated_orders.present?
-      return result.order(validated_orders).paginate(page: page, per_page: 5)
+    if search_column == "" && orders.present?
+      return result.order(orders).paginate(page: page, per_page: 5)
     end
 
     if search_column == "price"
@@ -50,8 +50,8 @@ class SearchSubscriptionForm
       )
     end
 
-    if validated_orders.present?
-      result = result.order(validated_orders)
+    if orders.present?
+      result = result.order(orders)
     end
 
     result.paginate(page: page, per_page: 5)
