@@ -15,10 +15,10 @@ class SearchSubscriptionForm
 
   validates :first_column, :second_column, :search_column,
             inclusion: { in: ALLOWED_COLUMNS, message: "無効なカラム名です" },
-            allow_blank: true
+            allow_nil: true
   validates :first_direction, :second_direction,
             inclusion: { in: ALLOWED_DIRECTIONS, message: "無効な並び順です" },
-            allow_blank: true
+            allow_nil: true
 
   def initialize(attributes = {}, current_user:)
     blank_to_nil(attributes)
