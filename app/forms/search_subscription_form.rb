@@ -43,7 +43,7 @@ class SearchSubscriptionForm
     else
       user_subscriptions = user_subscriptions.where(
         "#{search_column} LIKE :search_value",
-        search_value: "%#{search_value}%"
+        search_value: "%" + ActiveRecord::Base.sanitize_sql_like(search_value) + "%"
       )
     end
 

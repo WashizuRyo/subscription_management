@@ -5,11 +5,11 @@ class SubscriptionsController < ApplicationController
 
   def index
     @search_subscription_form = SearchSubscriptionForm.new(search_subscription_params, current_user: current_user)
-    @subscriptions = @search_subscription_form.search_subscriptions
-
     unless @search_subscription_form.valid?
-      @subscriptions = []
+      return @subscriptions = []
     end
+
+    @subscriptions = @search_subscription_form.search_subscriptions
   end
 
   def new
