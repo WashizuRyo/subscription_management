@@ -11,6 +11,15 @@ class Subscription < ApplicationRecord
   validates :billing_date, presence: true
   validate :end_date_after_start_date
 
+  scope :billing_in_this_month, ->(user) {
+    start_date = Date.today.beginning_of_month
+    end_date = Date.today.end_of_month
+    Subscription
+      .where(user_id: user)
+      .where("billing_date BETWEEN :start_date AND :end_date", start_date: start_date, end_date: end_date)
+    binding.irb
+  }
+
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
   ALLOWED_DIRECTIONS = %w[asc desc]
 
@@ -32,6 +41,10 @@ class Subscription < ApplicationRecord
     end
 
     valid_orders
+  end
+
+  def self.this_month_total_billing(user)
+    billing_in_this_month(user).sum(:price)
   end
 
   private

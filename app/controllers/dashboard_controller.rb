@@ -1,5 +1,8 @@
 class DashboardController < ApplicationController
+  before_action :logged_in_user
+
   def index
+    @this_month_total_billing = Subscription.this_month_total_billing(current_user)
     @subscriptions = current_user.subscriptions.take(3)
   end
 end
