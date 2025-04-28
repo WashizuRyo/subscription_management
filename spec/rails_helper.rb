@@ -44,6 +44,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include SystemHelper, type: :system
   config.include RequestHelper, type: :request
   # You can uncomment this line to turn off ActiveRecord support entirely.

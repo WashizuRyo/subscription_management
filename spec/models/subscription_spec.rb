@@ -59,4 +59,42 @@ RSpec.describe Subscription, type: :model do
       end
     end
   end
+
+  describe "this_month_total_billing" do
+    let(:user) { FactoryBot.create(:user) }
+
+    it "returns the total price for billings with billing_date in April" do
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3))
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 2000)
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 1980)
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 5, 3))
+
+      travel_to Date.new(2025, 4, 1) do
+        result = Subscription.this_month_total_billing(user)
+        expect(result).to eq 3980
+      end
+    end
+
+    it "returns 0 when there are no billings with billing_date in April" do
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 3))
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 2, 3))
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3))
+
+      travel_to Date.new(2025, 4, 1) do
+        result = Subscription.this_month_total_billing(user)
+        expect(result).to eq 0
+      end
+    end
+
+    it "does not mix billing dates from same month in different years" do
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 3), price: 100)
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2026, 1, 3), price: 200)
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2027, 1, 3), price: 300)
+
+      travel_to Date.new(2025, 1, 1) do
+        result = Subscription.this_month_total_billing(user)
+        expect(result).to eq 100
+      end
+    end
+  end
 end
