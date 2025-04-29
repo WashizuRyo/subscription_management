@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_021623) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_29_024236) do
   create_table "subscription_tags", force: :cascade do |t|
     t.integer "subscription_id", null: false
     t.integer "tag_id", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_021623) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
+    t.integer "status", default: 0, null: false
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
