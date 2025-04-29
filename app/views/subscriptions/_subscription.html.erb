@@ -1,4 +1,11 @@
 <div>
+  <% if subscription.tags.any? %>
+    <div>
+      <% subscription.tags.each do |tag| %>
+        <span><%= tag.name %></span>
+      <% end %>
+    </div>
+  <% end %>
   <h3><%= subscription.subscription_name %></h3>
   <p>プラン: <%= subscription.plan_name %></p>
   <p>料金: <%= subscription.price %></p>
