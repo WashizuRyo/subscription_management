@@ -17,7 +17,6 @@ class Subscription < ApplicationRecord
     Subscription
       .where(user_id: user)
       .where("billing_date BETWEEN :start_date AND :end_date", start_date: start_date, end_date: end_date)
-    binding.irb
   }
 
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
