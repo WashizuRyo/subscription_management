@@ -14,11 +14,10 @@ class Subscription < ApplicationRecord
   validate :end_date_after_start_date
 
   scope :billing_in_this_month, ->(user) {
-    start_date = Date.today.beginning_of_month
-    end_date = Date.today.end_of_month
     Subscription
       .where(user_id: user)
-      .where("billing_date BETWEEN :start_date AND :end_date", start_date: start_date, end_date: end_date)
+      .where("billing_date BETWEEN :start_date AND :end_date",
+             start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month)
   }
   scope :next_billing_soon, ->(user) {
     Subscription.where("billing_date > ? AND user_id = ?", Date.today, user).order(billing_date: :asc).take(10)
