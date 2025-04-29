@@ -30,7 +30,7 @@ class SearchSubscriptionForm
     return [] unless self.valid?
 
     @orders = build_orders
-    user_subscriptions = @current_user.subscriptions
+    user_subscriptions = @current_user.subscriptions.includes(:tags)
 
     return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
     return user_subscriptions.order(@orders).paginate(page: page, per_page: 5) if only_sort_params_present?

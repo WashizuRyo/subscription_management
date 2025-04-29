@@ -19,12 +19,15 @@ class Subscription < ApplicationRecord
   }
   scope :next_billing_soon, ->(user) {
     where("billing_date > ? AND user_id = ?", Date.today, user)
-      .order(billing_date: :asc).take(10)
+      .order(billing_date: :asc)
+      .includes(:tags)
+      .limit(10)
   }
   scope :latest, ->(user) {
     where(user_id: user)
       .order(created_at: :desc)
       .limit(5)
+      .includes(:tags)
   }
 
   def self.this_month_total_billing(user)
