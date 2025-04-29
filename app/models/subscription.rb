@@ -14,18 +14,17 @@ class Subscription < ApplicationRecord
   validate :end_date_after_start_date
 
   scope :billing_in_this_month, ->(user) {
-    Subscription
-      .where(user_id: user)
-      .where("billing_date BETWEEN :start_date AND :end_date",
+      where(user_id: user).where("billing_date BETWEEN :start_date AND :end_date",
              start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month)
   }
   scope :next_billing_soon, ->(user) {
-    Subscription.where("billing_date > ? AND user_id = ?", Date.today, user).order(billing_date: :asc).take(10)
+    where("billing_date > ? AND user_id = ?", Date.today, user)
+      .order(billing_date: :asc).take(10)
   }
   scope :latest, ->(user) {
-    Subscription.where(user_id: user)
-                .order(created_at: :desc)
-                .limit(5)
+    where(user_id: user)
+      .order(created_at: :desc)
+      .limit(5)
   }
 
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
