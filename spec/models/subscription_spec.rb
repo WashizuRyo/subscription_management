@@ -97,4 +97,37 @@ RSpec.describe Subscription, type: :model do
       end
     end
   end
+
+  describe "next_billing_soon" do
+    let(:user) { FactoryBot.create(:user) }
+
+    it "returns subscriptions sorted by billing date close to today" do
+      today = Date.new(2025, 1, 1)
+      sub1 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 2, 3), price: 100)
+      sub2 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3), price: 200)
+      sub3 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 300)
+
+      travel_to today do
+        result = Subscription.next_billing_soon(user)
+        expect(result.count).to eq 3
+        expect(result.first).to eq sub1
+        expect(result.second).to eq sub2
+        expect(result.third).to eq sub3
+      end
+    end
+
+    it "does not include subscriptions with billing date equal to today" do
+      today = Date.new(2025, 1, 1)
+      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 1), price: 100)
+      sub1 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3), price: 200)
+      sub2 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 300)
+
+      travel_to today do
+        result = Subscription.next_billing_soon(user)
+        expect(result.count).to eq 2
+        expect(result.first).to eq sub1
+        expect(result.second).to eq sub2
+      end
+    end
+  end
 end

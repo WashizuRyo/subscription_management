@@ -20,6 +20,9 @@ class Subscription < ApplicationRecord
       .where(user_id: user)
       .where("billing_date BETWEEN :start_date AND :end_date", start_date: start_date, end_date: end_date)
   }
+  scope :next_billing_soon, ->(user) {
+    Subscription.where("billing_date > ? AND user_id = ?", Date.today, user).order(billing_date: :asc).take(10)
+  }
 
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
   ALLOWED_DIRECTIONS = %w[asc desc]

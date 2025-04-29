@@ -3,3 +3,5 @@
 
 <%= link_to "さらに見る", user_subscriptions_path(current_user) %>
 <%= render @subscriptions %>
+<h1>次回更新日が近いサブスク</h1>
+<%= render @next_billing_soon_subscriptions %>
