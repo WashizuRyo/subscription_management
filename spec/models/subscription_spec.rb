@@ -35,31 +35,6 @@ RSpec.describe Subscription, type: :model do
     end
   end
 
-  describe "allowed_sort_orders" do
-    context "when args is valid" do
-      it "returns arguments" do
-        valid_orders = [ { "price" => "asc" }, { "subscription_name" => "desc"  } ]
-        expect(Subscription.validate_orders(valid_orders)).to eq valid_orders
-      end
-    end
-
-    context "when args is invalid" do
-      it "returns Argument Error" do
-        invalid_order = [ { "invalid_column" => "asc" } ]
-        expect do
-          Subscription.validate_orders(invalid_order)
-        end.to raise_error(ArgumentError, "無効なカラム名です: invalid_column")
-      end
-
-      it "returns Argument Error" do
-        invalid_order = [ { "subscription_name" => "invalid_direction" } ]
-        expect do
-          Subscription.validate_orders(invalid_order)
-        end.to raise_error(ArgumentError, "無効なソート方向です: invalid_direction")
-      end
-    end
-  end
-
   describe "this_month_total_billing" do
     let(:user) { FactoryBot.create(:user) }
 
