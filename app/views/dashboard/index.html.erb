@@ -1,7 +1,9 @@
 <h1>今月の請求額</h1>
 <p><%= @this_month_total_billing %>円</p>
 
+<h1>最近登録されたサブスク</h1>
 <%= link_to "さらに見る", user_subscriptions_path(current_user) %>
-<%= render @subscriptions %>
+<%= render @latest_subscriptions %>
+
 <h1>次回更新日が近いサブスク</h1>
 <%= render @next_billing_soon_subscriptions %>

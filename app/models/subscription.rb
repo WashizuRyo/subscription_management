@@ -23,6 +23,11 @@ class Subscription < ApplicationRecord
   scope :next_billing_soon, ->(user) {
     Subscription.where("billing_date > ? AND user_id = ?", Date.today, user).order(billing_date: :asc).take(10)
   }
+  scope :latest, ->(user) {
+    Subscription.where(user_id: user)
+                .order(created_at: :desc)
+                .limit(5)
+  }
 
   ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
   ALLOWED_DIRECTIONS = %w[asc desc]

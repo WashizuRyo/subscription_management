@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
 
   def index
     @this_month_total_billing = Subscription.this_month_total_billing(current_user)
-    @subscriptions = current_user.subscriptions.take(3)
+    @latest_subscriptions = Subscription.latest(current_user)
     @next_billing_soon_subscriptions = Subscription.next_billing_soon(current_user)
   end
 end
