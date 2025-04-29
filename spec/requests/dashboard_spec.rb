@@ -14,7 +14,7 @@ RSpec.describe "Dashboards", type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "responses to subscriptions that include tags" do
+      it "responds to subscriptions that include tags" do
         sub = FactoryBot.create(:subscription, user: user, subscription_name: "test_sub")
         tag = FactoryBot.create(:tag, name: "test_tag")
         FactoryBot.create(:subscription_tag, subscription: sub, tag: tag)
