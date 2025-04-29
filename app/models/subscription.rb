@@ -27,29 +27,6 @@ class Subscription < ApplicationRecord
       .limit(5)
   }
 
-  ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
-  ALLOWED_DIRECTIONS = %w[asc desc]
-
-  def self.validate_orders(orders)
-    valid_orders = []
-
-    orders.each do |order|
-      column, direction = order.first
-
-      unless ALLOWED_COLUMNS.include?(column)
-        raise ArgumentError, "無効なカラム名です: #{column}"
-      end
-
-      unless ALLOWED_DIRECTIONS.include?(direction)
-        raise ArgumentError, "無効なソート方向です: #{direction}"
-      end
-
-      valid_orders << { column => direction }
-    end
-
-    valid_orders
-  end
-
   def self.this_month_total_billing(user)
     billing_in_this_month(user).sum(:price)
   end

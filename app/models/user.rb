@@ -37,41 +37,4 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
-
-  def search_subscriptions(search_column: nil, search_value: nil, page: 1, order_by: [])
-    validated_orders = Subscription.validate_orders(order_by) if order_by.present?
-    result = subscriptions
-
-    # ソートのみクエリに設定された場合
-    if search_column == "" && validated_orders.present?
-      return result.order(validated_orders).paginate(page: page, per_page: 5)
-    end
-
-    # 引数が渡されなかった場合
-    if search_column.nil? && search_value.nil?
-      return result.paginate(page: page, per_page: 5)
-    end
-
-    unless Subscription::ALLOWED_COLUMNS.include?(search_column)
-      raise ArgumentError, "無効なカラム名です: #{search_column}"
-    end
-
-    if search_column == "price"
-      result = result.where(
-        "#{search_column} LIKE :search_value",
-        search_value: search_value
-      )
-    else
-      result = result.where(
-        "#{search_column} LIKE :search_value",
-        search_value: "%#{search_value}%"
-      )
-    end
-
-    if validated_orders.present?
-      result = result.order(validated_orders)
-    end
-
-    result.paginate(page: page, per_page: 5)
-  end
 end
