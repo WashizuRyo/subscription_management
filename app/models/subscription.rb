@@ -2,6 +2,7 @@ class Subscription < ApplicationRecord
   enum :status, { active: 0, canceled: 1, expired: 2, trial: 3 }
 
   belongs_to :user
+  belongs_to :payment_method, optional: true
   has_many :subscription_tags
   has_many :tags, through: :subscription_tags
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_051757) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_30_070256) do
   create_table "payment_methods", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "method_type"
@@ -42,6 +42,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_051757) do
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.integer "status", default: 0, null: false
+    t.integer "payment_method_id"
+    t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -64,5 +66,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_051757) do
   add_foreign_key "payment_methods", "users"
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
+  add_foreign_key "subscriptions", "payment_methods"
   add_foreign_key "subscriptions", "users"
 end
