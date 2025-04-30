@@ -30,3 +30,11 @@ ja:
               too_short: "パスワードは%{count}文字以上で入力してください"
             password_confirmation:
               confirmation: "パスワード確認が一致しません"
+        payment_method:
+          attributes:
+            method_type:
+              blank: "種類を入力してください"
+            provider:
+              blank: "提供元を入力してください"
+            memo:
+              blank: "メモを入力してください"
