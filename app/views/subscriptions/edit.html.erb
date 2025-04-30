@@ -30,6 +30,17 @@
       </div>
     <% end %>
 
+    <p>支払い方法</p>
+    <% @payment_methods.each do |payment_method| %>
+      <div>
+        <%= radio_button_tag "subscription[payment_method_id]",
+                             payment_method.id, @subscription.payment_method == payment_method,
+                             id: "payment_method_#{payment_method.id}" %>
+        <%= label_tag "payment_method_#{payment_method.id}",
+                      [payment_method.method_type, payment_method.provider, payment_method.memo].reject(&:blank?).join(', ') %>
+      </div>
+    <% end %>
+
     <%= f.submit "送信する" %>
 
   <% end %>

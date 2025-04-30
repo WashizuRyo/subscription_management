@@ -14,6 +14,8 @@ class SubscriptionsController < ApplicationController
 
   def new
     @subscription = current_user.subscriptions.new
+    @payment_methods = current_user.payment_methods
+    @tags = Tag.all
   end
 
   def create
@@ -32,6 +34,7 @@ class SubscriptionsController < ApplicationController
       redirect_to root_path
     else
       @tags = Tag.all
+      @payment_methods = current_user.payment_methods
     end
   end
 
@@ -63,6 +66,7 @@ class SubscriptionsController < ApplicationController
                                          :start_date,
                                          :end_date,
                                          :billing_date,
+                                         :payment_method_id,
                                          tag_ids: [])
   end
 

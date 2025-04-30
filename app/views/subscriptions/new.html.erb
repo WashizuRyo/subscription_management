@@ -23,6 +23,23 @@
     <%= f.label :billing_date, "請求日" %>
     <%= f.date_field :billing_date %>
 
+    <p>タグ</p>
+    <% @tags.each do |tag| %>
+      <div>
+        <%= check_box_tag "subscription[tag_ids][]", tag.id, false, id: "tag_#{tag.id}" %>
+        <%= label_tag "tag_#{tag.id}", tag.name %>
+      </div>
+    <% end %>
+
+    <p>支払い方法</p>
+    <% @payment_methods.each do |payment_method| %>
+      <div>
+        <%= radio_button_tag "subscription[payment_method_id]", payment_method.id, false, id: "payment_method_#{payment_method.id}" %>
+        <%= label_tag "payment_method_#{payment_method.id}",
+                      [payment_method.method_type, payment_method.provider, payment_method.memo].reject(&:blank?).join(', ') %>
+      </div>
+    <% end %>
+
     <%= f.submit "送信する" %>
 
   <% end %>
