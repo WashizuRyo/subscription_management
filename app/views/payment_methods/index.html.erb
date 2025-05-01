@@ -1,5 +1,5 @@
 <h1>新規作成</h1>
-<div>
+<div id="new_payment_method">
   <%= form_with(model: @payment_method, url: user_payment_methods_path(current_user), local: true) do |f| %>
     <%= render "shared/error_messages", object: f.object %>
 
@@ -16,7 +16,6 @@
   <% end %>
 </div>
 
-
 <% if @payment_methods.any? %>
   <h1>支払い方法</h1>
 
@@ -30,14 +29,14 @@
     <%= form_with(model: method, url: user_payment_method_path(current_user, id: method.id), local:true) do |f| %>
       <%= render "shared/error_messages", object: @error_payment_method == method ? @error_payment_method : f.object %>
 
-      <%= f.label :provider %>
-      <%= f.text_field :provider %>
+      <%= f.label :provider, for: "edit_provider_#{method.id}" %>
+      <%= f.text_field :provider, id: "edit_provider_#{method.id}" %>
 
-      <%= f.label :method_type %>
-      <%= f.text_field :method_type %>
+      <%= f.label :method_type, for: "edit_type_#{method.id}" %>
+      <%= f.text_field :method_type, id: "edit_type_#{method.id}" %>
 
-      <%= f.label :memo %>
-      <%= f.text_field :memo %>
+      <%= f.label :memo, for: "edit_memo_#{method.id}" %>
+      <%= f.text_field :memo, id: "edit_memo_#{method.id}" %>
 
       <%= f.submit "編集" %>
     <% end %>
