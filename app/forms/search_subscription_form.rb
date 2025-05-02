@@ -41,7 +41,7 @@ class SearchSubscriptionForm
       )
     else
       user_subscriptions = user_subscriptions.where(
-        Subscription.arel_table[search_column.to_sym].matches("%#{search_value}%")
+        Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")
       )
     end
 
