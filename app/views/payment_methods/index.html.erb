@@ -1,0 +1,53 @@
+<h1>新規作成</h1>
+<div id="new_payment_method">
+  <%= form_with(model: @payment_method, url: user_payment_methods_path(current_user), local: true) do |f| %>
+    <%= render "shared/error_messages", object: f.object %>
+
+    <%= f.label :provider, id: "new_payment_method_provider" %>
+    <%= f.text_field :provider, id: "new_payment_method_provider" %>
+
+    <%= f.label :method_type, id: "new_payment_method_method_type" %>
+    <%= f.text_field :method_type, id: "new_payment_method_method_type" %>
+
+    <%= f.label :memo, id: "new_payment_method_memo" %>
+    <%= f.text_field :memo, id: "new_payment_method_memo" %>
+
+    <%= f.submit "作成" %>
+  <% end %>
+</div>
+
+<% if @payment_methods.any? %>
+  <h1>支払い方法</h1>
+
+  <% @payment_methods.each do |method| %>
+    <div>
+      <span><%= method.provider %></span>
+      <span><%= method.method_type %></span>
+      <span><%= method.memo %></span>
+    </div>
+
+    <%= form_with(model: method, url: user_payment_method_path(current_user, id: method.id), local:true) do |f| %>
+      <%= render "shared/error_messages", object: @error_payment_method == method ? @error_payment_method : f.object %>
+
+      <%= f.label :provider, for: "edit_provider_#{method.id}" %>
+      <%= f.text_field :provider, id: "edit_provider_#{method.id}" %>
+
+      <%= f.label :method_type, for: "edit_type_#{method.id}" %>
+      <%= f.text_field :method_type, id: "edit_type_#{method.id}" %>
+
+      <%= f.label :memo, for: "edit_memo_#{method.id}" %>
+      <%= f.text_field :memo, id: "edit_memo_#{method.id}" %>
+
+      <%= f.submit "編集", id: "edit_submit_button_#{method.id}" %>
+    <% end %>
+
+    <%= button_to "削除",
+                  user_payment_method_path(current_user, id: method.id),
+                  method: :delete,
+                  data: { turbo_confirm: "#{method.provider}を削除してもよろしいですか?"},
+                  id: "delete_button_#{method.id}"
+    %>
+  <% end %>
+<% else %>
+ <h1>支払い方法が登録されていません</h1>
+<% end %>

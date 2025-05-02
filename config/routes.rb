@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   resources :users do
     resources :subscriptions
     resources :tags
+    resources :payment_methods
   end
 end

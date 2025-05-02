@@ -22,7 +22,8 @@ subscriptions = [
     price: 1490,
     start_date: Date.today - 2.months,
     end_date: Date.today + 10.months,
-    billing_date: Date.today.beginning_of_month
+    billing_date: Date.today.beginning_of_month,
+    payment_method_id: nil
   },
   {
     subscription_name: "Amazon Prime",
@@ -30,7 +31,8 @@ subscriptions = [
     price: 4900,
     start_date: Date.today - 3.months,
     end_date: Date.today + 9.months,
-    billing_date: Date.today - 3.months
+    billing_date: Date.today - 3.months,
+    payment_method_id: nil
   },
   {
     subscription_name: "Spotify",
@@ -38,7 +40,8 @@ subscriptions = [
     price: 980,
     start_date: Date.today - 1.month,
     end_date: Date.today + 11.months,
-    billing_date: Date.today.beginning_of_month
+    billing_date: Date.today.beginning_of_month,
+    payment_method_id: nil
   }
 ]
 
@@ -61,4 +64,14 @@ tags = [
 
 tags.each do |tag_date|
   Tag.create!(tag_date)
+end
+
+payment_methods = [
+  { method_type: "クレジットカード", provider: "VISA", memo: "amazonカード" },
+  { method_type: "銀行振込", provider: "ゆうちょ銀行", memo: "" },
+  { method_type: "デビットカード", provider: "MasterCard", memo: "イオンカード" }
+]
+
+payment_methods.each do |v|
+  user.payment_methods.create!(v)
 end
