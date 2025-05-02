@@ -3,14 +3,14 @@
   <%= form_with(model: @payment_method, url: user_payment_methods_path(current_user), local: true) do |f| %>
     <%= render "shared/error_messages", object: f.object %>
 
-    <%= f.label :provider %>
-    <%= f.text_field :provider %>
+    <%= f.label :provider, id: "new_payment_method_provider" %>
+    <%= f.text_field :provider, id: "new_payment_method_provider" %>
 
-    <%= f.label :method_type %>
-    <%= f.text_field :method_type %>
+    <%= f.label :method_type, id: "new_payment_method_method_type" %>
+    <%= f.text_field :method_type, id: "new_payment_method_method_type" %>
 
-    <%= f.label :memo %>
-    <%= f.text_field :memo %>
+    <%= f.label :memo, id: "new_payment_method_memo" %>
+    <%= f.text_field :memo, id: "new_payment_method_memo" %>
 
     <%= f.submit "作成" %>
   <% end %>
@@ -38,13 +38,14 @@
       <%= f.label :memo, for: "edit_memo_#{method.id}" %>
       <%= f.text_field :memo, id: "edit_memo_#{method.id}" %>
 
-      <%= f.submit "編集" %>
+      <%= f.submit "編集", id: "edit_submit_button_#{method.id}" %>
     <% end %>
 
     <%= button_to "削除",
                   user_payment_method_path(current_user, id: method.id),
                   method: :delete,
-                  data: { turbo_confirm: "#{method.provider}を削除してもよろしいですか?"}
+                  data: { turbo_confirm: "#{method.provider}を削除してもよろしいですか?"},
+                  id: "delete_button_#{method.id}"
     %>
   <% end %>
 <% else %>
