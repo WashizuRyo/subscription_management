@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_070256) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_100817) do
   create_table "payment_methods", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "method_type"
@@ -31,7 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_070256) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.string "subscription_name"
+    t.string "name"
     t.string "plan_name"
     t.decimal "price", precision: 10, scale: 2
     t.date "start_date"
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_070256) do
     t.boolean "active", default: true
     t.integer "status", default: 0, null: false
     t.integer "payment_method_id"
+    t.string "billing_cycle"
     t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end

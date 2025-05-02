@@ -15,7 +15,7 @@ RSpec.describe "Dashboards", type: :request do
       end
 
       it "responds to subscriptions that include tags" do
-        sub = FactoryBot.create(:subscription, user: user, subscription_name: "test_sub")
+        sub = FactoryBot.create(:subscription, user: user, name: "test_sub")
         tag = FactoryBot.create(:tag, name: "test_tag")
         FactoryBot.create(:subscription_tag, subscription: sub, tag: tag)
 
