@@ -37,13 +37,11 @@ class SearchSubscriptionForm
 
     if search_column == "price"
       user_subscriptions = user_subscriptions.where(
-        "#{search_column} LIKE :search_value",
-        search_value: search_value
+        Subscription.arel_table[search_column.to_sym].eq(search_value)
       )
     else
       user_subscriptions = user_subscriptions.where(
-        "#{search_column} LIKE :search_value",
-        search_value: "%" + ActiveRecord::Base.sanitize_sql_like(search_value) + "%"
+        Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")
       )
     end
 
