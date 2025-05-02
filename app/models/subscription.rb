@@ -28,7 +28,7 @@ class Subscription < ApplicationRecord
     where(user_id: user)
       .order(created_at: :desc)
       .limit(5)
-      .includes(:tags)
+      .includes(:tags, :payment_method)
   }
 
   def self.this_month_total_billing(user)

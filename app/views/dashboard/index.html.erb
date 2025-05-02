@@ -3,7 +3,15 @@
 
 <h1>最近登録されたサブスク</h1>
 <%= link_to "さらに見る", user_subscriptions_path(current_user) %>
-<%= render @latest_subscriptions %>
+<% if @latest_subscriptions %>
+  <%= render @latest_subscriptions %>
+<% else %>
+    <p>最近登録されたサブスクはありません</p>
+<% end %>
 
 <h1>次回更新日が近いサブスク</h1>
-<%= render @next_billing_soon_subscriptions %>
+<% if @next_billing_soon_subscriptions %>
+  <p>次回更新日が近いサブスクはありません</p>
+<% else %>
+  <%= render @next_billing_soon_subscriptions %>
+<% end %>
