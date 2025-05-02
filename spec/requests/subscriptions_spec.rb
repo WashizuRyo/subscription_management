@@ -16,7 +16,7 @@ RSpec.describe "Subscriptions", type: :request do
         aggregate_failures do
           expect(response).to have_http_status :ok
           user.subscriptions.each do |subscription|
-            expect(response.body).to include(subscription.subscription_name)
+            expect(response.body).to include(subscription.name)
           end
         end
       end

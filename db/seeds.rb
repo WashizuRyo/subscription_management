@@ -17,7 +17,7 @@ User.create!(name: "Tester",
 user = User.first
 subscriptions = [
   {
-    subscription_name: "Netflix",
+    name: "Netflix",
     plan_name: "スタンダード",
     price: 1490,
     start_date: Date.today - 2.months,
@@ -26,7 +26,7 @@ subscriptions = [
     payment_method_id: nil
   },
   {
-    subscription_name: "Amazon Prime",
+    name: "Amazon Prime",
     plan_name: "年間プラン",
     price: 4900,
     start_date: Date.today - 3.months,
@@ -35,7 +35,7 @@ subscriptions = [
     payment_method_id: nil
   },
   {
-    subscription_name: "Spotify",
+    name: "Spotify",
     plan_name: "プレミアム",
     price: 980,
     start_date: Date.today - 1.month,

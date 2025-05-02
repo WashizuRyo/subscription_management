@@ -6,7 +6,7 @@ ja:
       models:
         subscription:
           attributes:
-            subscription_name:
+            name:
               blank: サブスクリプション名を入力してください
             plan_name:
               blank: プラン名を入力してください

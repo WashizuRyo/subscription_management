@@ -13,7 +13,7 @@
       <span><%= subscription.payment_method.memo %></span>
     <% end %>
   <% end %>
-  <h3><%= subscription.subscription_name %></h3>
+  <h3><%= subscription.name %></h3>
   <p>プラン: <%= subscription.plan_name %></p>
   <p>料金: <%= subscription.price %></p>
   <p>開始日: <%= subscription.start_date %></p>
@@ -24,7 +24,7 @@
     <%= button_to "削除",
                   user_subscription_path(current_user, id: subscription.id),
                   method: :delete,
-                  data: { turbo_confirm: "#{subscription.subscription_name}を削除してもよろしいですか?"}
+                  data: { turbo_confirm: "#{subscription.name}を削除してもよろしいですか?"}
     %>
   </div>
 </div>

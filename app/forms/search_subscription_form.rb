@@ -1,5 +1,5 @@
 class SearchSubscriptionForm
-  ALLOWED_COLUMNS = %w[subscription_name plan_name price start_date end_date billing_date]
+  ALLOWED_COLUMNS = %w[name plan_name price start_date end_date billing_date]
   ALLOWED_DIRECTIONS = %w[asc desc]
 
   include ActiveModel::Model
