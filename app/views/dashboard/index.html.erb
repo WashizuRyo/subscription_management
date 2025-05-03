@@ -1,17 +1,41 @@
-<h1>今月の請求額</h1>
-<p><%= @this_month_total_billing %>円</p>
-
-<h1>最近登録されたサブスク</h1>
-<%= link_to "さらに見る", user_subscriptions_path(current_user) %>
-<% if @latest_subscriptions %>
-  <%= render @latest_subscriptions %>
-<% else %>
-    <p>最近登録されたサブスクはありません</p>
-<% end %>
-
-<h1>次回更新日が近いサブスク</h1>
-<% if @next_billing_soon_subscriptions %>
-  <p>次回更新日が近いサブスクはありません</p>
-<% else %>
-  <%= render @next_billing_soon_subscriptions %>
-<% end %>
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title h4">今月の請求額</h2>
+        <p class="card-text display-4 text-primary"><%= @this_month_total_billing %>円</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title h4 mb-0">最近登録されたサブスク</h2>
+        <%= link_to "さらに見る", user_subscriptions_path(current_user), class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <div class="card-body">
+        <% if @latest_subscriptions.present? %>
+          <%= render @latest_subscriptions %>
+        <% else %>
+          <p class="card-text text-muted">最近登録されたサブスクはありません</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="card-title h4 mb-0">次回更新日が近いサブスク</h2>
+      </div>
+      <div class="card-body">
+        <% if @next_billing_soon_subscriptions.blank? %>
+          <p class="card-text text-muted">次回更新日が近いサブスクはありません</p>
+        <% else %>
+          <%= render @next_billing_soon_subscriptions %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

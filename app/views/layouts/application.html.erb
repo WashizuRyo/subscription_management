@@ -7,16 +7,24 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
     <%= render 'layouts/header' %>
-    <% flash.each do |message_type, message| %>
-      <div><%= message %></div>
-    <% end %>
-    <%= yield %>
-    <%= debug(params) if Rails.env.development? %>
+    <div class="container mt-4">
+      <% flash.each do |message_type, message| %>
+        <div class="alert <%= message_type == 'notice' ? 'alert-success' : 'alert-danger' %> alert-dismissible fade show">
+          <%= message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <%= yield %>
+      <% if Rails.env.development? %>
+        <div class="mt-5">
+          <%= debug(params) %>
+        </div>
+      <% end %>
+    </div>
   </body>
 </html>
