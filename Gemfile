@@ -18,6 +18,10 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "bcrypt"
 gem "will_paginate", "~> 4.0"
+# Bootstrap CSS framework
+gem "bootstrap", "~> 5.3.2"
+# Sass compiler for Rails
+gem "sassc-rails"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
