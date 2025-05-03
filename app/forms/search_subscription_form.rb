@@ -30,8 +30,9 @@ class SearchSubscriptionForm
     return [] unless valid?
 
     scope = @current_user.subscriptions.includes(:tags, :payment_method)
+    orders = build_orders
     scope = apply_search_filter(scope) if search_params_present?
-    scope = apply_order(scope) if orders_present?
+    scope = apply_order(scope, orders) if orders.present?
 
     scope.paginate(page: page, per_page: 5)
   end
@@ -46,8 +47,8 @@ class SearchSubscriptionForm
     end
   end
 
-  def apply_order(scope)
-    scope.order(build_orders)
+  def apply_order(scope, orders)
+    scope.order(orders)
   end
 
   def build_orders
@@ -65,9 +66,5 @@ class SearchSubscriptionForm
 
   def search_params_present?
     search_column.present? && search_value.present?
-  end
-
-  def orders_present?
-    build_orders.present?
   end
 end
