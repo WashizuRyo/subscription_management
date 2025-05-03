@@ -2,6 +2,8 @@
   <li><%= link_to "ホーム", root_path %></li>
   <% if logged_in? %>
     <li><%= link_to "サブスクリプション", user_subscriptions_path(current_user) %></li>
+    <li><%= link_to 'タグ一覧', user_tags_path(current_user) %></li>
+    <li><%= link_to '支払い方法一覧', user_payment_methods_path(current_user) %></li>
     <li><%= link_to "プロフィール", current_user %></li>
     <li><%= link_to "ログアウト", logout_path, data: { "turbo-method": :delete} %></li>
   <% else %>
