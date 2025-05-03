@@ -1,0 +1,17 @@
+---
+description: このプロジェクトにおけるPull Requestの作成、レビュー関する規約を定義します。
+globs: 
+alwaysApply: true
+---
+<!-- description: このプロジェクトにおけるPull Requestの作成、レビュー、マージに関する規約を定義します。 -->
+
+# Pull Request 規約
+
+## PRの作成
+- PRは、関連するIssueがある場合、必ず紐付けること
+- PRの名前は `{issue_number}_簡素なPRの説明` の形式にすること
+  - 例: `789_delete_unnecessary_search_process`
+- PRのDescriptionには、変更の概要、理由、関連Issueへのリンクを記載すること
+- レビュー担当者を指定すること
+- セルフレビューを実施し、基本的なチェックを行うこと
+- Issueがない軽微な変更の場合は、PR名にプレフィックスをつけること
