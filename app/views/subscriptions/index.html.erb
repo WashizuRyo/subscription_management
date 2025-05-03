@@ -1,6 +1,5 @@
 <h1>サブスクリプション一覧</h1>
 <%= link_to "新規作成", new_user_subscription_path(current_user) %>
-
 <div>
   <%= form_with(model: @search_subscription_form, url: user_subscriptions_path(current_user),scope: :q, method: :get) do |f| %>
     <%= render "shared/error_messages", object: @search_subscription_form %>
@@ -48,12 +47,11 @@
         </div>
       </div>
     </div>
-      <%= link_to "クリア", user_subscriptions_path(current_user) %>
-      <%= f.submit "検索" %>
-    <% end %>
+    <%= link_to "クリア", user_subscriptions_path(current_user) %>
+    <%= f.submit "検索" %>
+  <% end %>
   <div>
-</div>
-
+  </div>
   <% if @subscriptions.any? %>
     <%= render @subscriptions %>
     <%= will_paginate @subscriptions%>
