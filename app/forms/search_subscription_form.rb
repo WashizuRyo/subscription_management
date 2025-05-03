@@ -27,32 +27,29 @@ class SearchSubscriptionForm
   end
 
   def search_subscriptions
-    return [] unless self.valid?
+    return [] unless valid?
 
-    @orders = build_orders
-    user_subscriptions = @current_user.subscriptions.includes(:tags, :payment_method)
+    scope = @current_user.subscriptions.includes(:tags, :payment_method)
+    orders = build_orders
+    scope = apply_search_filter(scope) if search_params_present?
+    scope = apply_order(scope, orders) if orders.present?
 
-    return user_subscriptions.paginate(page: page, per_page: 5) if search_params_nil?
-    return user_subscriptions.order(@orders).paginate(page: page, per_page: 5) if only_sort_params_present?
-
-    if search_column == "price"
-      user_subscriptions = user_subscriptions.where(
-        Subscription.arel_table[search_column.to_sym].eq(search_value)
-      )
-    else
-      user_subscriptions = user_subscriptions.where(
-        Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")
-      )
-    end
-
-    if @orders.present?
-      user_subscriptions = user_subscriptions.order(@orders)
-    end
-
-    user_subscriptions.paginate(page: page, per_page: 5)
+    scope.paginate(page: page, per_page: 5)
   end
 
   private
+
+  def apply_search_filter(scope)
+    if search_column == "price"
+      scope.where(Subscription.arel_table[search_column.to_sym].eq(search_value))
+    else
+      scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%"))
+    end
+  end
+
+  def apply_order(scope, orders)
+    scope.order(orders)
+  end
 
   def build_orders
     orders = []
@@ -67,11 +64,7 @@ class SearchSubscriptionForm
     end
   end
 
-  def search_params_nil?
-    search_column.nil? ||  search_value.nil?
-  end
-
-  def only_sort_params_present?
-    @orders.present? && search_params_nil?
+  def search_params_present?
+    search_column.present? && search_value.present?
   end
 end
