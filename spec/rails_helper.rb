@@ -47,6 +47,7 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
   config.include SystemHelper, type: :system
   config.include RequestHelper, type: :request
+  config.include ActionView::Helpers::NumberHelper
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
