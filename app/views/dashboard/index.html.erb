@@ -1,17 +1,23 @@
-<h1>今月の請求額</h1>
-<p><%= @this_month_total_billing %>円</p>
-
-<h1>最近登録されたサブスク</h1>
-<%= link_to "さらに見る", user_subscriptions_path(current_user) %>
-<% if @latest_subscriptions %>
-  <%= render @latest_subscriptions %>
-<% else %>
+<div id="dashboard-container">
+  <div class="card" id="dashboard-card">
+    <div class="card-body">
+      <h3 class="card-title mb-1">今月の請求額</h3>
+      <p class="card-text billing-amount">¥<%= number_with_delimiter(@this_month_total_billing.to_i) %></p>
+      <p class="card-text active-subscriptions"><i class="bi bi-calendar-check me-2"></i>アクティブなサブスクリプション: 5件</p>
+    </div>
+  </div>
+  <h1>最近登録されたサブスク</h1>
+  <% if @latest_subscriptions %>
+    <div class="row row-cols-1 row-cols-sm-4 g-4 p-4">
+      <%= render @latest_subscriptions %>
+    </div>
+  <% else %>
     <p>最近登録されたサブスクはありません</p>
-<% end %>
-
-<h1>次回更新日が近いサブスク</h1>
-<% if @next_billing_soon_subscriptions %>
-  <p>次回更新日が近いサブスクはありません</p>
-<% else %>
-  <%= render @next_billing_soon_subscriptions %>
-<% end %>
+  <% end %>
+  <h1>次回更新日が近いサブスク</h1>
+  <% if @next_billing_soon_subscriptions %>
+    <p>次回更新日が近いサブスクはありません</p>
+  <% else %>
+    <%= render @next_billing_soon_subscriptions %>
+  <% end %>
+</div>
