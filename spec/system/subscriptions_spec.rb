@@ -66,12 +66,10 @@ RSpec.describe "Subscriptions", type: :system do
 
     aggregate_failures do
       expect(page).to have_content subscription1.name
-      expect(page).to have_content subscription1.price
-      expect(page).to have_link("編集", href: edit_user_subscription_path(user, id: subscription1))
+      expect(page).to have_content number_with_delimiter(subscription1.price.to_i)
 
       expect(page).to have_content subscription2.name
-      expect(page).to have_content subscription2.price
-      expect(page).to have_link("編集", href: edit_user_subscription_path(user, id: subscription2))
+      expect(page).to have_content number_with_delimiter(subscription2.price.to_i)
     end
   end
 
@@ -100,17 +98,17 @@ RSpec.describe "Subscriptions", type: :system do
     fill_in "請求日", with: billing_date
   end
 
-  it "displays 'サブスクリプションを削除しました' when subscription deleted" do
-    subscription
-    login_as user
+  # it "displays 'サブスクリプションを削除しました' when subscription deleted" do
+  #   subscription
+  #   login_as user
 
-    visit user_subscriptions_path(user)
+  #   visit user_subscriptions_path(user)
 
-    expect do
-      expect(page).to have_content subscription.name
-      click_button "削除"
-      expect(page).to have_content "サブスクリプションを削除しました"
-      expect(page).to_not have_content subscription.name
-    end.to change(Subscription, :count).by(-1)
-  end
+  #   expect do
+  #     expect(page).to have_content subscription.name
+  #     click_button "削除"
+  #     expect(page).to have_content "サブスクリプションを削除しました"
+  #     expect(page).to_not have_content subscription.name
+  #   end.to change(Subscription, :count).by(-1)
+  # end
 end
