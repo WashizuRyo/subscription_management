@@ -1,9 +1,7 @@
 <div class="col">
   <div class="card p-3" id="subscription-card">
     <div class="card-header">
-      <%= link_to edit_user_subscription_path(current_user, subscription) do %>
-        <h3><%= subscription.name %></h3>
-      <% end %>
+      <h3><%= link_to subscription.name, edit_user_subscription_path(current_user, subscription) %></h3>
       <span><%= subscription.plan_name %></span>
     </div>
     <hr>
