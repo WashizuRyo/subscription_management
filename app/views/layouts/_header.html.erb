@@ -40,6 +40,8 @@
     <% end %>
   </div>
 </nav>
+
+<% if logged_in? %>
 <nav id="sub-nav">
   <ul class="nav">
     <li class="nav-item">
@@ -63,4 +65,5 @@
       <% end %>
     </li>
   </ul>
-</nav>
+  </nav>
+<% end %>
