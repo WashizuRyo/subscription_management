@@ -1,1 +1,18 @@
+$white: #fff;
+$test-color: #fd4e27;
+$gray-600: rgba($white, 0.15);
+$orange: rgb(255, 120, 9);
+$navy: #0d1117;
+$blue: #4493f8;
+
+$dropdown-link-hover-bg: $gray-600;
+$dropdown-link-hover-color: $white;
+$dropdown-link-active-bg: $gray-600;
+$dropdown-link-active-color: $white;
+
+$nav-link-color: $white;
+$nav-underline-link-active-color: $test-color;
+
 @import "bootstrap";
+@import "navigation";
+@import "dashboard";

@@ -73,3 +73,5 @@ group :test do
   gem "launchy"
   gem "shoulda-matchers"
 end
+
+gem "hotwire-livereload", "~> 2.0", group: :development

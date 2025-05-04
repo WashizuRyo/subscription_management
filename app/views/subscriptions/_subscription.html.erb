@@ -1,30 +1,46 @@
-<div>
-  <% if subscription.tags.any? %>
-    <div>
-      <% subscription.tags.each do |tag| %>
-        <span><%= tag.name %></span>
-      <% end %>
+<div class="col">
+  <div class="card p-3" id="subscription-card">
+    <div class="card-header">
+      <h3><%= link_to subscription.name, edit_user_subscription_path(current_user, subscription) %></h3>
+      <span><%= subscription.plan_name %></span>
     </div>
-  <% end %>
-  <% if subscription.payment_method.present? %>
-    <span><%= subscription.payment_method.provider %></span>
-    <span><%= subscription.payment_method.method_type %></span>
-    <% if subscription.payment_method.memo.present? %>
-      <span><%= subscription.payment_method.memo %></span>
+    <hr>
+    <div class="card-body">
+      <div class="info-group">
+        <span>
+          <i class="bi bi-calendar-range me-2"></i>期間
+        </span>
+        <p class="card-text"><%= subscription.start_date.strftime('%Y年%m月%d日') %> ~ <%= subscription.end_date.strftime('%Y年%m月%d日') %></p>
+      </div>
+      <div class="info-group">
+        <span>
+          <i class="bi bi-credit-card me-2"></i>請求日
+        </span>
+        <p class="card-text"><%= subscription.billing_date.strftime('%Y年%m月%d日') %></p>
+      </div>
+      <div class="d-flex justify-content-end">
+        <h5 class="card-text price">¥<%= number_with_delimiter(subscription.price.to_i) %> / 月</h5>
+      </div>
+    </div>
+    <% if subscription.payment_method.present? || subscription.tags.any? %>
+      <hr>
+      <div class="card-footer">
+        <div class="footer-content">
+          <% if subscription.tags.any? %>
+            <div class="tag-container">
+              <% subscription.tags.each do |tag| %>
+                <span class="badge bg-primary bg-opacity-25 text-primary border border-primary fs-6"><%= tag.name %></span>
+              <% end %>
+            </div>
+          <% end %>
+          <% if subscription.payment_method.present? %>
+            <div class="info-group">
+              <span>支払い方法</span>
+              <p><%= subscription.payment_method.provider %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-  <% end %>
-  <h3><%= subscription.name %></h3>
-  <p>プラン: <%= subscription.plan_name %></p>
-  <p>料金: <%= subscription.price %></p>
-  <p>開始日: <%= subscription.start_date %></p>
-  <p>終了日: <%= subscription.end_date %></p>
-  <p>請求日: <%= subscription.billing_date %></p>
-  <div>
-    <%= link_to "編集", edit_user_subscription_path(current_user, id: subscription.id) %>
-    <%= button_to "削除",
-                  user_subscription_path(current_user, id: subscription.id),
-                  method: :delete,
-                  data: { turbo_confirm: "#{subscription.name}を削除してもよろしいですか?"}
-    %>
   </div>
 </div>
