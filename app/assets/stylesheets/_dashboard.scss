@@ -6,7 +6,7 @@
 #dashboard-card {
   background-color: $navy;
   color: $white;
-  border-color: $gray-600;
+  border-color: $gray-transparent;
   padding: 0.5rem;
   margin-bottom: 2rem;
 
@@ -27,7 +27,7 @@
 #subscription-card {
   background-color: $navy;
   color: $white;
-  border-color: $gray-600;
+  border-color: $gray-transparent;
 
   h3 {
     color: $blue;

@@ -2,7 +2,7 @@
   padding-left: 3rem;
   padding-right: 3rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid $gray-600;
+  border-bottom: 2px solid $gray-transparent;
   background-color: black;
 
   .nav {
@@ -21,7 +21,7 @@
 
     &:hover,
     &:active {
-      background-color: $gray-600;
+      background-color: $gray-transparent;
       color: $white;
     }
   }
