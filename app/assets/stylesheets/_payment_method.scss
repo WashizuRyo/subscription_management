@@ -24,6 +24,19 @@
   margin-inline: 6rem;
   padding-top: 5rem;
 
+  .edit-form-hidden {
+    display: none;
+  }
+
+  .memo-field-wide {
+    width: 200%;
+  }
+
+  .edit-button-group {
+    height: 38px;
+    border-radius: 6px;
+  }
+
   input,
   textarea {
     background-color: $navy-transparent;
