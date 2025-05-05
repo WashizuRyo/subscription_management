@@ -1,18 +1,30 @@
 $white: #fff;
 $test-color: #fd4e27;
-$gray-600: rgba($white, 0.15);
+$gray-transparent: rgba($white, 0.15);
+$gray-500: #3d444d;
 $orange: rgb(255, 120, 9);
 $navy: #0d1117;
+$navy-transparent: #5159643f;
 $blue: #4493f8;
+$light-blue: #5ea3fa;
 
-$dropdown-link-hover-bg: $gray-600;
+$dropdown-link-hover-bg: $gray-transparent;
 $dropdown-link-hover-color: $white;
-$dropdown-link-active-bg: $gray-600;
+$dropdown-link-active-bg: $gray-transparent;
 $dropdown-link-active-color: $white;
 
 $nav-link-color: $white;
 $nav-underline-link-active-color: $test-color;
 
+$table-border-color: $gray-transparent;
+
 @import "bootstrap";
 @import "navigation";
 @import "dashboard";
+@import "payment_method";
+
+#content {
+  background-color: $navy;
+  height: 100vh;
+  width: 100vw;
+}

@@ -1,0 +1,133 @@
+// ボタンスタイルの共通化
+@mixin blue-button {
+  background-color: $blue;
+  color: $white;
+  border: 1px solid $blue;
+
+  &:hover {
+    background-color: $light-blue;
+  }
+
+  &:focus,
+  &:active,
+  &.active,
+  &:focus-visible {
+    background-color: $blue;
+    color: $white;
+    border-color: $blue;
+    outline: 1px solid $blue;
+  }
+}
+
+#payment_methods_container {
+  color: $white;
+  margin-inline: 6rem;
+  padding-top: 5rem;
+
+  .edit-form-hidden {
+    display: none;
+  }
+
+  .memo-field-wide {
+    width: 200%;
+  }
+
+  .edit-button-group {
+    height: 38px;
+    border-radius: 6px;
+  }
+
+  input,
+  textarea {
+    background-color: $navy-transparent;
+    border: 1px solid $gray-transparent;
+    color: $white;
+
+    &:focus {
+      background-color: $navy;
+      outline: 1px solid $blue;
+    }
+
+    &::placeholder {
+      color: $gray-transparent;
+    }
+  }
+
+  #edit_form {
+    margin-bottom: 1.5rem;
+  }
+
+  .cancel-edit {
+    border: 1px solid $gray-transparent;
+    color: $white;
+    background-color: $navy-transparent;
+  }
+
+  #edit_payment_method_submit {
+    @include blue-button;
+  }
+
+  #edit_form {
+    margin-top: 1rem;
+  }
+
+  table {
+    th {
+      color: $white;
+      background-color: $navy-transparent;
+      padding: 0.85rem;
+      vertical-align: middle;
+    }
+
+    td {
+      color: $white;
+      background-color: $navy;
+      padding: 0.85rem;
+      vertical-align: middle;
+    }
+
+    .bi {
+      background-color: $gray-transparent;
+      border-radius: 0.5rem;
+      padding: 0.4rem;
+      border: 1px solid $gray-transparent;
+      font-size: 1.2rem;
+
+      &.bi-trash {
+        color: $red;
+        &:hover {
+          background-color: red;
+          color: $white;
+        }
+      }
+
+      &.bi-pencil {
+        color: $white;
+        margin-right: 0.5rem;
+
+        &:hover {
+          background-color: $navy-transparent;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  #new_payment_method {
+    background-color: $navy;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    margin-left: 1.5rem;
+
+    border: 1px solid $gray-transparent;
+    div {
+      margin-bottom: 1rem;
+    }
+
+    #new_payment_method_submit {
+      margin-top: 1rem;
+      width: 100%;
+      @include blue-button;
+    }
+  }
+}
