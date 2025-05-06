@@ -1,11 +1,33 @@
-<div id=<%= "tag_#{tag.id}" %>>
-  <h3><%= tag.name %></h3>
-  <div>
-    <%= link_to "編集", edit_user_tag_path(current_user, id: tag.id) %>
-    <%= button_to "削除",
-                  user_tag_path(current_user, id: tag.id),
-                  method: :delete,
-                  data: { turbo_confirm: "#{tag.name}を削除してもよろしいですか?"}
-    %>
+<div id=<%= "tag_#{tag.id}" %> class="g-col-12 g-col-md-3 tag-card p-3">
+  <div class="card">
+    <div class="card-header p-0 d-flex justify-content-between align-items-center">
+      <h6 class="mb-0"><span class="badge bg-primary bg-opacity-25 text-primary border border-primary fs-6 px-2"><%= tag.name %></span></h6>
+      <div class="d-flex">
+        <%= link_to edit_user_tag_path(current_user, id: tag.id), data: { bs_toggle: 'tooltip', bs_placement: 'bottom', bs_custom_class: 'custom-tooltip', bs_title: '編集' } do %>
+          <i class="bi bi-pencil"></i>
+        <% end %>
+        <%= button_to user_tag_path(current_user, id: tag.id),
+                          method: :delete,
+                          data: { 
+                            turbo_confirm: "#{tag.name}を削除してもよろしいですか?", 
+                            bs_toggle: 'tooltip', 
+                            bs_placement: 'bottom', 
+                            bs_custom_class: 'custom-tooltip', 
+                            bs_title: '削除' 
+                          } do %>
+          <i class="bi bi-trash"></i>
+        <% end %>
+      </div>
+    </div>
+    <div class="card-body p-0 pt-2">
+      <%= link_to user_subscriptions_path(current_user, id: tag.id), class: "text-decoration-none" do %>
+        <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="サブスクリプション数">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-collection me-2"></i>
+            <p class="card-text mb-0"><%= tag.subscriptions.count %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

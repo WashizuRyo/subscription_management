@@ -19,6 +19,69 @@
   }
 }
 
+@mixin form-card-style {
+  color: $white;
+  background-color: $navy;
+  border-radius: 0.5rem;
+  padding: 2rem;
+
+  border: 1px solid $gray-transparent;
+  div {
+    margin-bottom: 1rem;
+  }
+
+  #submit_button {
+    margin-top: 1rem;
+    width: 100%;
+    @include blue-button;
+  }
+
+  label {
+    margin-bottom: 0.5rem;
+  }
+
+  input,
+  textarea {
+    background-color: $navy-transparent;
+    border: 1px solid $gray-transparent;
+    color: $white;
+
+    &:focus {
+      background-color: $navy;
+      outline: 1px solid $blue;
+    }
+
+    &::placeholder {
+      color: $gray-transparent;
+    }
+  }
+}
+
+// アイコンスタイルの共通化
+@mixin icon-style {
+  border-radius: 0.5rem;
+  padding: 0.4rem;
+  font-size: 1.1rem;
+
+  &.bi-trash {
+    color: $gray-transparent;
+    &:hover {
+      background-color: $navy-transparent;
+      color: $red;
+    }
+  }
+
+  &.bi-pencil {
+    color: $gray-transparent;
+    margin-right: 0.5rem;
+
+    &:hover {
+      background-color: $navy-transparent;
+      cursor: pointer;
+    }
+  }
+}
+
 #payment_methods_container {
   color: $white;
   margin-inline: 6rem;
@@ -87,47 +150,11 @@
     }
 
     .bi {
-      background-color: $gray-transparent;
-      border-radius: 0.5rem;
-      padding: 0.4rem;
-      border: 1px solid $gray-transparent;
-      font-size: 1.2rem;
-
-      &.bi-trash {
-        color: $red;
-        &:hover {
-          background-color: red;
-          color: $white;
-        }
-      }
-
-      &.bi-pencil {
-        color: $white;
-        margin-right: 0.5rem;
-
-        &:hover {
-          background-color: $navy-transparent;
-          cursor: pointer;
-        }
-      }
+      @include icon-style;
     }
   }
+}
 
-  #new_payment_method {
-    background-color: $navy;
-    border-radius: 0.5rem;
-    padding: 2rem;
-    margin-left: 1.5rem;
-
-    border: 1px solid $gray-transparent;
-    div {
-      margin-bottom: 1rem;
-    }
-
-    #new_payment_method_submit {
-      margin-top: 1rem;
-      width: 100%;
-      @include blue-button;
-    }
-  }
+#new_payment_method_form {
+  @include form-card-style;
 }
