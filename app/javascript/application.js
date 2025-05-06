@@ -6,3 +6,4 @@ import "@popperjs/core";
 import "bootstrap";
 import "controllers";
 import "payment_method";
+import "tag";
