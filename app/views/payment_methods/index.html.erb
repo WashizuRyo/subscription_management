@@ -1,5 +1,5 @@
-<div id="payment_methods_container" class="row gx-5">
-  <div class="col-md-9">
+<div id="payment_methods_container" class="grid" style="--bs-gap: 3rem;">
+  <div class="g-col-12 g-col-md-9">
     <% if @payment_methods.any? %>
       <% @payment_methods.each do |method| %>
         <div id="edit_form_<%= method.id %>" class="edit-form-hidden">
@@ -78,8 +78,8 @@
       <h1>支払い方法が登録されていません</h1>
     <% end %>
   </div>
-  <div class="col-md-3">
-    <div id="new_payment_method">
+  <div class="g-col-12 g-col-md-3">
+    <div id="new_payment_method_form">
       <h3 class="mb-4">新規支払い方法</h3>
       <%= form_with(model: @payment_method, url: user_payment_methods_path(current_user)) do |f| %>
         <%= render "shared/error_messages", object: f.object %>
@@ -95,7 +95,7 @@
           <%= f.label :memo, "メモ", for: "new_payment_method_memo", class: "form-label" %>
           <%= f.text_area :memo, id: "new_payment_method_memo", class: "form-control", placeholder: "カード番号は入力しないでください", rows: 6 %>
         </div>
-        <button type="submit" class="btn" name="commit" id="new_payment_method_submit" data-disable-with="支払い方法を追加">
+        <button type="submit" class="btn submit-btn" name="commit" id="new_payment_method_submit" data-disable-with="支払い方法を追加">
           <i class="bi bi-plus-lg text-white me-2"></i>
           支払い方法を追加
         </button>

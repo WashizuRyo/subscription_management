@@ -18,6 +18,10 @@ ja:
               blank: 終了日を入力してください
             billing_date:
               blank: 請求日を入力してください
+        tag:
+          attributes:
+            name:
+              blank: "タグ名を入力してください"
         user:
           attributes:
             name:

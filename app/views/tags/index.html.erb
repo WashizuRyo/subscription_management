@@ -1,5 +1,44 @@
-<h1>タグ一覧</h1>
-
-<div>
-  <%= render @tags %>
+<div id="tags_container">
+  <div class="grid" style="--bs-gap: 3rem;">
+    <div id="tags_list" class="g-col-12 g-col-md-9">
+      <div class="grid" style="--bs-gap: 1rem;">
+        <%= render @tags %>
+      </div>
+    </div>
+    <div class="g-col-12 g-col-md-3">
+      <div id="new_tag_form" class="card-style">
+        <h3 class="mb-4">新規タグ</h3>
+        <%= form_with(model: @tag, url: user_tags_path(current_user)) do |f| %>
+          <%= render "shared/error_messages", object: f.object %>
+          <div>
+            <%= f.label :name, "タグ名" %>
+            <%= f.text_field :name, class: "form-control", placeholder: "例: 音楽" %>
+          </div>
+          <button type="submit" class="btn submit-btn" name="commit" id="new_tag_submit" data-disable-with="タグを作成">
+            <i class="bi bi-plus-lg text-white me-2"></i>
+            タグを作成
+          </button>
+        <% end %>
+      </div>
+      <% @tags.each do |tag| %>
+        <div id="edit_tag_form_<%= tag.id %>" style="display: none;" class="card-style">
+          <h3 class="mb-4">タグ編集</h3>
+          <%= form_with(model: tag, url: user_tag_path(current_user, tag)) do |f| %>
+            <%= render "shared/error_messages", object: f.object %>
+            <div>
+              <%= f.label :name, "タグ名" , for: "tag_name_#{tag.id}"%>
+              <%= f.text_field :name, class: "form-control", placeholder: "例: 音楽", id: "tag_name_#{tag.id}" %>
+            </div>
+            <div class="d-flex align-items-end gap-3">
+              <button type="button" class="btn cancel-edit" data-tag-id="<%= tag.id %>" id="cancel_edit_button">キャンセル</button>
+              <button type="submit" class="btn submit-btn" name="commit" id="edit_tag_submit" data-disable-with="タグを更新" data-tag-id="<%= tag.id %>">
+                <i class="bi bi-pencil-square text-white me-2"></i>
+                更新
+              </button>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

@@ -5,6 +5,18 @@ class TagsController < ApplicationController
 
   def index
     @tags = Tag.all
+    @tag = Tag.new
+  end
+
+  def create
+    @tag = Tag.new(tag_params)
+    if @tag.save
+      flash[:success] = "タグを作成しました"
+      redirect_to user_tags_path(current_user)
+    else
+      @tags = Tag.all
+      render "index", status: :unprocessable_entity
+    end
   end
 
   def edit
@@ -19,8 +31,8 @@ class TagsController < ApplicationController
       flash[:success] = "タグを更新しました"
       redirect_to user_tags_path(current_user)
     else
-      flash.now[:danger] = "タグの更新に失敗しました"
-      render "edit", status: :unprocessable_entity
+      @tags = Tag.all
+      render "index", status: :unprocessable_entity
     end
   end
 

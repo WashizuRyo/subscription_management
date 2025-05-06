@@ -18,13 +18,15 @@ $nav-underline-link-active-color: $test-color;
 
 $table-border-color: $gray-transparent;
 
+$enable-grid-classes: false;
+$enable-cssgrid: true;
+
 @import "bootstrap";
 @import "navigation";
 @import "dashboard";
 @import "payment_method";
-
+@import "tag";
 #content {
   background-color: $navy;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
 }

@@ -8,7 +8,7 @@
   </div>
   <h1>最近登録されたサブスク</h1>
   <% if @latest_subscriptions.present? %>
-    <div class="row row-cols-1 row-cols-sm-4 g-4 p-4">
+    <div class="grid p-4">
       <%= render @latest_subscriptions %>
     </div>
   <% else %>
@@ -16,7 +16,7 @@
   <% end %>
   <h1>次回更新日が近いサブスク</h1>
   <% if @next_billing_soon_subscriptions.present? %>
-    <div class="row row-cols-1 row-cols-sm-4 g-4 p-4">
+    <div class="grid p-4">
       <%= render @next_billing_soon_subscriptions %>
     </div>
   <% else %>
