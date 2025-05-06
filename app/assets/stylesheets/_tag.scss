@@ -62,6 +62,19 @@
   }
 }
 
-#new_tag_form {
+.card-style {
   @include form-card-style;
+
+  .cancel-edit {
+    border: 1px solid $gray-transparent;
+    color: $white;
+    background-color: $navy-transparent;
+    width: 60%;
+  }
+
+  input {
+    &:focus {
+      color: $white;
+    }
+  }
 }
