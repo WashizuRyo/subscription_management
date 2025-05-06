@@ -10,9 +10,7 @@ RSpec.describe "Tags", type: :system do
     visit user_tags_path(user)
 
     expect do
-      within "#tag_#{tag.id}" do
-        click_button "削除"
-      end
+      find("#tag_#{tag.id}").click_button
 
       expect(page).to have_content "タグを削除しました"
       expect(page).to_not have_content tag.name
