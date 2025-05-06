@@ -18,6 +18,9 @@ $nav-underline-link-active-color: $test-color;
 
 $table-border-color: $gray-transparent;
 
+$enable-grid-classes: false;
+$enable-cssgrid: true;
+
 @import "bootstrap";
 @import "navigation";
 @import "dashboard";
