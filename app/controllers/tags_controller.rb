@@ -8,6 +8,17 @@ class TagsController < ApplicationController
     @tag = Tag.new
   end
 
+  def create
+    @tag = Tag.new(tag_params)
+    if @tag.save
+      flash[:success] = "タグを作成しました"
+      redirect_to user_tags_path(current_user)
+    else
+      flash.now[:danger] = "タグの作成に失敗しました"
+      render "index", status: :unprocessable_entity
+    end
+  end
+
   def edit
     if @tag.nil?
       flash[:danger] = "タグが見つかりませんでした"
