@@ -1,35 +1,26 @@
 <h1>サブスクリプションを編集する</h1>
-
 <div>
   <%= form_with(model:  [@user, @subscription]) do |f| %>
     <%= render "shared/error_messages", object: f.object %>
-
     <%= f.label :price, "値段"%>
     <%= f.number_field :price%>
     <span>円</span>
-
     <%= f.label :name, "名前" %>
     <%= f.text_field :name %>
-
     <%= f.label :plan_name, "プラン名" %>
     <%= f.text_field :plan_name %>
-
     <%= f.label :start_date, "開始日" %>
     <%= f.date_field :start_date %>
-
     <%= f.label :end_date, "終了日" %>
     <%= f.date_field :end_date %>
-
     <%= f.label :billing_date, "請求日" %>
     <%= f.date_field :billing_date %>
-
     <% @tags.each do |tag| %>
       <div>
         <%= check_box_tag "subscription[tag_ids][]", tag.id, @subscription.tags.include?(tag), id: "tag_#{tag.id}" %>
         <%= label_tag "tag_#{tag.id}", tag.name %>
       </div>
     <% end %>
-
     <p>支払い方法</p>
     <% @payment_methods.each do |payment_method| %>
       <div>
@@ -40,8 +31,6 @@
                       [payment_method.method_type, payment_method.provider, payment_method.memo].reject(&:blank?).join(', ') %>
       </div>
     <% end %>
-
     <%= f.submit "送信する" %>
-
   <% end %>
 </div>
