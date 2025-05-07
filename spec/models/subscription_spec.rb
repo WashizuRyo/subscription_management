@@ -35,6 +35,13 @@ RSpec.describe Subscription, type: :model do
     end
   end
 
+  describe "associations" do
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:payment_method).optional }
+    it { is_expected.to have_many(:subscription_tags).dependent(:destroy) }
+    it { is_expected.to have_many(:tags).through(:subscription_tags) }
+  end
+
   describe "this_month_total_billing" do
     let(:user) { FactoryBot.create(:user) }
 

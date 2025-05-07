@@ -121,6 +121,29 @@ RSpec.describe "Subscriptions", type: :request do
           expect(response).to redirect_to root_path
         end
       end
+
+      context "with valid params" do
+        let(:subscription) { user.subscriptions.first }
+        let(:tag) { FactoryBot.create(:tag) }
+
+        before do
+          subscription.tags << tag
+        end
+
+        it "removes all tags when no tags are selected" do
+          # タグが選択されなかったら, クエリにtag_idsが含まれない
+          patch user_subscription_path(user, subscription), params: {
+            subscription: {
+              name: subscription.name
+            }
+          }
+
+          expect(response).to redirect_to root_path
+          follow_redirect!
+          expect(response.body).to include "サブスクリプションを更新しました"
+          expect(subscription.reload.tags).to be_empty
+        end
+      end
     end
 
     context "not logged in" do
