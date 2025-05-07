@@ -39,6 +39,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def update
+    params[:subscription][:tag_ids] ||= []
     if @subscription.update(subscription_params)
       flash[:success] = "サブスクリプションを更新しました"
       redirect_to root_path
