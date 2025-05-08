@@ -77,7 +77,7 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       expect(subscriptions[2]).to eq sub3
     end
 
-    it "returns subscriptions that exactly match when search_column is 'price'" do
+    it "returns subscriptions when price exactly matches search value (exact match)" do
       FactoryBot.create(:subscription, user: user, price: 9000)
       FactoryBot.create(:subscription, user: user, price: 900)
       FactoryBot.create(:subscription, user: user, price: 90)
@@ -85,11 +85,63 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
                               search_column: "price",
-                              search_value: 90)
+                              search_value: 90,
+                              search_value_pattern: "exact")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 1
       expect(subscriptions.first.price).to eq 90
+    end
+
+    it "returns subscriptions when name contains search term (partial match)" do
+      FactoryBot.create(:subscription, user: user, name: "Netflix Premium")
+      FactoryBot.create(:subscription, user: user, name: "Netflix Basic")
+      FactoryBot.create(:subscription, user: user, name: "Amazon Prime")
+      FactoryBot.create(:subscription, user: user, name: "Disney Plus")
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "name",
+                              search_value: "netflix",
+                              search_value_pattern: "partial")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
+    end
+
+    it "returns subscriptions when name ends with search term (end_with match)" do
+      FactoryBot.create(:subscription, user: user, name: "Netflix Premium")
+      FactoryBot.create(:subscription, user: user, name: "Netflix Basic")
+      FactoryBot.create(:subscription, user: user, name: "Amazon Prime")
+      FactoryBot.create(:subscription, user: user, name: "Disney Plus")
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "name",
+                              search_value: "Premium",
+                              search_value_pattern: "end_with")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.name).to eq "Netflix Premium"
+    end
+
+    it "returns subscriptions when name starts with search term (start_with match)" do
+      FactoryBot.create(:subscription, user: user, name: "Netflix Premium")
+      FactoryBot.create(:subscription, user: user, name: "Netflix Basic")
+      FactoryBot.create(:subscription, user: user, name: "Amazon Prime")
+      FactoryBot.create(:subscription, user: user, name: "Disney Plus")
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "name",
+                              search_value: "Netflix",
+                              search_value_pattern: "start_with")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
     end
 
     it "returns subscriptions that match the search_column / search_value" do
@@ -124,9 +176,9 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 3
-      expect(subscriptions.first.price).to eq 30
-      expect(subscriptions.second.price).to eq 20
-      expect(subscriptions.third.price).to eq 10
+      expect(subscriptions[0].price).to eq 30
+      expect(subscriptions[1].price).to eq 20
+      expect(subscriptions[2].price).to eq 10
     end
 
     it "returns subscriptions that sorted by orders" do

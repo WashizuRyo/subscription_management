@@ -7,6 +7,7 @@ class SearchSubscriptionForm
 
   attribute :search_column, :string
   attribute :search_value, :string
+  attribute :search_value_pattern, :string
   attribute :first_column, :string
   attribute :first_direction, :string
   attribute :second_column, :string
@@ -21,7 +22,7 @@ class SearchSubscriptionForm
             allow_nil: true
 
   def initialize(attributes = {}, current_user:)
-    blank_to_nil(attributes)
+    attributes = blank_to_nil(attributes)
     super(attributes)
     @current_user = current_user
   end
@@ -30,25 +31,36 @@ class SearchSubscriptionForm
     return [] unless valid?
 
     scope = @current_user.subscriptions.includes(:tags, :payment_method)
-    orders = build_orders
-    scope = apply_search_filter(scope) if search_params_present?
-    scope = apply_order(scope, orders) if orders.present?
+    if search_params_present?
+      scope = build_search_query.call(scope)
+    end
+
+    if sort_params_present?
+      scope = build_order_query.call(scope)
+    end
 
     scope.paginate(page: page, per_page: 5)
   end
 
   private
 
-  def apply_search_filter(scope)
-    if search_column == "price"
-      scope.where(Subscription.arel_table[search_column.to_sym].eq(search_value))
+  def build_search_query
+    if search_value_pattern == "partial"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
+    elsif search_value_pattern == "exact"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].eq(search_value)) }
+    elsif search_value_pattern == "start_with"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
+    elsif search_value_pattern == "end_with"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}")) }
     else
-      scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%"))
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
     end
   end
 
-  def apply_order(scope, orders)
-    scope.order(orders)
+  def build_order_query
+    orders = build_orders
+    ->(scope) { scope.order(orders) }
   end
 
   def build_orders
@@ -59,12 +71,15 @@ class SearchSubscriptionForm
   end
 
   def blank_to_nil(attributes)
-    attributes.each do |key, value|
-      attributes[key] = value.presence
-    end
+    attributes.transform_values { |v| v.presence }
   end
 
   def search_params_present?
     search_column.present? && search_value.present?
+  end
+
+  def sort_params_present?
+    first_column.present? && first_direction.present? ||
+    second_column.present? && second_direction.present?
   end
 end
