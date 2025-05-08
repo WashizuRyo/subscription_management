@@ -50,9 +50,9 @@ class SearchSubscriptionForm
     elsif search_value_pattern == "exact"
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].eq(search_value)) }
     elsif search_value_pattern == "start_with"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("#{search_value}%")) }
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
     elsif search_value_pattern == "end_with"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{search_value}")) }
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}")) }
     else
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
     end
