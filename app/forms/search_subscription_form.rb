@@ -22,7 +22,7 @@ class SearchSubscriptionForm
             allow_nil: true
 
   def initialize(attributes = {}, current_user:)
-    blank_to_nil(attributes)
+    attributes = blank_to_nil(attributes)
     super(attributes)
     @current_user = current_user
   end
@@ -71,9 +71,7 @@ class SearchSubscriptionForm
   end
 
   def blank_to_nil(attributes)
-    attributes.each do |key, value|
-      attributes[key] = value.presence
-    end
+    attributes.transform_values { |v| v.presence }
   end
 
   def search_params_present?
