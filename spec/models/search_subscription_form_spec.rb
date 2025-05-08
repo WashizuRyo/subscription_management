@@ -63,18 +63,15 @@ RSpec.describe SearchSubscriptionForm, type: :model do
     end
 
     it "returns subscriptions without filtering when only sorting params are present" do
-      sub1 = FactoryBot.create(:subscription, user: user, price: 100)
-      sub2 = FactoryBot.create(:subscription, user: user, price: 200)
-      sub3 = FactoryBot.create(:subscription, user: user, price: 300)
+      FactoryBot.create(:subscription, user: user, price: 100)
+      FactoryBot.create(:subscription, user: user, price: 200)
+      FactoryBot.create(:subscription, user: user, price: 300)
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
                               first_column: "price",
                               first_direction: "asc")
       subscriptions = form.search_subscriptions
-      expect(subscriptions.count).to eq 3
-      expect(subscriptions[0]).to eq sub1
-      expect(subscriptions[1]).to eq sub2
-      expect(subscriptions[2]).to eq sub3
+      expect(subscriptions.map(&:price)).to eq([ 100, 200, 300 ])
     end
 
     it "returns subscriptions when price exactly matches search value (exact match)" do
@@ -106,7 +103,6 @@ RSpec.describe SearchSubscriptionForm, type: :model do
                               search_value_pattern: "partial")
       subscriptions = form.search_subscriptions
 
-      expect(subscriptions.length).to eq 2
       expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
     end
 
@@ -140,7 +136,6 @@ RSpec.describe SearchSubscriptionForm, type: :model do
                               search_value_pattern: "start_with")
       subscriptions = form.search_subscriptions
 
-      expect(subscriptions.length).to eq 2
       expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
     end
 
@@ -175,10 +170,7 @@ RSpec.describe SearchSubscriptionForm, type: :model do
                               first_direction: "desc")
       subscriptions = form.search_subscriptions
 
-      expect(subscriptions.length).to eq 3
-      expect(subscriptions[0].price).to eq 30
-      expect(subscriptions[1].price).to eq 20
-      expect(subscriptions[2].price).to eq 10
+      expect(subscriptions.map(&:name)).to eq([ "Net", "netflix", "Netflix" ])
     end
 
     it "returns subscriptions that sorted by orders" do
@@ -196,10 +188,7 @@ RSpec.describe SearchSubscriptionForm, type: :model do
                               second_direction: "asc")
       subscriptions = form.search_subscriptions
 
-      expect(subscriptions.length).to eq 3
-      expect(subscriptions.first.price).to eq 10
-      expect(subscriptions.second.price).to eq 20
-      expect(subscriptions.third.price).to eq 30
+      expect(subscriptions.map(&:price)).to eq([ 10, 20, 30 ])
     end
   end
 end
