@@ -83,7 +83,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
                               current_user: user,
                               search_column: "price",
                               search_value: 90,
-                              search_value_pattern: "exact")
+                              search_date_start: 90,
+                              search_date_value_pattern: "exact")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 1

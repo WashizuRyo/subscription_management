@@ -8,6 +8,9 @@ class SearchSubscriptionForm
   attribute :search_column, :string
   attribute :search_value, :string
   attribute :search_value_pattern, :string
+  attribute :search_date_start, :date
+  attribute :search_date_end, :date
+  attribute :search_date_value_pattern, :string
   attribute :first_column, :string
   attribute :first_direction, :string
   attribute :second_column, :string
@@ -45,6 +48,16 @@ class SearchSubscriptionForm
   private
 
   def build_search_query
+    if search_value_pattern.present? && column_type == :string
+      filter_by_string
+    elsif search_date_value_pattern.present? && (column_type == :date || column_type == :decimal)
+      filter_by_date
+    else
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
+    end
+  end
+
+  def filter_by_string
     if search_value_pattern == "partial"
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
     elsif search_value_pattern == "exact"
@@ -53,14 +66,28 @@ class SearchSubscriptionForm
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
     elsif search_value_pattern == "end_with"
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}")) }
-    else
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
+    end
+  end
+
+  def filter_by_date
+    if search_date_value_pattern == "exact"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].eq(search_date_start)) }
+    elsif search_date_value_pattern == "before"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].lt(search_date_start)) }
+    elsif search_date_value_pattern == "after"
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].gt(search_date_start)) }
+    elsif search_date_value_pattern == "between"
+        ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].between(search_date_start, search_date_end)) }
     end
   end
 
   def build_order_query
     orders = build_orders
     ->(scope) { scope.order(orders) }
+  end
+
+  def column_type
+    Subscription.columns_hash[search_column]&.type
   end
 
   def build_orders
