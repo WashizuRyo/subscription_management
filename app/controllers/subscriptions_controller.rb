@@ -76,8 +76,12 @@ class SubscriptionsController < ApplicationController
   end
 
   def search_subscription_params
-    params.fetch(:q, {}).permit(:search_column,
-                  :search_value,
+    params.fetch(:q, {}).permit(:filter_column,
+                  :text_filter_value,
+                  :text_filter_pattern,
+                  :date_filter_start,
+                  :date_filter_end,
+                  :date_filter_pattern,
                   :first_column,
                   :first_direction,
                   :second_column,
