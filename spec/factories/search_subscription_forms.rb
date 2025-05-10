@@ -1,7 +1,11 @@
 FactoryBot.define do
   factory :search_subscription_form do
-    search_column { "" }
-    search_value { "" }
+    filter_column { "" }
+    text_filter_value { "" }
+    text_filter_pattern { "" }
+    date_filter_start { nil }
+    date_filter_end { nil }
+    date_filter_pattern { "" }
     first_column { "" }
     first_direction { "" }
     second_column { "" }

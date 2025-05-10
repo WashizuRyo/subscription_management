@@ -7,3 +7,4 @@ import "bootstrap";
 import "controllers";
 import "payment_method";
 import "tag";
+import "subscription_filter";

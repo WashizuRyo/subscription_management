@@ -22,12 +22,12 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       expect(form.errors.count).to eq 1
     end
 
-    it "is invalid when search_column is not included in ALLOWED_COLUMNS" do
+    it "is invalid when filter_column is not included in ALLOWED_COLUMNS" do
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "invalid")
+                              filter_column: "invalid")
       expect(form).to_not be_valid
-      expect(form.errors[:search_column]).to include "無効なカラム名です"
+      expect(form.errors[:filter_column]).to include "無効なカラム名です"
       expect(form.errors.count).to eq 1
     end
 
@@ -57,8 +57,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       user = FactoryBot.create(:user, :with_subscriptions)
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "",
-                              search_value: "")
+                              filter_column: "",
+                              text_filter_value: "")
       expect(form.search_subscriptions.count).to eq 5
     end
 
@@ -81,9 +81,9 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "price",
-                              search_value: 90,
-                              search_value_pattern: "exact")
+                              filter_column: "price",
+                              date_filter_start: 90,
+                              date_filter_pattern: "exact")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 1
@@ -98,9 +98,9 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "name",
-                              search_value: "netflix",
-                              search_value_pattern: "partial")
+                              filter_column: "name",
+                              text_filter_value: "netflix",
+                              text_filter_pattern: "partial")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
@@ -114,9 +114,9 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "name",
-                              search_value: "Premium",
-                              search_value_pattern: "end_with")
+                              filter_column: "name",
+                              text_filter_value: "Premium",
+                              text_filter_pattern: "end_with")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 1
@@ -131,9 +131,9 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "name",
-                              search_value: "Netflix",
-                              search_value_pattern: "start_with")
+                              filter_column: "name",
+                              text_filter_value: "Netflix",
+                              text_filter_pattern: "start_with")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.map(&:name)).to match_array([ "Netflix Premium", "Netflix Basic" ])
@@ -148,8 +148,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "name",
-                              search_value: "Netflix")
+                              filter_column: "name",
+                              text_filter_value: "Netflix")
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.length).to eq 1
@@ -164,8 +164,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "name",
-                              search_value: "net",
+                              filter_column: "name",
+                              text_filter_value: "net",
                               first_column: "price",
                               first_direction: "desc")
       subscriptions = form.search_subscriptions
@@ -180,8 +180,8 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              search_column: "plan_name",
-                              search_value: "standard",
+                              filter_column: "plan_name",
+                              text_filter_value: "standard",
                               first_column: "plan_name",
                               first_direction: "asc",
                               second_column: "price",
@@ -189,6 +189,96 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       subscriptions = form.search_subscriptions
 
       expect(subscriptions.map(&:price)).to eq([ 10, 20, 30 ])
+    end
+
+    it "returns subscriptions when start_date exactly matches search date (exact match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "start_date",
+                              date_filter_start: date2,
+                              date_filter_pattern: "exact")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.start_date).to eq date2
+    end
+
+    it "returns subscriptions when start_date is before search date (before match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      search_date = Date.new(2023, 2, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "start_date",
+                              date_filter_start: search_date,
+                              date_filter_pattern: "before")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:start_date)).to match_array([ date1, date2 ])
+    end
+
+    it "returns subscriptions when start_date is after search date (after match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      search_date = Date.new(2023, 2, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "start_date",
+                              date_filter_start: search_date,
+                              date_filter_pattern: "after")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.start_date).to eq date3
+    end
+
+    it "returns subscriptions when start_date is between search dates (between match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+      date4 = Date.new(2023, 4, 5)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+      FactoryBot.create(:subscription, user: user, start_date: date4)
+
+      start_date = Date.new(2023, 1, 20)
+      end_date = Date.new(2023, 3, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "start_date",
+                              date_filter_start: start_date,
+                              date_filter_end: end_date,
+                              date_filter_pattern: "between")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:start_date)).to match_array([ date2, date3 ])
     end
   end
 end
