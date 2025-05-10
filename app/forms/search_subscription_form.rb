@@ -77,7 +77,7 @@ class SearchSubscriptionForm
     elsif search_date_value_pattern == "after"
       ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].gt(search_date_start)) }
     elsif search_date_value_pattern == "between"
-        ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].between(search_date_start, search_date_end)) }
+      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].gteq(search_date_start).and(Subscription.arel_table[search_column.to_sym].lteq(search_date_end))) }
     end
   end
 
