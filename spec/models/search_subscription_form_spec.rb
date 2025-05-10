@@ -191,5 +191,99 @@ RSpec.describe SearchSubscriptionForm, type: :model do
 
       expect(subscriptions.map(&:price)).to eq([ 10, 20, 30 ])
     end
+
+    it "returns subscriptions when start_date exactly matches search date (exact match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "start_date",
+                              search_value: date2.to_s,
+                              search_date_start: date2,
+                              search_date_value_pattern: "exact")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.start_date).to eq date2
+    end
+
+    it "returns subscriptions when start_date is before search date (before match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      search_date = Date.new(2023, 2, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "start_date",
+                              search_value: search_date.to_s,
+                              search_date_start: search_date,
+                              search_date_value_pattern: "before")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:start_date)).to match_array([ date1, date2 ])
+    end
+
+    it "returns subscriptions when start_date is after search date (after match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+
+      search_date = Date.new(2023, 2, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "start_date",
+                              search_value: search_date.to_s,
+                              search_date_start: search_date,
+                              search_date_value_pattern: "after")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.start_date).to eq date3
+    end
+
+    it "returns subscriptions when start_date is between search dates (between match)" do
+      date1 = Date.new(2023, 1, 15)
+      date2 = Date.new(2023, 2, 1)
+      date3 = Date.new(2023, 3, 10)
+      date4 = Date.new(2023, 4, 5)
+
+      FactoryBot.create(:subscription, user: user, start_date: date1)
+      FactoryBot.create(:subscription, user: user, start_date: date2)
+      FactoryBot.create(:subscription, user: user, start_date: date3)
+      FactoryBot.create(:subscription, user: user, start_date: date4)
+
+      start_date = Date.new(2023, 1, 20)
+      end_date = Date.new(2023, 3, 15)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              search_column: "start_date",
+                              search_value: start_date,
+                              search_date_start: start_date,
+                              search_date_end: end_date,
+                              search_date_value_pattern: "between")
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 2
+      expect(subscriptions.map(&:start_date)).to match_array([ date2, date3 ])
+    end
   end
 end
