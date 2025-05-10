@@ -5,19 +5,19 @@ class SearchSubscriptionForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :search_column, :string
-  attribute :search_value, :string
-  attribute :search_value_pattern, :string
-  attribute :search_date_start, :date
-  attribute :search_date_end, :date
-  attribute :search_date_value_pattern, :string
+  attribute :filter_column, :string
+  attribute :text_filter_value, :string
+  attribute :text_filter_pattern, :string
+  attribute :date_filter_start, :date
+  attribute :date_filter_end, :date
+  attribute :date_filter_pattern, :string
   attribute :first_column, :string
   attribute :first_direction, :string
   attribute :second_column, :string
   attribute :second_direction, :string
   attribute :page, :integer
 
-  validates :first_column, :second_column, :search_column,
+  validates :first_column, :second_column, :filter_column,
             inclusion: { in: ALLOWED_COLUMNS, message: "無効なカラム名です" },
             allow_nil: true
   validates :first_direction, :second_direction,
@@ -34,7 +34,7 @@ class SearchSubscriptionForm
     return [] unless valid?
 
     scope = @current_user.subscriptions.includes(:tags, :payment_method)
-    if search_params_present?
+    if filter_params_present?
       scope = build_search_query.call(scope)
     end
 
@@ -48,36 +48,40 @@ class SearchSubscriptionForm
   private
 
   def build_search_query
-    if search_value_pattern.present? && column_type == :string
-      filter_by_string
-    elsif search_date_value_pattern.present? && (column_type == :date || column_type == :decimal)
+    if text_filter?
+      filter_by_text
+    elsif date_filter?
       filter_by_date
     else
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}%")) }
     end
   end
 
-  def filter_by_string
-    if search_value_pattern == "partial"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
-    elsif search_value_pattern == "exact"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].eq(search_value)) }
-    elsif search_value_pattern == "start_with"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("#{ActiveRecord::Base.sanitize_sql_like(search_value)}%")) }
-    elsif search_value_pattern == "end_with"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(search_value)}")) }
+  def filter_by_text
+    if text_filter_pattern == "partial"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}%")) }
+    elsif text_filter_pattern == "exact"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].eq(text_filter_value)) }
+    elsif text_filter_pattern == "start_with"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}%")) }
+    elsif text_filter_pattern == "end_with"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}")) }
+    else
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}%")) }
     end
   end
 
   def filter_by_date
-    if search_date_value_pattern == "exact"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].eq(search_date_start)) }
-    elsif search_date_value_pattern == "before"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].lt(search_date_start)) }
-    elsif search_date_value_pattern == "after"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].gt(search_date_start)) }
-    elsif search_date_value_pattern == "between"
-      ->(scope) { scope.where(Subscription.arel_table[search_column.to_sym].gteq(search_date_start).and(Subscription.arel_table[search_column.to_sym].lteq(search_date_end))) }
+    if date_filter_pattern == "exact"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].eq(date_filter_start)) }
+    elsif date_filter_pattern == "before"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].lt(date_filter_start)) }
+    elsif date_filter_pattern == "after"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].gt(date_filter_start)) }
+    elsif date_filter_pattern == "between"
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].gteq(date_filter_start).and(Subscription.arel_table[filter_column.to_sym].lteq(date_filter_end))) }
+    else
+      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].eq(date_filter_start)) }
     end
   end
 
@@ -86,8 +90,16 @@ class SearchSubscriptionForm
     ->(scope) { scope.order(orders) }
   end
 
+  def text_filter?
+    column_type == :string
+  end
+
+  def date_filter?
+    column_type == :date || column_type == :decimal
+  end
+
   def column_type
-    Subscription.columns_hash[search_column]&.type
+    Subscription.columns_hash[filter_column]&.type
   end
 
   def build_orders
@@ -101,8 +113,16 @@ class SearchSubscriptionForm
     attributes.transform_values { |v| v.presence }
   end
 
-  def search_params_present?
-    search_column.present? && search_value.present?
+  def filter_params_present?
+    return false unless filter_column.present?
+
+    if text_filter?
+      text_filter_value.present?
+    elsif date_filter?
+      date_filter_start.present?
+    else
+      text_filter_value.present?
+    end
   end
 
   def sort_params_present?
