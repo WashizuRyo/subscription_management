@@ -10,9 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_02_100817) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_100529) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "payment_methods", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "method_type"
     t.string "provider"
     t.string "memo"
@@ -22,8 +25,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_100817) do
   end
 
   create_table "subscription_tags", force: :cascade do |t|
-    t.integer "subscription_id", null: false
-    t.integer "tag_id", null: false
+    t.bigint "subscription_id", null: false
+    t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["subscription_id"], name: "index_subscription_tags_on_subscription_id"
@@ -37,12 +40,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_100817) do
     t.date "start_date"
     t.date "end_date"
     t.date "billing_date"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.integer "status", default: 0, null: false
-    t.integer "payment_method_id"
+    t.bigint "payment_method_id"
     t.string "billing_cycle"
     t.index ["payment_method_id"], name: "index_subscriptions_on_payment_method_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
