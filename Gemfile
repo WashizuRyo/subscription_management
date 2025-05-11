@@ -34,6 +34,8 @@ gem "dartsass-rails"
 gem "bootstrap", "~> 5.3"
 gem "jquery-rails"
 
+gem "pg"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
