@@ -26,6 +26,8 @@ $enable-cssgrid: true;
 @import "dashboard";
 @import "payment_method";
 @import "tag";
+@import "subscription";
+
 #content {
   background-color: $navy;
   min-height: 100vh;
