@@ -17,7 +17,7 @@ function initializeFilters() {
     const selectedColumn = $(this).val();
     if (selectedColumn === "name" || selectedColumn === "plan_name") {
       $("#text_filter_pattern").show();
-      $("#text_filter_value_field").show();
+      $("#text_filter_fields").show();
       $("#date_filter_fields").hide();
     } else if (
         selectedColumn === "price" ||
@@ -26,7 +26,7 @@ function initializeFilters() {
         selectedColumn === "billing_date"
     ) {
       $("#text_filter_pattern").hide();
-      $("#text_filter_value_field").hide();
+      $("#text_filter_fields").hide();
       $("#date_filter_fields").show();
       $("#q_text_filter_patter").show();
     } else {
