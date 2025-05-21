@@ -21,6 +21,13 @@ $table-border-color: $gray-transparent;
 $enable-grid-classes: false;
 $enable-cssgrid: true;
 
+$input-bg: $navy-transparent;
+$input-color: $white;
+$input-placeholder-color: $gray-transparent;
+$input-border-color: $gray-transparent;
+$input-border-width: 1px;
+$input-focus-bg: $navy;
+
 @import "bootstrap";
 @import "navigation";
 @import "dashboard";
