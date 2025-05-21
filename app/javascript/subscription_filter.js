@@ -1,48 +1,71 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const filterColumnSelect = document.querySelector(
-    'select[name="q[filter_column]"]'
-  );
-  const textFilterFields = document.getElementById("text_filter_fields");
-  const dateFilterFields = document.getElementById("date_filter_fields");
-  const dateFilterEndField = document.getElementById("date_filter_end_field");
-  const dateFilterPatternSelect = document.querySelector(
-    'select[name="q[date_filter_pattern]"]'
-  );
+import jQuery from "jquery";
+window.$ = jQuery;
 
-  function updateFilterFields() {
-    const selectedColumn = filterColumnSelect.value;
 
+// フィルターの初期化と設定を行う関数
+function initializeFilters() {
+  // 既存イベントを解除（重複防止）
+  $(document).off("change", "select[name='q[filter_column]']");
+  $(document).off("change", "select[name='q[date_filter_pattern]']");
+  $(document).off("click", "#add_filter_button");
+  $(document).off("click", "#open_filter_box");
+  $(document).off("click", "#open_sort_box");
+  $(document).off("click", "#add_sort_button");
+
+  // イベント委譲でバインド
+  $(document).on("change", "select[name='q[filter_column]']", function() {
+    const selectedColumn = $(this).val();
     if (selectedColumn === "name" || selectedColumn === "plan_name") {
-      textFilterFields.style.display = "block";
-      dateFilterFields.style.display = "none";
+      $("#text_filter_pattern").show();
+      $("#text_filter_fields").show();
+      $("#date_filter_fields").hide();
     } else if (
-      selectedColumn === "price" ||
-      selectedColumn === "start_date" ||
-      selectedColumn === "end_date" ||
-      selectedColumn === "billing_date"
+        selectedColumn === "price" ||
+        selectedColumn === "start_date" ||
+        selectedColumn === "end_date" ||
+        selectedColumn === "billing_date"
     ) {
-      textFilterFields.style.display = "none";
-      dateFilterFields.style.display = "block";
-      updateDateEndField();
+      $("#text_filter_pattern").hide();
+      $("#text_filter_fields").hide();
+      $("#date_filter_fields").show();
+      $("#q_text_filter_patter").show();
     } else {
-      textFilterFields.style.display = "none";
-      dateFilterFields.style.display = "none";
+      $("#text_filter_fields").hide();
+      $("#date_filter_fields").hide();
     }
-  }
+  });
 
-  function updateDateEndField() {
-    if (dateFilterPatternSelect.value === "between") {
-      dateFilterEndField.style.display = "block";
+  $(document).on("change", "select[name='q[date_filter_pattern]']", function() {
+    const selectedPattern = $(this).val();
+    if (selectedPattern === "between") {
+      $("#date_filter_end_field").show();
     } else {
-      dateFilterEndField.style.display = "none";
+      $("#date_filter_end_field").hide();
     }
-  }
+  });
 
-  if (filterColumnSelect) {
-    filterColumnSelect.addEventListener("change", updateFilterFields);
-    dateFilterPatternSelect.addEventListener("change", updateDateEndField);
+  $(document).on("click", "#add_filter_button", function() {
+    $("#filter_box").hide();
+  });
 
-    // 初期表示時の設定
-    updateFilterFields();
-  }
-});
+  $(document).on("click", "#open_filter_box", function() {
+    $("#filter_box").toggle();
+  });
+
+  $(document).on("click", "#open_sort_box", function() {
+    $("#sort_box").toggle();
+  });
+
+  $(document).on("click", "#add_sort_button", function() {
+    $("#sort_box").hide();
+  });
+}
+
+// Turboイベントで初期化
+document.addEventListener("turbo:load", initializeFilters);
+document.addEventListener("turbo:render", initializeFilters);
+document.addEventListener("turbo:frame-render", initializeFilters);
+document.addEventListener("turbo:submit-end", initializeFilters);
+
+// ページ初回ロード時も初期化
+$(document).ready(initializeFilters);
