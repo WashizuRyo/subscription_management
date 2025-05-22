@@ -41,7 +41,7 @@ RSpec.describe "Subscriptions", type: :system do
     visit edit_user_subscription_path(user, id: subscription.id)
 
     fill_in_subscription_form(100, "Spotify")
-    click_button "送信する"
+    click_button "変更を保存"
 
     aggregate_failures do
       expect(page).to have_current_path root_path
@@ -90,8 +90,8 @@ RSpec.describe "Subscriptions", type: :system do
                                 start_date = Time.zone.today,
                                 end_date = 1.months.from_now.to_date,
                                 billing_date = 1.months.from_now.to_date)
-    fill_in "値段", with: price
-    fill_in "名前", with: name
+    fill_in "料金(円)", with: price
+    fill_in "サブスクリプション名", with: name
     fill_in "プラン名", with: plan_name
     fill_in "開始日", with: start_date
     fill_in "終了日", with: end_date
