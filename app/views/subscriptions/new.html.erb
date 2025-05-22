@@ -4,11 +4,11 @@
   <%= form_with(model: [@user, @subscription], local: true ) do |f| %>
     <%= render "shared/error_messages", object: f.object %>
 
-    <%= f.label :price, "値段"%>
+    <%= f.label :price, "料金(円)"%>
     <%= f.number_field :price%>
     <span>円</span>
 
-    <%= f.label :name, "名前" %>
+    <%= f.label :name, "サブスクリプション名" %>
     <%= f.text_field :name %>
 
     <%= f.label :plan_name, "プラン名" %>
