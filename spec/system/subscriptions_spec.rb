@@ -15,7 +15,7 @@ RSpec.describe "Subscriptions", type: :system do
                                 "Netflix",
                                 "スタンダード",
       )
-      click_button "変更を保存"
+      click_button "送信する"
     end.to change(Subscription, :count).by(1)
 
     aggregate_failures do
