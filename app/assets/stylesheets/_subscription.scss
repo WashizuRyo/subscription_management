@@ -38,3 +38,30 @@
     }
   }
 }
+
+#edit-subscription {
+  color: $white;
+  padding-top: 80px;
+  
+  .card-border {
+    border: 1px solid $gray-transparent;
+    border-radius: 0.375rem;
+  }
+}
+
+.section-description {
+  color: $gray-transparent-light;
+  font-size: 0.95em;
+  margin-bottom: 1rem;
+}
+
+#cancel_edit_button {
+  background-color: $navy-transparent;
+  border: 1px solid $gray-transparent;
+  color: $white;
+}
+
+#edit_subscription_submit {
+  @include blue-button;
+  border-radius: 6px;
+}
