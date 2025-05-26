@@ -1,7 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
-  before_action :get_subscription, only: %i[edit update destroy]
+  before_action :get_subscription, only: %i[edit update destroy show]
 
   def index
     @search_subscription_form = SearchSubscriptionForm.new(search_subscription_params, current_user: current_user)
@@ -10,6 +10,9 @@ class SubscriptionsController < ApplicationController
     end
 
     @subscriptions = @search_subscription_form.search_subscriptions
+  end
+
+  def show
   end
 
   def new
