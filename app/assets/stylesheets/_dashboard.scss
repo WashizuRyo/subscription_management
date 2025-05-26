@@ -44,7 +44,7 @@
   }
 
   .card-text.price {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
   }
 
@@ -83,4 +83,34 @@
       gap: 0.25rem;
     }
   }
+}
+
+.statistics-info,
+.statistics-info-card {
+  border: 1px solid $gray-transparent;
+  border-radius: 0.375rem;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+}
+
+.statistics-info-card h5 {
+  color: $gray-transparent-light;
+  font-size: 1em;
+}
+
+.statistics-icon-blue {
+  color: #4493f8;
+  font-size: 1.3rem;
+}
+.statistics-icon-purple {
+  color: #a259f7;
+  font-size: 1.3rem;
+}
+.statistics-icon-green {
+  color: #27c97d;
+  font-size: 1.3rem;
 }

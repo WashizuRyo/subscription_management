@@ -1,0 +1,35 @@
+<% content_for :subscription_actions do %>
+  <div class="d-flex justify-content-end gap-3">
+    <%= link_to "編集", edit_user_subscription_path(current_user, @subscription), class: "btn btn-outline-secondary" %>
+    <%= link_to "削除", user_subscription_path(current_user, @subscription), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>
+<div class="container pt-5">
+  <%= render @subscription %>
+  <div class="mt-5 p-4 text-white statistics-info">
+    <h2>統計情報</h2>
+    <div class="d-flex justify-content-between gap-3 mt-4">
+      <div class="p-4 w-100 statistics-info-card">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h5 class="mb-0">累計支払額</h5>
+          <i class="bi bi-cash-coin ms-2 statistics-icon-blue"></i>
+        </div>
+        <p>¥1,000</p>
+      </div>
+      <div class="p-4 w-100 statistics-info-card">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h5 class="mb-0">次回支払額</h5>
+          <i class="bi bi-credit-card-2-front ms-2 statistics-icon-purple"></i>
+        </div>
+        <p>¥<%= @subscription.price.to_i %></p>
+      </div>
+      <div class="p-4 w-100 statistics-info-card">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h5 class="mb-0">利用月数</h5>
+          <i class="bi bi-calendar3 ms-2 statistics-icon-green"></i>
+        </div>
+        <p>13ヶ月</p>
+      </div>
+    </div>
+  </div>
+</div>
