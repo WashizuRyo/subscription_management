@@ -47,12 +47,8 @@
           <% end %>
         </div>
       </div>
-
-      <% if controller.action_name == "show" %>
-        <div class="d-flex justify-content-end gap-3">
-          <%= link_to "編集", edit_user_subscription_path(current_user, subscription), class: "btn btn-outline-secondary" %>
-          <%= link_to "削除", user_subscription_path(current_user, subscription), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-outline-secondary" %>
-        </div>
+      <% if content_for?(:subscription_actions) %>
+        <%= yield :subscription_actions %>
       <% end %>
     <% end %>
   </div>
