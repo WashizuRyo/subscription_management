@@ -16,7 +16,10 @@ COPY Gemfile.lock /work/Gemfile.lock
 RUN bundle install
 
 COPY . /work
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
 
 EXPOSE 3000
 
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["sh", "-c", "bin/rails dartsass:watch & bin/rails server -b 0.0.0.0"]
