@@ -4,7 +4,11 @@ class TagsController < ApplicationController
   before_action :get_tag, only: %i[destroy edit update]
 
   def index
-    @tags = Tag.all
+    if query_params.present?
+      @tags = Tag.search_by_name(query_params[:name])
+    else
+      @tags = Tag.all
+    end
     @tag = Tag.new
   end
 
@@ -54,5 +58,9 @@ class TagsController < ApplicationController
 
   def tag_params
     params.require(:tag).permit(:name)
+  end
+
+  def query_params
+    params.permit(:name)
   end
 end

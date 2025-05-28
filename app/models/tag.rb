@@ -3,4 +3,6 @@ class Tag < ApplicationRecord
   has_many :subscriptions, through: :subscription_tags
 
   validates :name, presence: true
+
+  scope :search_by_name, ->(query) { where("name LIKE ?", "%#{query}%") }
 end

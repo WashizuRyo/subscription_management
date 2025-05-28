@@ -1,6 +1,7 @@
 #tags_container {
   margin-inline: 6rem;
   padding-top: 5rem;
+  color: $white;
 }
 
 #tags_list {
@@ -77,4 +78,17 @@
       color: $white;
     }
   }
+}
+
+.tag-count {
+  color: $white;
+  background-color: $gray-transparent;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }

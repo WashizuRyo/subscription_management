@@ -1,4 +1,15 @@
 <div id="tags_container">
+  <div class="d-flex align-items-center gap-5 mb-3">
+    <div class="d-flex align-items-center">
+      <h3>タグ</h3>
+      <span class="tag-count"><%= @tags.count %></span>
+    </div>
+    <div class="w-50">
+      <%= form_with(url: user_tags_path(current_user), method: :get) do |f| %>
+        <%= f.text_field :name, value: params[:name], class: "form-control", placeholder: "タグを検索" %>
+      <% end %>
+    </div>
+  </div>
   <div class="grid" style="--bs-gap: 3rem;">
     <div id="tags_list" class="g-col-12 g-col-md-9">
       <div class="grid" style="--bs-gap: 1rem;">
