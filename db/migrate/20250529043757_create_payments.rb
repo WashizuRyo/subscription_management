@@ -10,7 +10,7 @@ class CreatePayments < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :payments, [:subscription_id, :billing_date], unique: true
+    add_index :payments, [ :subscription_id, :billing_date ], unique: true
     add_index :payments, :billing_date
   end
 end

@@ -81,7 +81,7 @@ user.subscriptions.each_with_index do |subscription, index|
   # 各サブスクリプションに支払方法を設定
   payment_method = user.payment_methods[index % user.payment_methods.count]
   subscription.update!(payment_method: payment_method)
-  
+
   # 過去の支払履歴を作成（過去3ヶ月分）
   3.times do |i|
     Payment.create!(

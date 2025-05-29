@@ -3,7 +3,7 @@ class DailyBillingJob < ApplicationJob
 
   def perform
     Rails.logger.info "Daily billing job started at #{Time.current}"
-    
+
     # 今日が請求日のサブスクリプションを取得
     subscriptions_to_bill = Subscription.joins(:user)
                                       .where(billing_date: Date.current)
@@ -40,16 +40,16 @@ class DailyBillingJob < ApplicationJob
 
   def update_next_billing_date(subscription)
     next_date = case subscription.billing_cycle
-                when 'monthly'
+    when "monthly"
                   subscription.billing_date + 1.month
-                when 'yearly'
+    when "yearly"
                   subscription.billing_date + 1.year
-                when 'weekly'
+    when "weekly"
                   subscription.billing_date + 1.week
-                else
+    else
                   subscription.billing_date + 1.month # デフォルトは月次
-                end
-    
+    end
+
     subscription.update!(billing_date: next_date)
   end
 end
