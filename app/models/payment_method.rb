@@ -1,5 +1,7 @@
 class PaymentMethod < ApplicationRecord
   has_many :subscriptions
+  has_many :payments, dependent: :destroy
+  
   belongs_to :user
 
   validates :provider, presence: true

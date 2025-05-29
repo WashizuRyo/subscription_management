@@ -5,6 +5,7 @@ class Subscription < ApplicationRecord
   belongs_to :payment_method, optional: true
   has_many :subscription_tags, dependent: :destroy
   has_many :tags, through: :subscription_tags
+  has_many :payments, dependent: :destroy
 
   validates :name, presence: true
   validates :plan_name, presence: true
