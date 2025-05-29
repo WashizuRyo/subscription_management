@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_02_100529) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_29_043757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_100529) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_payment_methods_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "subscription_id", null: false
+    t.bigint "payment_method_id", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.date "billing_date", null: false
+    t.datetime "paid_at"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["billing_date"], name: "index_payments_on_billing_date"
+    t.index ["payment_method_id"], name: "index_payments_on_payment_method_id"
+    t.index ["subscription_id", "billing_date"], name: "index_payments_on_subscription_id_and_billing_date", unique: true
+    t.index ["subscription_id"], name: "index_payments_on_subscription_id"
   end
 
   create_table "subscription_tags", force: :cascade do |t|
@@ -68,6 +83,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_100529) do
   end
 
   add_foreign_key "payment_methods", "users"
+  add_foreign_key "payments", "payment_methods"
+  add_foreign_key "payments", "subscriptions"
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
   add_foreign_key "subscriptions", "payment_methods"
