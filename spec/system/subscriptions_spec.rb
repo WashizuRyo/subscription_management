@@ -90,7 +90,7 @@ RSpec.describe "Subscriptions", type: :system do
                                 start_date = Time.zone.today,
                                 end_date = 1.months.from_now.to_date,
                                 billing_date = 1.months.from_now.to_date)
-    fill_in "料金(円)", with: price
+    fill_in "料金", with: price
     fill_in "サブスクリプション名", with: name
     fill_in "プラン名", with: plan_name
     fill_in "開始日", with: start_date
