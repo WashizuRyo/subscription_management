@@ -4,11 +4,7 @@ class TagsController < ApplicationController
   before_action :get_tag, only: %i[destroy edit update]
 
   def index
-    if query_params.present?
-      @tags = Tag.search_by_name(query_params[:name])
-    else
-      @tags = Tag.all
-    end
+    @tags = Tag.search_by_name(query_params[:name])
     @tag = Tag.new
   end
 

@@ -8,16 +8,16 @@
         <p class="section-description">サブスクリプションの基本情報を入力してください。</p>
         <div class="d-flex justify-content-between gap-2 mb-3">
           <div class="d-flex flex-column w-100">
-            <%= f.label :name, "サブスクリプション名", class: "form-label" %>
+            <%= f.label :name, class: "form-label" %>
             <%= f.text_field :name, class: "form-control" %>
           </div>
           <div class="d-flex flex-column w-100">
-            <%= f.label :price, "料金(円)", class: "form-label" %>
+            <%= f.label :price, class: "form-label" %>
             <%= f.number_field :price, class: "form-control" %>
           </div>
         </div>
         <div>
-          <%= f.label :plan_name, "プラン名", class: "form-label" %>
+          <%= f.label :plan_name, class: "form-label" %>
           <%= f.text_field :plan_name, class: "form-control" %>
         </div>
       </div>
@@ -26,19 +26,19 @@
         <p class="section-description">請求日や支払い方法などを設定してください。</p>
         <div class="grid mb-3">
           <div class="d-flex flex-column g-col-12 g-col-md-4">
-            <%= f.label :billing_date, "請求日", class: "form-label" %>
+            <%= f.label :billing_date, class: "form-label" %>
             <%= f.date_field :billing_date, class: "form-control" %>
           </div>
           <div class="d-flex flex-column g-col-12 g-col-md-4">
-            <%= f.label :start_date, "開始日", class: "form-label" %>
+            <%= f.label :start_date, class: "form-label" %>
             <%= f.date_field :start_date, class: "form-control" %>
           </div>
           <div class="d-flex flex-column g-col-12 g-col-md-4">
-            <%= f.label :end_date, "終了日", class: "form-label" %>
+            <%= f.label :end_date, class: "form-label" %>
             <%= f.date_field :end_date, class: "form-control" %>
           </div>
         </div>
-        <p>支払い方法</p>
+        <p><%= PaymentMethod.model_name.human %></p>
         <% @payment_methods.each do |payment_method| %>
           <div>
             <%= radio_button_tag "subscription[payment_method_id]",
@@ -51,7 +51,7 @@
         <% end %>
       </div>
       <div class="card-border p-4">
-        <h3>タグ</h3>
+        <h3><%= Tag.model_name.human %></h3>
         <p class="section-description">該当するタグを選択してください。</p>
         <div class="d-flex flex-wrap gap-4 mt-3">
           <% @tags.each do |tag| %>

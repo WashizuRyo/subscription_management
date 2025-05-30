@@ -2,16 +2,15 @@ class PaymentMethodsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
   before_action :get_payment_method, only: %i[update destroy]
+  before_action :set_payment_methods, only: %i[update create]
 
   def index
-    @payment_method = PaymentMethod.new
-    @payment_methods = current_user.payment_methods
+    @payment_method = current_user.payment_methods.new
+    @payment_methods = current_user.payment_methods.search_by_provider_or_type(query_params[:q])
   end
 
   def create
     @payment_method = current_user.payment_methods.new(payment_method_params)
-    @payment_methods = current_user.payment_methods
-
     if @payment_method.save
       flash[:success] = "支払い方法の登録に成功しました"
       redirect_to user_payment_methods_path(current_user)
@@ -27,7 +26,6 @@ class PaymentMethodsController < ApplicationController
     else
       @error_payment_method = @payment_method
       @payment_method = current_user.payment_methods.new
-      @payment_methods = current_user.payment_methods
       render :index, status: :unprocessable_entity
     end
   end
@@ -52,5 +50,13 @@ class PaymentMethodsController < ApplicationController
 
   def get_payment_method
     @payment_method = PaymentMethod.find_by(id: params[:id])
+  end
+
+  def set_payment_methods
+    @payment_methods = current_user.payment_methods
+  end
+
+  def query_params
+    params.permit(:q)
   end
 end
