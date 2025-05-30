@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    models:
+      subscription: サブスクリプション
+    attributes:
+      subscription:
+        name: サブスクリプション名
+        plan_name: プラン名
+        price: 料金
+        start_date: 開始日
+        end_date: 終了日
+        billing_date: 請求日
+        created_at: 追加日
+        updated_at: 更新日

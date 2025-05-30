@@ -14,13 +14,13 @@
       </div>
       <div class="info-group">
         <span>
-          <i class="bi bi-credit-card me-2"></i>請求日
+          <i class="bi bi-credit-card me-2"></i><%= Subscription.human_attribute_name(:billing_date) %>
         </span>
         <p class="card-text"><%= subscription.billing_date.strftime('%Y年%m月%d日') %></p>
       </div>
       <div class="info-group">
         <span>
-          <i class="bi bi-calendar-plus me-2"></i>追加日
+          <i class="bi bi-calendar-plus me-2"></i><%= Subscription.human_attribute_name(:created_at) %>
         </span>
         <p class="card-text"><%= subscription.created_at.strftime('%Y年%m月%d日') %></p>
       </div>
@@ -41,7 +41,7 @@
           <% end %>
           <% if subscription.payment_method.present? %>
             <div class="info-group">
-              <span>支払い方法</span>
+              <span><%= PaymentMethod.model_name.human %></span>
               <p><%= subscription.payment_method.provider %></p>
             </div>
           <% end %>
