@@ -2,6 +2,7 @@ class PaymentMethodsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
   before_action :get_payment_method, only: %i[update destroy]
+  before_action :set_payment_methods, only: %i[update create]
 
   def index
     @payment_method = current_user.payment_methods.new
@@ -25,7 +26,6 @@ class PaymentMethodsController < ApplicationController
     else
       @error_payment_method = @payment_method
       @payment_method = current_user.payment_methods.new
-      @payment_methods = current_user.payment_methods
       render :index, status: :unprocessable_entity
     end
   end
@@ -50,6 +50,10 @@ class PaymentMethodsController < ApplicationController
 
   def get_payment_method
     @payment_method = PaymentMethod.find_by(id: params[:id])
+  end
+
+  def set_payment_methods
+    @payment_methods = current_user.payment_methods
   end
 
   def query_params
