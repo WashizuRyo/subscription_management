@@ -1,7 +1,8 @@
 <div class="g-col-12 g-col-md-3">
   <div class="card p-3" id="subscription-card">
     <div class="card-header">
-      <h3><%= link_to subscription.name, user_subscription_path(current_user, subscription) %></h3>
+      <% link_path ||= user_subscription_path(current_user, subscription) %>
+      <h3><%= link_to subscription.name, link_path %></h3>
       <span><%= subscription.plan_name %></span>
     </div>
     <hr>
