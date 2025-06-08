@@ -1,0 +1,75 @@
+<div id="edit-subscription" class="container">
+  <h2 class="mb-4"><%= model.new_record? ? "新規作成" : "編集" %></h2>
+  <%= form_with model:, url: do |f| %>
+    <div class="d-flex flex-column gap-4">
+      <%= render "shared/error_messages", object: f.object %>
+      <div class="card-border p-4">
+        <h3>基本情報</h3>
+        <p class="section-description">サブスクリプションの基本情報を入力してください。</p>
+        <div class="d-flex justify-content-between gap-2 mb-3">
+          <div class="d-flex flex-column w-100">
+            <%= f.label :name, class: "form-label" %>
+            <%= f.text_field :name, class: "form-control" %>
+          </div>
+          <div class="d-flex flex-column w-100">
+            <%= f.label :price, class: "form-label" %>
+            <%= f.number_field :price, class: "form-control" %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :plan_name, class: "form-label" %>
+          <%= f.text_field :plan_name, class: "form-control" %>
+        </div>
+      </div>
+      <div class="card-border p-4">
+        <h3>請求情報</h3>
+        <p class="section-description">請求日や支払い方法などを設定してください。</p>
+        <div class="grid mb-3">
+          <div class="d-flex flex-column g-col-12 g-col-md-4">
+            <%= f.label :billing_date, class: "form-label" %>
+            <%= f.date_field :billing_date, class: "form-control" %>
+          </div>
+          <div class="d-flex flex-column g-col-12 g-col-md-4">
+            <%= f.label :start_date, class: "form-label" %>
+            <%= f.date_field :start_date, class: "form-control" %>
+          </div>
+          <div class="d-flex flex-column g-col-12 g-col-md-4">
+            <%= f.label :end_date, class: "form-label" %>
+            <%= f.date_field :end_date, class: "form-control" %>
+          </div>
+        </div>
+        <p><%= PaymentMethod.model_name.human %></p>
+        <% @payment_methods.each do |payment_method| %>
+          <div>
+            <%= radio_button_tag "subscription[payment_method_id]",
+                                 payment_method.id, @subscription.payment_method == payment_method,
+                                 id: "payment_method_#{payment_method.id}" %>
+            <%= label_tag "payment_method_#{payment_method.id}",
+                          [payment_method.method_type, payment_method.provider, payment_method.memo].reject(&:blank?).join(', '),
+                          class: "form-label" %>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-border p-4">
+        <h3><%= Tag.model_name.human %></h3>
+        <p class="section-description">該当するタグを選択してください。</p>
+        <div class="d-flex flex-wrap gap-4 mt-3">
+          <% @tags.each do |tag| %>
+            <div>
+              <%= check_box_tag "subscription[tag_ids][]", tag.id, @subscription.tags.include?(tag), id: "tag_#{tag.id}" %>
+              <%= label_tag "tag_#{tag.id}", tag.name, class: "form-label" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="grid text-center mt-4">
+        <div class="g-col-3 g-start-3">
+          <%= link_to "キャンセル", user_subscriptions_path(@user), id: "cancel_edit_button", class: "btn w-100" %>
+        </div>
+        <div class="g-col-3 g-start-8">
+          <%= f.submit model.new_record? ? "新規作成": "変更を保存", id: "edit_subscription_submit", class: "btn w-100" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

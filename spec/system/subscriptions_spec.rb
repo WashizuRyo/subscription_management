@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Subscriptions", type: :system do
   let(:user) { FactoryBot.create(:user) }
@@ -12,10 +12,9 @@ RSpec.describe "Subscriptions", type: :system do
 
     expect do
       fill_in_subscription_form(1000,
-                                "Netflix",
-                                "スタンダード",
-      )
-      click_button "送信する"
+        "Netflix",
+        "スタンダード")
+      click_button "新規作成"
     end.to change(Subscription, :count).by(1)
 
     aggregate_failures do
@@ -52,13 +51,13 @@ RSpec.describe "Subscriptions", type: :system do
 
   it "displays all subscriptions with edit links on the index page" do
     subscription1 = FactoryBot.create(:subscription,
-                                      name: "Amazon Prime",
-                                      price: 2000,
-                                      user: user)
+      name: "Amazon Prime",
+      price: 2000,
+      user: user)
     subscription2 = FactoryBot.create(:subscription,
-                                      name: "Hulu",
-                                      price: 4000,
-                                      user: user)
+      name: "Hulu",
+      price: 4000,
+      user: user)
 
     login_as user
 
@@ -85,11 +84,11 @@ RSpec.describe "Subscriptions", type: :system do
   end
 
   def fill_in_subscription_form(price = 1000,
-                                name = "Netflix",
-                                plan_name = "スタンダード",
-                                start_date = Time.zone.today,
-                                end_date = 1.months.from_now.to_date,
-                                billing_date = 1.months.from_now.to_date)
+    name = "Netflix",
+    plan_name = "スタンダード",
+    start_date = Time.zone.today,
+    end_date = 1.months.from_now.to_date,
+    billing_date = 1.months.from_now.to_date)
     fill_in "料金", with: price
     fill_in "サブスクリプション名", with: name
     fill_in "プラン名", with: plan_name

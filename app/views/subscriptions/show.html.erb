@@ -4,8 +4,9 @@
     <%= link_to "削除", user_subscription_path(current_user, @subscription), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-outline-secondary" %>
   </div>
 <% end %>
+
 <div class="container pt-5">
-  <%= render @subscription %>
+  <%= render @subscription, link_path: edit_user_subscription_path(@user, @subscription)%>
   <div class="mt-5 p-4 text-white statistics-info">
     <h2>統計情報</h2>
     <div class="d-flex justify-content-between gap-3 mt-4">
@@ -49,3 +50,4 @@
       </div>
     </div>
   </div>
+</div>
