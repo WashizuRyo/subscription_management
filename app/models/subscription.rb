@@ -1,5 +1,5 @@
 class Subscription < ApplicationRecord
-  enum :status, {active: 0, canceled: 1, expired: 2, trial: 3}
+  enum :status, { active: 0, canceled: 1, expired: 2, trial: 3 }
 
   belongs_to :user
   belongs_to :payment_method, optional: true
