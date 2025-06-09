@@ -1,4 +1,11 @@
 ja:
+  enums:
+    subscription:
+      status:
+        active: "有効"
+        canceled: "キャンセル済"
+        expired: "期限切れ"
+        trial: "トライアル"
   errors:
     format: "%{message}"
   activerecord:
