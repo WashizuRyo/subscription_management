@@ -65,13 +65,14 @@ class SubscriptionsController < ApplicationController
 
   def subscription_params
     params.require(:subscription).permit(:name,
-                                         :plan_name,
-                                         :price,
-                                         :start_date,
-                                         :end_date,
-                                         :billing_date,
-                                         :payment_method_id,
-                                         tag_ids: [])
+      :plan_name,
+      :price,
+      :status,
+      :start_date,
+      :end_date,
+      :billing_date,
+      :payment_method_id,
+      tag_ids: [])
   end
 
   def get_subscription
@@ -80,15 +81,15 @@ class SubscriptionsController < ApplicationController
 
   def search_subscription_params
     params.fetch(:q, {}).permit(:filter_column,
-                  :text_filter_value,
-                  :text_filter_pattern,
-                  :date_filter_start,
-                  :date_filter_end,
-                  :date_filter_pattern,
-                  :first_column,
-                  :first_direction,
-                  :second_column,
-                  :second_direction,
-                  :page)
+      :text_filter_value,
+      :text_filter_pattern,
+      :date_filter_start,
+      :date_filter_end,
+      :date_filter_pattern,
+      :first_column,
+      :first_direction,
+      :second_column,
+      :second_direction,
+      :page)
   end
 end

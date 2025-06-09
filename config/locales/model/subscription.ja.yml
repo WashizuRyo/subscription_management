@@ -12,3 +12,4 @@ ja:
         billing_date: 請求日
         created_at: 追加日
         updated_at: 更新日
+        status: ステータス

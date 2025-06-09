@@ -1,5 +1,5 @@
 class Subscription < ApplicationRecord
-  enum :status, { active: 0, canceled: 1, expired: 2, trial: 3 }
+  enum :status, {active: 0, canceled: 1, expired: 2, trial: 3}
 
   belongs_to :user
   belongs_to :payment_method, optional: true
@@ -16,8 +16,8 @@ class Subscription < ApplicationRecord
   validate :end_date_after_start_date
 
   scope :billing_in_this_month, ->(user) {
-      where(user_id: user).where("billing_date BETWEEN :start_date AND :end_date",
-             start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month)
+    where(user_id: user).where("billing_date BETWEEN :start_date AND :end_date",
+      start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month)
   }
   scope :next_billing_soon, ->(user) {
     where("billing_date > ? AND user_id = ?", Date.today, user)
