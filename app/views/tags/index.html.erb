@@ -25,6 +25,10 @@
             <%= f.label :name %>
             <%= f.text_field :name, class: "form-control", placeholder: "例: 音楽" %>
           </div>
+          <div>
+            <%= f.label :color %>
+            <%= f.color_field :color, class: "form-control" %>
+          </div>
           <button type="submit" class="btn submit-btn" name="commit" id="new_tag_submit" data-disable-with="<%= Tag.model_name.human %>を作成">
             <i class="bi bi-plus-lg text-white me-2"></i>
             <%= Tag.model_name.human %>を作成
@@ -39,6 +43,10 @@
             <div>
               <%= f.label :name %>
               <%= f.text_field :name, class: "form-control", placeholder: "例: 音楽", id: "tag_name_#{tag.id}" %>
+            </div>
+            <div>
+              <%= f.label :color %>
+              <%= f.color_field :color, class: "form-control" %>
             </div>
             <div class="d-flex align-items-end gap-3">
               <button type="button" class="btn cancel-edit" data-tag-id="<%= tag.id %>" id="cancel_edit_button">キャンセル</button>
