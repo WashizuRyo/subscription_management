@@ -36,7 +36,7 @@
           <% if subscription.tags.any? %>
             <div class="tag-container">
               <% subscription.tags.each do |tag| %>
-                <span class="badge bg-primary bg-opacity-25 text-primary border border-primary fs-6"><%= tag.name %></span>
+                <span class="badge fs-6 px-2" style="color: <%= tag.color %>; border: 1px solid <%= tag.color %>; background-color: <%= tag.color.present? ? hex_to_rgba(tag.color, 0.3) : "" %>;"><%= tag.name %></span>
               <% end %>
             </div>
           <% end %>
