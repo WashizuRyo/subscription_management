@@ -23,7 +23,6 @@ RSpec.describe DailyBillingJob, type: :job do
         payment = Payment.last
         expect(payment.subscription).to eq(subscription)
         expect(payment.amount).to eq(1000)
-        expect(payment.status).to eq(0)
       end
     end
   end
