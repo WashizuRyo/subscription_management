@@ -34,7 +34,6 @@ class DailyBillingJob < ApplicationJob
       payment_method: subscription.payment_method,
       amount: subscription.price,
       billing_date: subscription.billing_date,
-      status: 0
     )
   end
 
