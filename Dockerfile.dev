@@ -4,7 +4,7 @@
 ARG RUBY_VERSION=3.2.6
 FROM docker.io/library/ruby:$RUBY_VERSION-slim
 
-RUN apt-get update -qq && apt-get install -y \
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   build-essential \
   libpq-dev \
   graphviz
