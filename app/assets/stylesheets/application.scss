@@ -36,6 +36,16 @@ $input-focus-bg: $navy;
 @import "tag";
 @import "subscription";
 
+.table-header-bg-dark {
+  background-color: $navy-transparent !important;
+    color: $white !important;
+}
+
+.table-bg-navy {
+  background-color: $navy !important;
+  color: $white !important;
+}
+
 #content {
   background-color: $navy;
   min-height: 100vh;

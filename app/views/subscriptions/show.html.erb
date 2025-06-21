@@ -33,19 +33,32 @@
       </div>
     </div>
   </div>
-  <div class="mt-5 p-4 text-white statistics-info">
-    <h2>支払い履歴</h2>
-    <div class="mt-4">
-      <% @subscription.payments.each do |payment| %>
-        <div class="d-flex flex-column gap-3 fs-5">
-          <div class="d-flex justify-content-between statistics-info-card p-3">
-            <div class="d-flex gap-2">
-              <i class="bi bi-credit-card-fill statistics-icon-green"></i>
-              <div><%= payment.created_at.strftime("%Y年%m月%d日") %></div>
-            </div>
-            <div>¥<%= number_with_delimiter(payment.amount.to_i) %></div>
-          </div>
-        <% end %>
+  <div class="pb-5">
+    <div class="mt-5 p-4 text-white border border-dark-subtle rounded">
+      <h2>支払い履歴</h2>
+      <div class="mt-4 border-start border-end border-top rounded border-dark-subtle">
+        <table class="table rounded overflow-hidden bg-color-navy">
+          <thead>
+            <tr>
+              <th scope="col" class="table-header-bg-dark p-3">支払日</th>
+              <th scope="col" class="table-header-bg-dark p-3">プラン名</th>
+              <th scope="col" class="table-header-bg-dark p-3">金額</th>
+              <th scope="col" class="table-header-bg-dark p-3">期間</th>
+              <th scope="col" class="table-header-bg-dark p-3">支払い方法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @subscription.payments.includes(:payment_method).order(billing_date: :desc).each do |payment| %>
+              <tr>
+                <td class="table-bg-navy p-3"><%= payment.billing_date.strftime("%Y年%m月%d日") %></td>
+                <td class="table-bg-navy p-3"><%= payment.plan %></td>
+                <td class="table-bg-navy p-3">¥<%= number_with_delimiter(payment.amount.to_i) %></td>
+                <td class="table-bg-navy p-3"><%= payment.created_at.strftime("%Y年%m月%d日") %></td>
+                <td class="table-bg-navy p-3"><%= payment.payment_method.provider %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
