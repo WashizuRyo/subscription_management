@@ -42,7 +42,6 @@
             <div class="d-flex gap-2">
               <i class="bi bi-credit-card-fill statistics-icon-green"></i>
               <div><%= payment.created_at.strftime("%Y年%m月%d日") %></div>
-              <div><%= payment.status %></div>
             </div>
             <div>¥<%= number_with_delimiter(payment.amount.to_i) %></div>
           </div>
