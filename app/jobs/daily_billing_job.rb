@@ -33,6 +33,7 @@ class DailyBillingJob < ApplicationJob
       subscription: subscription,
       payment_method: subscription.payment_method,
       amount: subscription.price,
+      plan: subscription.plan_name,
       billing_date: subscription.billing_date,
     )
   end
