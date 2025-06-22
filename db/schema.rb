@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_234559) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_21_235853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,7 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_234559) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "name"
-    t.string "plan_name"
+    t.string "plan"
     t.decimal "price", precision: 10, scale: 2
     t.date "start_date"
     t.date "end_date"

@@ -88,7 +88,7 @@ user.subscriptions.each_with_index do |subscription, index|
       subscription: subscription,
       payment_method: payment_method,
       amount: subscription.price,
-      billing_day_of_month: subscription.billing_day_of_month - i.months,
+      billing_date: subscription.billing_day_of_month - i.months,
       plan: subscription.plan
     )
   end

@@ -143,7 +143,7 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       FactoryBot.create(:subscription,
                         name: "Netflix",
                         price: 10000,
-                        plan_name: "standard",
+                        plan: "standard",
                         user: user)
 
       form = FactoryBot.build(:search_subscription_form,
@@ -174,15 +174,15 @@ RSpec.describe SearchSubscriptionForm, type: :model do
     end
 
     it "returns subscriptions that sorted by orders" do
-      FactoryBot.create(:subscription, user: user, price: 10, plan_name: "standard")
-      FactoryBot.create(:subscription, user: user, price: 20, plan_name: "standard")
-      FactoryBot.create(:subscription, user: user, price: 30, plan_name: "standard")
+      FactoryBot.create(:subscription, user: user, price: 10, plan: "standard")
+      FactoryBot.create(:subscription, user: user, price: 20, plan: "standard")
+      FactoryBot.create(:subscription, user: user, price: 30, plan: "standard")
 
       form = FactoryBot.build(:search_subscription_form,
                               current_user: user,
-                              filter_column: "plan_name",
+                              filter_column: "plan",
                               text_filter_value: "standard",
-                              first_column: "plan_name",
+                              first_column: "plan",
                               first_direction: "asc",
                               second_column: "price",
                               second_direction: "asc")
