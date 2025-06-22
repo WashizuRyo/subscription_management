@@ -5,11 +5,11 @@ RSpec.describe Subscription, type: :model do
     let(:user) { FactoryBot.build(:user) }
 
     it { is_expected.to validate_presence_of :name }
-    it { is_expected.to validate_presence_of :plan_name }
+    it { is_expected.to validate_presence_of :plan }
     it { is_expected.to validate_presence_of :price }
     it { is_expected.to validate_presence_of :start_date }
     it { is_expected.to validate_presence_of :end_date }
-    it { is_expected.to validate_presence_of :billing_date }
+    it { is_expected.to validate_presence_of :billing_day_of_month }
     it "is valid when end_date is after start_date" do
       subscription = FactoryBot.build(:subscription,
                                       user: user,
@@ -45,11 +45,11 @@ RSpec.describe Subscription, type: :model do
   describe "this_month_total_billing" do
     let(:user) { FactoryBot.create(:user) }
 
-    it "returns the total price for billings with billing_date in April" do
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3))
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 2000)
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 1980)
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 5, 3))
+    it "returns the total price for billings with billing_day_of_month in April" do
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 3, 3))
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 4, 3), price: 2000)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 4, 3), price: 1980)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 5, 3))
 
       travel_to Date.new(2025, 4, 1) do
         result = Subscription.this_month_total_billing(user)
@@ -57,10 +57,10 @@ RSpec.describe Subscription, type: :model do
       end
     end
 
-    it "returns 0 when there are no billings with billing_date in April" do
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 3))
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 2, 3))
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3))
+    it "returns 0 when there are no billings with billing_day_of_month in April" do
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 1, 3))
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 2, 3))
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 3, 3))
 
       travel_to Date.new(2025, 4, 1) do
         result = Subscription.this_month_total_billing(user)
@@ -69,9 +69,9 @@ RSpec.describe Subscription, type: :model do
     end
 
     it "does not mix billing dates from same month in different years" do
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 3), price: 100)
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2026, 1, 3), price: 200)
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2027, 1, 3), price: 300)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 1, 3), price: 100)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2026, 1, 3), price: 200)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2027, 1, 3), price: 300)
 
       travel_to Date.new(2025, 1, 1) do
         result = Subscription.this_month_total_billing(user)
@@ -85,9 +85,9 @@ RSpec.describe Subscription, type: :model do
 
     it "returns subscriptions sorted by billing date close to today" do
       today = Date.new(2025, 1, 1)
-      sub1 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 2, 3), price: 100)
-      sub2 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3), price: 200)
-      sub3 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 300)
+      sub1 = FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 2, 3), price: 100)
+      sub2 = FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 3, 3), price: 200)
+      sub3 = FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 4, 3), price: 300)
 
       travel_to today do
         result = Subscription.next_billing_soon(user)
@@ -100,9 +100,9 @@ RSpec.describe Subscription, type: :model do
 
     it "does not include subscriptions with billing date equal to today" do
       today = Date.new(2025, 1, 1)
-      FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 1, 1), price: 100)
-      sub1 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 3, 3), price: 200)
-      sub2 = FactoryBot.create(:subscription, user: user, billing_date: Date.new(2025, 4, 3), price: 300)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 1, 1), price: 100)
+      sub1 = FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 3, 3), price: 200)
+      sub2 = FactoryBot.create(:subscription, user: user, billing_day_of_month: Date.new(2025, 4, 3), price: 300)
 
       travel_to today do
         result = Subscription.next_billing_soon(user)

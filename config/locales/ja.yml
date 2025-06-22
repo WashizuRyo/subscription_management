@@ -15,7 +15,7 @@ ja:
           attributes:
             name:
               blank: サブスクリプション名を入力してください
-            plan_name:
+            plan:
               blank: プラン名を入力してください
             price:
               blank: 料金を入力してください
@@ -23,7 +23,7 @@ ja:
               blank: 開始日を入力してください
             end_date:
               blank: 終了日を入力してください
-            billing_date:
+            billing_day_of_month:
               blank: 請求日を入力してください
         tag:
           attributes:

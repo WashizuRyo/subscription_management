@@ -3,7 +3,7 @@
     <div class="card-header">
       <% link_path ||= user_subscription_path(current_user, subscription) %>
       <h3><%= link_to subscription.name, link_path %></h3>
-      <span><%= subscription.plan_name %></span>
+      <span><%= subscription.plan %></span>
     </div>
     <hr>
     <div class="card-body">
@@ -15,9 +15,9 @@
       </div>
       <div class="info-group">
         <span>
-          <i class="bi bi-credit-card me-2"></i><%= Subscription.human_attribute_name(:billing_date) %>
+          <i class="bi bi-credit-card me-2"></i><%= Subscription.human_attribute_name(:billing_day_of_month) %>
         </span>
-        <p class="card-text"><%= subscription.billing_date.strftime('%Y年%m月%d日') %></p>
+        <p class="card-text"><%= subscription.billing_day_of_month.strftime('%Y年%m月%d日') %></p>
       </div>
       <div class="info-group">
         <span>

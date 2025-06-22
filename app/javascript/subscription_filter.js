@@ -15,7 +15,7 @@ function initializeFilters() {
   // イベント委譲でバインド
   $(document).on("change", "select[name='q[filter_column]']", function() {
     const selectedColumn = $(this).val();
-    if (selectedColumn === "name" || selectedColumn === "plan_name") {
+    if (selectedColumn === "name" || selectedColumn === "plan") {
       $("#text_filter_pattern").show();
       $("#text_filter_fields").show();
       $("#date_filter_fields").hide();
@@ -23,7 +23,7 @@ function initializeFilters() {
         selectedColumn === "price" ||
         selectedColumn === "start_date" ||
         selectedColumn === "end_date" ||
-        selectedColumn === "billing_date"
+        selectedColumn === "billing_day_of_month"
     ) {
       $("#text_filter_pattern").hide();
       $("#text_filter_fields").hide();
