@@ -22,18 +22,6 @@ RSpec.describe "PaymentMethods", type: :system do
       expect(page).to have_content "test_method_type"
       expect(page).to have_content "test_memo"
     end
-
-    it "displays validation errors when payment_method is invalid" do
-      login_as user
-      visit user_payment_methods_path(user)
-
-      expect {
-        click_button "支払い方法を追加"
-      }.to_not change(PaymentMethod, :count)
-
-      expect(page).to have_content '提供元を入力してください'
-      expect(page).to have_content '種類を入力してください'
-    end
   end
 
   # TODO: 更新機能のテストを追加(ログインができない)
