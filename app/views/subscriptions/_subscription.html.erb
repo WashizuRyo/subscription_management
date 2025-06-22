@@ -11,13 +11,13 @@
         <span>
           <i class="bi bi-calendar-range me-2"></i>期間
         </span>
-        <p class="card-text"><%= subscription.start_date.strftime('%Y年%m月%d日') %> ~ <%= subscription.end_date.strftime('%Y年%m月%d日') %></p>
+        <p class="card-text"><%= subscription.start_date&.strftime('%Y年%m月%d日') %> ~ <%= subscription.end_date&.strftime('%Y年%m月%d日') %></p>
       </div>
       <div class="info-group">
         <span>
           <i class="bi bi-credit-card me-2"></i><%= Subscription.human_attribute_name(:billing_day_of_month) %>
         </span>
-        <p class="card-text"><%= subscription.billing_day_of_month.strftime('%Y年%m月%d日') %></p>
+        <p class="card-text"><%= subscription.billing_day_of_month %>日</p>
       </div>
       <div class="info-group">
         <span>

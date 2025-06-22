@@ -31,7 +31,7 @@
           <div class="d-flex gap-4 mt-3">
             <% Subscription.statuses_i18n.invert.each do |translated_status, enum_key| %>
               <div>
-                <%= radio_button_tag "subscription[status]", enum_key, @subscription.status == enum_key, id: "status_#{enum_key}" %>
+                <%= radio_button_tag "subscription[status]", enum_key, @subscription&.status == enum_key, id: "status_#{enum_key}" %>
                 <%= label_tag "status_#{enum_key}", translated_status, class: "form-label" %>
               </div>
             <% end %>
@@ -50,13 +50,17 @@
             <%= f.label :start_date, class: "form-label" %>
             <%= f.date_field :start_date, class: "form-control" %>
           </div>
-          <div class="d-flex flex-column g-col-12 g-col-md-4">
-            <%= f.label :end_date, class: "form-label" %>
-            <%= f.date_field :end_date, class: "form-control" %>
-          </div>
+<!--          <div class="d-flex flex-column g-col-12 g-col-md-4">-->
+            <%#= f.label :end_date, class: "form-label" %>
+            <%#= f.date_field :end_date, class: "form-control" %>
+<!--          </div>-->
+        </div>
+        <div class="my-3">
+          <%= check_box_tag "subscription[create_initial_payment]", "1", false, class: "form-check-input" %>
+          <%= label_tag "subscription_create_initial_payment", "利用開始日に初回支払いがあった場合は、チェックを入れてください", class: "form-check-label" %>
         </div>
         <p><%= PaymentMethod.model_name.human %></p>
-        <% @payment_methods.each do |payment_method| %>
+        <% current_user.payment_methods.each do |payment_method| %>
           <div>
             <%= radio_button_tag "subscription[payment_method_id]",
                                  payment_method.id, @subscription.payment_method == payment_method,
@@ -71,7 +75,7 @@
         <h3><%= Tag.model_name.human %></h3>
         <p class="section-description">該当するタグを選択してください。</p>
         <div class="d-flex flex-wrap gap-4 mt-3">
-          <% @tags.each do |tag| %>
+          <% Tag.all.each do |tag| %>
             <div>
               <%= check_box_tag "subscription[tag_ids][]", tag.id, @subscription.tags.include?(tag), id: "tag_#{tag.id}" %>
               <%= label_tag "tag_#{tag.id}", tag.name, class: "form-label" %>
