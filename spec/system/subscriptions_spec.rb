@@ -85,16 +85,16 @@ RSpec.describe "Subscriptions", type: :system do
 
   def fill_in_subscription_form(price = 1000,
     name = "Netflix",
-    plan_name = "スタンダード",
+    plan = "スタンダード",
     start_date = Time.zone.today,
     end_date = 1.months.from_now.to_date,
-    billing_date = 1.months.from_now.to_date)
+    billing_day_of_month = 1.months.from_now.to_date)
     fill_in "料金", with: price
     fill_in "サブスクリプション名", with: name
-    fill_in "プラン名", with: plan_name
+    fill_in "プラン名", with: plan
     fill_in "開始日", with: start_date
     fill_in "終了日", with: end_date
-    fill_in "請求日", with: billing_date
+    fill_in "毎月の請求日", with: billing_day_of_month
   end
 
   # it "displays 'サブスクリプションを削除しました' when subscription deleted" do

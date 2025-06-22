@@ -18,29 +18,29 @@ user = User.first
 subscriptions = [
   {
     name: "Netflix",
-    plan_name: "スタンダード",
+    plan: "スタンダード",
     price: 1490,
     start_date: Date.today - 2.months,
     end_date: Date.today + 10.months,
-    billing_date: Date.today.beginning_of_month,
+    billing_day_of_month: Date.today.beginning_of_month,
     payment_method_id: nil
   },
   {
     name: "Amazon Prime",
-    plan_name: "年間プラン",
+    plan: "年間プラン",
     price: 4900,
     start_date: Date.today - 3.months,
     end_date: Date.today + 9.months,
-    billing_date: Date.today - 3.months,
+    billing_day_of_month: Date.today - 3.months,
     payment_method_id: nil
   },
   {
     name: "Spotify",
-    plan_name: "プレミアム",
+    plan: "プレミアム",
     price: 980,
     start_date: Date.today - 1.month,
     end_date: Date.today + 11.months,
-    billing_date: Date.today.beginning_of_month,
+    billing_day_of_month: Date.today.beginning_of_month,
     payment_method_id: nil
   }
 ]
@@ -88,8 +88,8 @@ user.subscriptions.each_with_index do |subscription, index|
       subscription: subscription,
       payment_method: payment_method,
       amount: subscription.price,
-      billing_date: subscription.billing_date - i.months,
-      plan: subscription.plan_name
+      billing_day_of_month: subscription.billing_day_of_month - i.months,
+      plan: subscription.plan
     )
   end
 end

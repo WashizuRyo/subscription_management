@@ -8,20 +8,20 @@ class Subscription < ApplicationRecord
   has_many :payments, dependent: :destroy
 
   validates :name, presence: true
-  validates :plan_name, presence: true
+  validates :plan, presence: true
   validates :price, presence: true
   validates :start_date, presence: true
   validates :end_date, presence: true
-  validates :billing_date, presence: true
+  validates :billing_day_of_month, presence: true
   validate :end_date_after_start_date
 
   scope :billing_in_this_month, ->(user) {
-    where(user_id: user).where("billing_date BETWEEN :start_date AND :end_date",
+    where(user_id: user).where("billing_day_of_month BETWEEN :start_date AND :end_date",
       start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month)
   }
   scope :next_billing_soon, ->(user) {
-    where("billing_date > ? AND user_id = ?", Date.today, user)
-      .order(billing_date: :asc)
+    where("billing_day_of_month > ? AND user_id = ?", Date.today, user)
+      .order(billing_day_of_month: :asc)
       .includes(:tags)
       .limit(10)
   }

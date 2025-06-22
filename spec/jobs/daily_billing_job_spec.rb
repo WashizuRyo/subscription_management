@@ -11,7 +11,7 @@ RSpec.describe DailyBillingJob, type: :job do
         FactoryBot.create(:subscription,
                           user:,
                           payment_method: payment_method,
-                          billing_date: today,
+                          billing_day_of_month: today,
                           active: true,
                           billing_cycle: 'monthly',
                           price: 1000)

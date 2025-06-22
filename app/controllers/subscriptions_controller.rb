@@ -65,12 +65,12 @@ class SubscriptionsController < ApplicationController
 
   def subscription_params
     params.require(:subscription).permit(:name,
-      :plan_name,
+      :plan,
       :price,
       :status,
       :start_date,
       :end_date,
-      :billing_date,
+      :billing_day_of_month,
       :payment_method_id,
       tag_ids: [])
   end

@@ -6,7 +6,7 @@ class DailyBillingJob < ApplicationJob
 
     # 今日が請求日のサブスクリプションを取得
     subscriptions_to_bill = Subscription.joins(:user)
-                                      .where(billing_date: Date.current)
+                                      .where(billing_day_of_month: Date.current)
                                       .where(active: true)
                                       .includes(:payment_method, :user)
 
@@ -15,7 +15,7 @@ class DailyBillingJob < ApplicationJob
     subscriptions_to_bill.find_each do |subscription|
       begin
         create_payment_record(subscription)
-        update_next_billing_date(subscription)
+        update_next_billing_day_of_month(subscription)
         Rails.logger.info "Successfully processed subscription ID: #{subscription.id}"
       rescue => e
         Rails.logger.error "Failed to process subscription ID: #{subscription.id}, Error: #{e.message}"
@@ -33,23 +33,23 @@ class DailyBillingJob < ApplicationJob
       subscription: subscription,
       payment_method: subscription.payment_method,
       amount: subscription.price,
-      plan: subscription.plan_name,
-      billing_date: subscription.billing_date,
+      plan: subscription.plan,
+      billing_date: subscription.billing_day_of_month,
     )
   end
 
-  def update_next_billing_date(subscription)
+  def update_next_billing_day_of_month(subscription)
     next_date = case subscription.billing_cycle
     when "monthly"
-                  subscription.billing_date + 1.month
+                  subscription.billing_day_of_month + 1.month
     when "yearly"
-                  subscription.billing_date + 1.year
+                  subscription.billing_day_of_month + 1.year
     when "weekly"
-                  subscription.billing_date + 1.week
+                  subscription.billing_day_of_month + 1.week
     else
-                  subscription.billing_date + 1.month # デフォルトは月次
+                  subscription.billing_day_of_month + 1.month # デフォルトは月次
     end
 
-    subscription.update!(billing_date: next_date)
+    subscription.update!(billing_day_of_month: next_date)
   end
 end
