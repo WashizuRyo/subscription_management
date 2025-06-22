@@ -22,7 +22,7 @@ subscriptions = [
     price: 1490,
     start_date: Date.today - 2.months,
     end_date: Date.today + 10.months,
-    billing_day_of_month: Date.today.beginning_of_month,
+    billing_day_of_month: 1,
     payment_method_id: nil
   },
   {
@@ -31,7 +31,7 @@ subscriptions = [
     price: 4900,
     start_date: Date.today - 3.months,
     end_date: Date.today + 9.months,
-    billing_day_of_month: Date.today - 3.months,
+    billing_day_of_month: 1,
     payment_method_id: nil
   },
   {
@@ -40,7 +40,7 @@ subscriptions = [
     price: 980,
     start_date: Date.today - 1.month,
     end_date: Date.today + 11.months,
-    billing_day_of_month: Date.today.beginning_of_month,
+    billing_day_of_month: 1,
     payment_method_id: nil
   }
 ]
