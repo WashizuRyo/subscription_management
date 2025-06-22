@@ -17,16 +17,28 @@ class SubscriptionsController < ApplicationController
 
   def new
     @subscription = current_user.subscriptions.new
-    @payment_methods = current_user.payment_methods
-    @tags = Tag.all
   end
 
   def create
-    @subscription = current_user.subscriptions.new(subscription_params)
-    if @subscription.save
+    @subscription = current_user.subscriptions.new(subscription_params.except(:create_initial_payment))
+
+    ActiveRecord::Base.transaction do
+      @subscription.save!
+
+      if params.dig(:subscription, :create_initial_payment) == "1"
+        @subscription.payments.create!(
+          billing_date: @subscription.start_date,
+          amount: @subscription.price,
+          plan: @subscription.plan,
+          billing_cycle: @subscription.billing_cycle,
+          payment_method_id: @subscription.payment_method_id
+        )
+      end
+
       flash[:success] = "サブスクリプションが登録されました"
       redirect_to root_path
-    else
+    rescue ActiveRecord::RecordInvalid => e
+      @subscription = e.record
       render "new", status: :unprocessable_entity
     end
   end
@@ -72,6 +84,8 @@ class SubscriptionsController < ApplicationController
       :end_date,
       :billing_day_of_month,
       :payment_method_id,
+      :billing_cycle,
+      :create_initial_payment,
       tag_ids: [])
   end
 

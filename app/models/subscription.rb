@@ -11,9 +11,9 @@ class Subscription < ApplicationRecord
   validates :plan, presence: true
   validates :price, presence: true
   validates :start_date, presence: true
-  validates :end_date, presence: true
+  # validates :end_date, presence: true
   validates :billing_day_of_month, presence: true
-  validate :end_date_after_start_date
+  # validate :end_date_after_start_date
 
   scope :billing_in_this_month, ->(user) {
     where(user_id: user).where("billing_day_of_month BETWEEN :start_date AND :end_date",

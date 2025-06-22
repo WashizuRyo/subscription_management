@@ -5,7 +5,7 @@ FactoryBot.define do
     plan { "スタンダード" }
     start_date { Time.zone.today }
     end_date { 1.months.from_now.to_date }
-    billing_day_of_month { 1.months.from_now.to_date }
+    billing_day_of_month { 1 }
     user
   end
 end

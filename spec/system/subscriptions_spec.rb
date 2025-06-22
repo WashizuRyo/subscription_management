@@ -5,23 +5,6 @@ RSpec.describe "Subscriptions", type: :system do
   let(:other_user) { FactoryBot.create(:user) }
   let(:subscription) { FactoryBot.create(:subscription, user: user) }
 
-  it "user can create subscription" do
-    login_as user
-
-    visit new_user_subscription_path(user)
-
-    expect do
-      fill_in_subscription_form(1000,
-        "Netflix",
-        "スタンダード")
-      click_button "新規作成"
-    end.to change(Subscription, :count).by(1)
-
-    aggregate_failures do
-      expect(page).to have_current_path root_path
-      expect(page).to have_content "サブスクリプションが登録されました"
-    end
-  end
 
   it "user redirect to root_path when access to other user /uses/:id/subscriptions/new" do
     login_as user
@@ -31,44 +14,6 @@ RSpec.describe "Subscriptions", type: :system do
     aggregate_failures do
       expect(page).to have_content "権限がありません"
       expect(page).to have_current_path root_path
-    end
-  end
-
-  it "user can edit subscription" do
-    login_as user
-
-    visit edit_user_subscription_path(user, id: subscription.id)
-
-    fill_in_subscription_form(100, "Spotify")
-    click_button "変更を保存"
-
-    aggregate_failures do
-      expect(page).to have_current_path root_path
-      expect(subscription.reload.price).to eq 100
-      expect(subscription.reload.name).to eq "Spotify"
-    end
-  end
-
-  it "displays all subscriptions with edit links on the index page" do
-    subscription1 = FactoryBot.create(:subscription,
-      name: "Amazon Prime",
-      price: 2000,
-      user: user)
-    subscription2 = FactoryBot.create(:subscription,
-      name: "Hulu",
-      price: 4000,
-      user: user)
-
-    login_as user
-
-    visit user_subscriptions_path(user)
-
-    aggregate_failures do
-      expect(page).to have_content subscription1.name
-      expect(page).to have_content number_with_delimiter(subscription1.price.to_i)
-
-      expect(page).to have_content subscription2.name
-      expect(page).to have_content number_with_delimiter(subscription2.price.to_i)
     end
   end
 

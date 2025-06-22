@@ -4,7 +4,7 @@ ja:
       payment_method: 支払い方法
     attributes:
       payment_method:
-        provider: 名前
+        provider: カード会社
         method_type: タイプ
         memo: メモ
         created_at: 作成日

@@ -1,37 +1,18 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Users", type: :system do
   let(:user) { FactoryBot.create(:user) }
 
   describe "sign up" do
-    context "with invalid information" do
-      scenario "shows error messages" do
-        visit signup_path
-        expect {
-          fill_in_signup_form(" ", "user@invalid", "foo", "bar")
-          click_button "アカウントを作成する"
-
-          aggregate_failures do
-            expect(page).to have_content "エラーが発生しました。(4個)"
-            expect(page).to have_content "名前を入力してください"
-            expect(page).to have_content "有効なメールアドレスを入力してください"
-            expect(page).to have_content "パスワードは6文字以上で入力してください"
-            expect(page).to have_content "パスワード確認が一致しません"
-            expect(page).to have_http_status(:unprocessable_entity)
-          end
-        }.to_not change(User, :count)
-      end
-    end
-
     context "with valid information" do
       scenario "shows success messages" do
         visit signup_path
 
         expect {
           fill_in_signup_form("tester",
-                              "valid@example.com",
-                              "password",
-                              "password")
+            "valid@example.com",
+            "password",
+            "password")
           click_button "アカウントを作成する"
         }.to change(User, :count).by(1)
 

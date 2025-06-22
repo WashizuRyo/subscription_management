@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_235853) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_22_064616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_235853) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "plan"
+    t.integer "billing_cycle"
     t.index ["billing_date"], name: "index_payments_on_billing_date"
     t.index ["payment_method_id"], name: "index_payments_on_payment_method_id"
     t.index ["subscription_id", "billing_date"], name: "index_payments_on_subscription_id_and_billing_date", unique: true
@@ -53,7 +54,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_235853) do
     t.decimal "price", precision: 10, scale: 2
     t.date "start_date"
     t.date "end_date"
-    t.date "billing_day_of_month"
+    t.integer "billing_day_of_month"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

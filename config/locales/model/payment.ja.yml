@@ -1,0 +1,18 @@
+ja:
+  activerecord:
+    models:
+      payment: 支払い履歴
+    attributes:
+      payment:
+        billing_date: 支払日
+        plan: プラン名
+        billing_cycle: 期間
+        amount: 金額
+        created_at: 作成日
+        updated_at: 更新日
+      payment.payment_method:
+        provider: 名前
+        method_type: タイプ
+        memo: メモ
+        created_at: 作成日
+        updated_at: 更新日

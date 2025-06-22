@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Subscriptions", type: :request do
   let(:user) { FactoryBot.create(:user, :with_subscriptions) }
@@ -75,6 +75,40 @@ RSpec.describe "Subscriptions", type: :request do
         it "redirects to root_path" do
           post user_subscriptions_path(other_user)
           expect(response).to redirect_to root_path
+        end
+      end
+
+      context "when user checked create payment history" do
+        let(:payment_method) { FactoryBot.create(:payment_method, user:) }
+        let(:params) do
+          {
+            subscription: {
+              name: "New Subscription",
+              plan: "Basic",
+              price: 1000,
+              start_date: Date.today,
+              billing_day_of_month: 1,
+              create_initial_payment: "1",
+              payment_method_id: payment_method.id
+            }
+          }
+        end
+
+        subject { post user_subscriptions_path(user), params: }
+
+        it "should create subscriptions and payment" do
+          expect {
+            subject
+          }.to change { user.subscriptions.count }.by(1)
+            .and change { Payment.count }.by(1)
+
+          payment = user.subscriptions.last.payments.first
+          subscription = user.subscriptions.last
+          expect(payment.billing_date).to eq subscription.start_date
+          expect(payment.payment_method).to eq subscription.payments.first.payment_method
+          expect(payment.amount).to eq subscription.price
+          expect(payment.plan).to eq subscription.plan
+          expect(payment.billing_cycle).to eq subscription.billing_cycle
         end
       end
     end

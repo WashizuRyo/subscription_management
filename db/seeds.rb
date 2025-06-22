@@ -9,10 +9,9 @@
 #   end
 
 User.create!(name: "Tester",
-             email: "tester@example.com",
-             password: "password",
-             password_confirmation: "password"
-)
+  email: "tester@example.com",
+  password: "password",
+  password_confirmation: "password")
 
 user = User.first
 subscriptions = [
@@ -22,7 +21,7 @@ subscriptions = [
     price: 1490,
     start_date: Date.today - 2.months,
     end_date: Date.today + 10.months,
-    billing_day_of_month: Date.today.beginning_of_month,
+    billing_day_of_month: 1,
     payment_method_id: nil
   },
   {
@@ -31,7 +30,7 @@ subscriptions = [
     price: 4900,
     start_date: Date.today - 3.months,
     end_date: Date.today + 9.months,
-    billing_day_of_month: Date.today - 3.months,
+    billing_day_of_month: 1,
     payment_method_id: nil
   },
   {
@@ -40,7 +39,7 @@ subscriptions = [
     price: 980,
     start_date: Date.today - 1.month,
     end_date: Date.today + 11.months,
-    billing_day_of_month: Date.today.beginning_of_month,
+    billing_day_of_month: 1,
     payment_method_id: nil
   }
 ]
@@ -88,8 +87,9 @@ user.subscriptions.each_with_index do |subscription, index|
       subscription: subscription,
       payment_method: payment_method,
       amount: subscription.price,
-      billing_date: subscription.billing_day_of_month - i.months,
-      plan: subscription.plan
+      billing_date: Time.zone.local(2025, 5, 1) - i.months,
+      plan: subscription.plan,
+      billing_cycle: 1
     )
   end
 end

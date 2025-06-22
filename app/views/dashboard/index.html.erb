@@ -2,7 +2,7 @@
   <div class="card" id="dashboard-card">
     <div class="card-body">
       <h3 class="card-title mb-1">今月の請求額</h3>
-      <p class="card-text billing-amount">¥<%= number_with_delimiter(@this_month_total_billing.to_i) %></p>
+<!--      <p class="card-text billing-amount">¥<%#= number_with_delimiter(@this_month_total_billing.to_i) %></p>-->
       <p class="card-text active-subscriptions"><i class="bi bi-calendar-check me-2"></i>アクティブなサブスクリプション: <%= current_user&.subscriptions&.active&.count %>件</p>
     </div>
   </div>
@@ -17,12 +17,12 @@
   <% else %>
     <p>最近登録されたサブスクはありません</p>
   <% end %>
-  <h1>次回更新日が近いサブスク</h1>
-  <% if @next_billing_soon_subscriptions.present? %>
-    <div class="grid p-4">
-      <%= render @next_billing_soon_subscriptions %>
-    </div>
-  <% else %>
-    <p>次回更新日が近いサブスクはありません</p>
-  <% end %>
+<!--  <h1>次回更新日が近いサブスク</h1>-->
+  <%# if @next_billing_soon_subscriptions.present? %>
+<!--    <div class="grid p-4">-->
+      <%#= render @next_billing_soon_subscriptions %>
+<!--    </div>-->
+  <%# else %>
+<!--    <p>次回更新日が近いサブスクはありません</p>-->
+  <%# end %>
 </div>
