@@ -22,7 +22,7 @@ RSpec.describe "Subscriptions", type: :request do
       end
 
       it "returns error message when first_colum is invalid" do
-        get user_subscriptions_path(user, {q: {first_column: "invalid_column", first_direction: "desc"}})
+        get user_subscriptions_path(user, { q: { first_column: "invalid_column", first_direction: "desc" } })
 
         expect(response.body).to include("無効なカラム名です")
       end

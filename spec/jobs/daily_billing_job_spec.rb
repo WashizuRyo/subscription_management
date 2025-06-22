@@ -22,7 +22,7 @@
 #             .to change(Payment, :count).by(1)
 #           payment = Payment.last
 #           expect(payment.subscription).to eq(subscription)
-#           expect(payment.amount).to eq(1000)  
+#           expect(payment.amount).to eq(1000)
 #         end
 #       end
 #     end

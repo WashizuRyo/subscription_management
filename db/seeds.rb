@@ -49,16 +49,16 @@ subscriptions.each do |subscription_data|
 end
 
 tags = [
-  {name: "動画配信"},
-  {name: "音楽"},
-  {name: "書籍"},
-  {name: "学習"},
-  {name: "運動・フィットネス"},
-  {name: "ファッション"},
-  {name: "美容"},
-  {name: "食事・宅配"},
-  {name: "ビジネスツール"},
-  {name: "クラウドストレージ"}
+  { name: "動画配信" },
+  { name: "音楽" },
+  { name: "書籍" },
+  { name: "学習" },
+  { name: "運動・フィットネス" },
+  { name: "ファッション" },
+  { name: "美容" },
+  { name: "食事・宅配" },
+  { name: "ビジネスツール" },
+  { name: "クラウドストレージ" }
 ]
 
 tags.each do |tag_date|
@@ -66,9 +66,9 @@ tags.each do |tag_date|
 end
 
 payment_methods = [
-  {method_type: "クレジットカード", provider: "VISA", memo: "amazonカード"},
-  {method_type: "銀行振込", provider: "ゆうちょ銀行", memo: ""},
-  {method_type: "デビットカード", provider: "MasterCard", memo: "イオンカード"}
+  { method_type: "クレジットカード", provider: "VISA", memo: "amazonカード" },
+  { method_type: "銀行振込", provider: "ゆうちょ銀行", memo: "" },
+  { method_type: "デビットカード", provider: "MasterCard", memo: "イオンカード" }
 ]
 
 payment_methods.each do |v|
