@@ -14,6 +14,7 @@ User.create!(name: "Tester",
   password_confirmation: "password")
 
 user = User.first
+billing_date = Time.zone.local(2025, 5, 1)
 subscriptions = [
   {
     name: "Netflix",
@@ -22,6 +23,7 @@ subscriptions = [
     start_date: Date.today - 2.months,
     end_date: Date.today + 10.months,
     billing_day_of_month: 1,
+    billing_date:,
     payment_method_id: nil
   },
   {
@@ -31,6 +33,7 @@ subscriptions = [
     start_date: Date.today - 3.months,
     end_date: Date.today + 9.months,
     billing_day_of_month: 1,
+    billing_date:,
     payment_method_id: nil
   },
   {
@@ -40,6 +43,7 @@ subscriptions = [
     start_date: Date.today - 1.month,
     end_date: Date.today + 11.months,
     billing_day_of_month: 1,
+    billing_date:,
     payment_method_id: nil
   }
 ]
