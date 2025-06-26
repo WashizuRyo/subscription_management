@@ -23,9 +23,9 @@ class SubscriptionsController < ApplicationController
     @subscription = current_user.subscriptions.new(subscription_params.except(:create_initial_payment))
 
     ActiveRecord::Base.transaction do
-      @subscription.save!
-
       if params.dig(:subscription, :create_initial_payment) == "1"
+        @subscription.billing_date = @subscription.start_date.advance(months: @subscription.billing_cycle.to_i)
+        @subscription.save!
         @subscription.payments.create!(
           billing_date: @subscription.start_date,
           amount: @subscription.price,
@@ -33,6 +33,9 @@ class SubscriptionsController < ApplicationController
           billing_cycle: @subscription.billing_cycle,
           payment_method_id: @subscription.payment_method_id
         )
+      else
+        @subscription.billing_date = @subscription.start_date
+        @subscription.save!
       end
 
       flash[:success] = "サブスクリプションが登録されました"
