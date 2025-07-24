@@ -49,4 +49,65 @@ RSpec.describe User, type: :model do
   it "authenticated? should return false for a user with nil digest" do
     expect(user.authenticated?("")).to be_falsy
   end
+
+  describe "monthly budget methods" do
+    let(:user_with_budget) { FactoryBot.create(:user, monthly_budget: 5000) }
+
+    describe "#monthly_subscription_total" do
+      it "returns 0 when user has no subscriptions" do
+        expect(user_with_budget.monthly_subscription_total).to eq(0)
+      end
+
+      it "calculates total from active subscriptions only" do
+        FactoryBot.create(:subscription, user: user_with_budget, price: 1000, status: :active)
+        FactoryBot.create(:subscription, user: user_with_budget, price: 2000, status: :active)
+        FactoryBot.create(:subscription, user: user_with_budget, price: 500, status: :canceled)
+
+        expect(user_with_budget.monthly_subscription_total).to eq(3000)
+      end
+    end
+
+    describe "#budget_usage_percentage" do
+      it "returns 0 when monthly_budget is nil" do
+        user_without_budget = FactoryBot.create(:user, monthly_budget: nil)
+        expect(user_without_budget.budget_usage_percentage).to eq(0)
+      end
+
+      it "returns 0 when monthly_budget is zero" do
+        user_with_zero_budget = FactoryBot.create(:user, monthly_budget: 0)
+        expect(user_with_zero_budget.budget_usage_percentage).to eq(0)
+      end
+
+      it "calculates percentage correctly" do
+        FactoryBot.create(:subscription, user: user_with_budget, price: 3000, status: :active)
+        expect(user_with_budget.budget_usage_percentage).to eq(60.0)
+      end
+
+      it "returns percentage over 100 when budget is exceeded" do
+        FactoryBot.create(:subscription, user: user_with_budget, price: 8000, status: :active)
+        expect(user_with_budget.budget_usage_percentage).to eq(160.0)
+      end
+    end
+
+    describe "#budget_remaining" do
+      it "returns nil when monthly_budget is nil" do
+        user_without_budget = FactoryBot.create(:user, monthly_budget: nil)
+        expect(user_without_budget.budget_remaining).to be_nil
+      end
+
+      it "returns positive value when under budget" do
+        FactoryBot.create(:subscription, user: user_with_budget, price: 2000, status: :active)
+        expect(user_with_budget.budget_remaining).to eq(3000)
+      end
+
+      it "returns negative value when over budget" do
+        FactoryBot.create(:subscription, user: user_with_budget, price: 8000, status: :active)
+        expect(user_with_budget.budget_remaining).to eq(-3000)
+      end
+
+      it "returns budget amount when no subscriptions" do
+        expect(user_with_budget.budget_remaining).to eq(5000)
+      end
+    end
+  end
 end

@@ -1,1 +1,45 @@
-<%= @user.name %>, <%= @user.email %>
+<% provide(:title, @user.name) %>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">ユーザープロフィール</h3>
+          <% if current_user == @user %>
+            <%= link_to "設定", edit_user_path(@user), class: "btn btn-outline-primary btn-sm" %>
+          <% end %>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-3">
+              <strong>名前:</strong>
+            </div>
+            <div class="col-sm-9">
+              <%= @user.name %>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <strong>メールアドレス:</strong>
+            </div>
+            <div class="col-sm-9">
+              <%= @user.email %>
+            </div>
+          </div>
+          <% if @user.monthly_budget %>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <strong>月額予算:</strong>
+              </div>
+              <div class="col-sm-9">
+                ¥<%= number_with_delimiter(@user.monthly_budget) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

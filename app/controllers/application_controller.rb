@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def correct_user
-    @user = User.find_by(id: params[:user_id])
+    @user = User.find_by(id: params[:user_id] || params[:id])
     unless @user == current_user
       flash[:danger] = "権限がありません"
       redirect_to root_path

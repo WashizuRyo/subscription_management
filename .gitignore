@@ -38,3 +38,4 @@
 
 # Ignore IDE files
 .idea/
+.idea/subscription_management.iml
