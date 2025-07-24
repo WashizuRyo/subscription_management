@@ -11,6 +11,7 @@ class User < ApplicationRecord
             format: { with: VALID_EMAIL_REGEX },
             uniqueness: true
   validates :password, length: { minimum: 6 }
+  validates :monthly_budget, presence: true, numericality: { greater_than_or_equal_to: 0 }
   has_secure_password
 
   def self.digest(string)
