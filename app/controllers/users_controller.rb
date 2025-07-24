@@ -13,8 +13,9 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     
-    # パスワードが空の場合は更新しない
+    # パスワードが空の場合はバリデーションをスキップ
     if params[:user][:password].blank?
+      @user.skip_password_validation = true
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
