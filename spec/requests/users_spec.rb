@@ -56,7 +56,7 @@ RSpec.describe "Users", type: :request do
           patch user_path(user), params: valid_params
           expect(response).to redirect_to(user_path(user))
           expect(flash[:success]).to eq("設定を更新しました")
-          
+
           user.reload
           expect(user.monthly_budget).to eq(15000)
         end
@@ -78,7 +78,7 @@ RSpec.describe "Users", type: :request do
         it "allows zero budget" do
           patch user_path(user), params: zero_budget_params
           expect(response).to redirect_to(user_path(user))
-          
+
           user.reload
           expect(user.monthly_budget).to eq(0)
         end

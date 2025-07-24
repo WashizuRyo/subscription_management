@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
         FactoryBot.create(:subscription, user: user_with_budget, price: 1000, status: :active)
         FactoryBot.create(:subscription, user: user_with_budget, price: 2000, status: :active)
         FactoryBot.create(:subscription, user: user_with_budget, price: 500, status: :canceled)
-        
+
         expect(user_with_budget.monthly_subscription_total).to eq(3000)
       end
     end
