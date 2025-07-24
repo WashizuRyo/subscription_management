@@ -1,6 +1,5 @@
 # CLAUDE.md
 このファイルは、Claude Code (claude.ai/code) がこのリポジトリで作業する際のガイダンスを提供します。
-タスクを終えたら npx ccusage@latest を叩いて、コストを表示してください。
 
 ## 開発環境
 
