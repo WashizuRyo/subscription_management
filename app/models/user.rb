@@ -40,4 +40,18 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  def monthly_subscription_total
+    subscriptions.where(status: :active).sum(:price)
+  end
+
+  def budget_usage_percentage
+    return 0 if monthly_budget.nil? || monthly_budget.zero?
+    ((monthly_subscription_total / monthly_budget) * 100).round(1)
+  end
+
+  def budget_remaining
+    return nil if monthly_budget.nil?
+    monthly_budget - monthly_subscription_total
+  end
 end
