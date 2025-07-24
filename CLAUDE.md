@@ -1,10 +1,17 @@
 # CLAUDE.md
-
 このファイルは、Claude Code (claude.ai/code) がこのリポジトリで作業する際のガイダンスを提供します。
+タスクを終えたら npx ccusage@latest を叩いて、コストを表示してください。
 
 ## 開発環境
 
 これはDockerコンテナで動作するRuby on Rails 8のサブスクリプション管理アプリケーションです。
+
+### タスクを終えたらやること
+- `npx ccusage@latest` を実行して、使用量を確認
+- `bin/rubocop --auto-correct` を実行して、コードの自動修正
+- `docker compose exec app bin/rails spec`を実行して、テストを実行
+
+エラーが発生した場合は，エラーが解消されるまで修正を繰り返してください。
 
 ### よく使用するコマンド
 
@@ -44,6 +51,7 @@
 - `SearchSubscriptionForm`による検索機能
 - タグベースのカテゴリ分類
 - 請求サマリー付きダッシュボード
+- 月額予算設定・使用率可視化機能
 
 **アプリケーション構造:**
 - コントローラーはusersの下にネストされたルートでRESTfulパターンに従う
@@ -75,6 +83,14 @@
 - `SearchSubscriptionForm`が複雑なサブスクリプションフィルタリングを処理
 - テキスト、日付、多列ソートをサポート
 - will_paginate gemによるページネーション
+
+**月額予算機能:**
+- Userモデルの`monthly_budget`カラムで予算上限を管理
+- `monthly_subscription_total`メソッドでアクティブなサブスクの月額合計を計算
+- `budget_usage_percentage`メソッドで予算使用率を算出
+- `budget_remaining`メソッドで残り予算（または超過額）を計算
+- ダッシュボードで使用率をプログレスバーで可視化（緑50%未満/黄50-80%/赤80%超）
+- ユーザー設定画面で予算の設定・更新が可能
 
 ### 開発メモ
 
