@@ -90,6 +90,38 @@ RSpec.describe SearchSubscriptionForm, type: :model do
       expect(subscriptions.first.price).to eq 90
     end
 
+    it "returns subscriptions when billing_day_of_month matches the numeric filter" do
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: 5)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: 15)
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: 28)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "billing_day_of_month",
+                              date_filter_start: "15",
+                              date_filter_pattern: "exact")
+
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions.length).to eq 1
+      expect(subscriptions.first.billing_day_of_month).to eq 15
+    end
+
+    it "adds an error when range filter value cannot be parsed" do
+      FactoryBot.create(:subscription, user: user, billing_day_of_month: 10)
+
+      form = FactoryBot.build(:search_subscription_form,
+                              current_user: user,
+                              filter_column: "billing_day_of_month",
+                              date_filter_start: "invalid",
+                              date_filter_pattern: "exact")
+
+      subscriptions = form.search_subscriptions
+
+      expect(subscriptions).to be_empty
+      expect(form.errors[:base]).to include "無効な検索値です"
+    end
+
     it "returns subscriptions when name contains search term (partial match)" do
       FactoryBot.create(:subscription, user: user, name: "Netflix Premium")
       FactoryBot.create(:subscription, user: user, name: "Netflix Basic")

@@ -8,8 +8,8 @@ class SearchSubscriptionForm
   attribute :filter_column, :string
   attribute :text_filter_value, :string
   attribute :text_filter_pattern, :string
-  attribute :date_filter_start, :date
-  attribute :date_filter_end, :date
+  attribute :date_filter_start, :string
+  attribute :date_filter_end, :string
   attribute :date_filter_pattern, :string
   attribute :first_column, :string
   attribute :first_direction, :string
@@ -50,8 +50,8 @@ class SearchSubscriptionForm
   def build_search_query
     if text_filter?
       filter_by_text
-    elsif date_filter?
-      filter_by_date
+    elsif range_filter?
+      filter_by_range
     else
       ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].matches("%#{ActiveRecord::Base.sanitize_sql_like(text_filter_value)}%")) }
     end
@@ -71,17 +71,28 @@ class SearchSubscriptionForm
     end
   end
 
-  def filter_by_date
-    if date_filter_pattern == "exact"
-      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].eq(date_filter_start)) }
-    elsif date_filter_pattern == "before"
-      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].lt(date_filter_start)) }
-    elsif date_filter_pattern == "after"
-      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].gt(date_filter_start)) }
-    elsif date_filter_pattern == "between"
-      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].gteq(date_filter_start).and(Subscription.arel_table[filter_column.to_sym].lteq(date_filter_end))) }
+  def filter_by_range
+    column = Subscription.arel_table[filter_column.to_sym]
+    start_value = parse_range_value(date_filter_start, :start)
+    end_value = if date_filter_pattern == "between"
+      parse_range_value(date_filter_end, :end)
+    end
+
+    return ->(scope) { scope.none } if start_value.nil?
+
+    case date_filter_pattern
+    when "exact"
+      ->(scope) { scope.where(column.eq(start_value)) }
+    when "before"
+      ->(scope) { scope.where(column.lt(start_value)) }
+    when "after"
+      ->(scope) { scope.where(column.gt(start_value)) }
+    when "between"
+      return ->(scope) { scope.none } if end_value.nil?
+
+      ->(scope) { scope.where(column.gteq(start_value).and(column.lteq(end_value))) }
     else
-      ->(scope) { scope.where(Subscription.arel_table[filter_column.to_sym].eq(date_filter_start)) }
+      ->(scope) { scope.where(column.eq(start_value)) }
     end
   end
 
@@ -94,8 +105,8 @@ class SearchSubscriptionForm
     column_type == :string
   end
 
-  def date_filter?
-    column_type == :date || column_type == :decimal
+  def range_filter?
+    column_type.in?([:date, :decimal, :integer])
   end
 
   def column_type
@@ -118,8 +129,12 @@ class SearchSubscriptionForm
 
     if text_filter?
       text_filter_value.present?
-    elsif date_filter?
-      date_filter_start.present?
+    elsif range_filter?
+      if date_filter_pattern == "between"
+        date_filter_start.present? && date_filter_end.present?
+      else
+        date_filter_start.present?
+      end
     else
       text_filter_value.present?
     end
@@ -128,5 +143,32 @@ class SearchSubscriptionForm
   def sort_params_present?
     first_column.present? && first_direction.present? ||
     second_column.present? && second_direction.present?
+  end
+
+  def parse_range_value(value, _position)
+    return if value.blank?
+
+    result = cast_range_value(value)
+    result
+  rescue ArgumentError, TypeError
+    errors.add(:base, "無効な検索値です") unless errors[:base].include?("無効な検索値です")
+    nil
+  end
+
+  def cast_range_value(value)
+    type = attribute_type
+    return value if type.nil?
+
+    type.deserialize(value).tap do |casted|
+      if casted.nil?
+        errors.add(:base, "無効な検索値です") unless errors[:base].include?("無効な検索値です")
+      end
+    end
+  end
+
+  def attribute_type
+    return if filter_column.blank?
+
+    Subscription.type_for_attribute(filter_column)
   end
 end
