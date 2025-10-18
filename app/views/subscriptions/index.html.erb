@@ -14,13 +14,39 @@
                 <div class="text-start">
                   <%= f.label :filter_column, "フィルター", class: "form-label" %>
                 </div>
-                <%= f.select :filter_column, [["選択してください", ""],
-                                              [Subscription.human_attribute_name(:name), "name"],
-                                              [Subscription.human_attribute_name(:plan), "plan"],
-                                              [Subscription.human_attribute_name(:price), "price"],
-                                              [Subscription.human_attribute_name(:start_date), "start_date"],
-                                              [Subscription.human_attribute_name(:end_date), "end_date"],
-                                              [Subscription.human_attribute_name(:billing_day_of_month), "billing_day_of_month"]], {},
+                <% filter_column_options = [
+                  ["選択してください", ""],
+                  [Subscription.human_attribute_name(:name), "name", { data: { filter_type: "text" } }],
+                  [Subscription.human_attribute_name(:plan), "plan", { data: { filter_type: "text" } }],
+                  [Subscription.human_attribute_name(:price), "price", { data: {
+                    filter_type: "number",
+                    range_start_label: Subscription.human_attribute_name(:price),
+                    range_end_label: Subscription.human_attribute_name(:price),
+                    range_step: "0.01",
+                    range_min: "0"
+                  } }],
+                  [Subscription.human_attribute_name(:start_date), "start_date", { data: {
+                    filter_type: "date",
+                    range_start_label: Subscription.human_attribute_name(:start_date),
+                    range_end_label: Subscription.human_attribute_name(:end_date)
+                  } }],
+                  [Subscription.human_attribute_name(:end_date), "end_date", { data: {
+                    filter_type: "date",
+                    range_start_label: Subscription.human_attribute_name(:end_date),
+                    range_end_label: Subscription.human_attribute_name(:end_date)
+                  } }],
+                  [Subscription.human_attribute_name(:billing_day_of_month), "billing_day_of_month", { data: {
+                    filter_type: "number",
+                    range_start_label: Subscription.human_attribute_name(:billing_day_of_month),
+                    range_end_label: Subscription.human_attribute_name(:billing_day_of_month),
+                    range_step: "1",
+                    range_min: "1",
+                    range_max: "31"
+                  } }]
+                ] %>
+                <%= f.select :filter_column,
+                             options_for_select(filter_column_options, f.object.filter_column),
+                             {},
                              class: "form-select" %>
               </div>
               <div class="d-flex align-items-end">
@@ -35,7 +61,7 @@
                 </div>
               </div>
               <div class="d-flex align-items-end">
-                <div id="date_filter_fields" style="display: none;">
+                <div id="range_filter_pattern_container" style="display: none;">
                   <%= f.select :date_filter_pattern, [["完全一致", "exact"],
                                                       ["指定日より前", "before"],
                                                       ["指定日より後", "after"],
@@ -45,20 +71,20 @@
                 </div>
               </div>
             </div>
-            <div id="q_text_filter_patter" style="display: none;" class="mb-2">
+            <div id="range_filter_fields" style="display: none;" class="mb-2">
               <div class="d-flex flex-column text-start gap-1 mb-1">
-                <%= f.label :date_filter_start, Subscription.human_attribute_name(:start_date), class: "form-label" %>
-                <%= f.date_field :date_filter_start, class: "form-control" %>
+                <%= f.label :date_filter_start, Subscription.human_attribute_name(:start_date), class: "form-label", id: "range_filter_start_label" %>
+                <%= f.text_field :date_filter_start, class: "form-control", id: "range_filter_start_input", disabled: true %>
               </div>
-              <div id="date_filter_end_field" style="display: none;">
+              <div id="range_filter_end_field" style="display: none;">
                 <div class="d-flex flex-column text-start gap-1">
-                  <%= f.label :date_filter_end, Subscription.human_attribute_name(:end_date), class: "form-label" %>
-                  <%= f.date_field :date_filter_end, class: "form-control" %>
+                  <%= f.label :date_filter_end, Subscription.human_attribute_name(:end_date), class: "form-label", id: "range_filter_end_label" %>
+                  <%= f.text_field :date_filter_end, class: "form-control", id: "range_filter_end_input", disabled: true %>
                 </div>
               </div>
             </div>
             <div id="text_filter_fields" style="display: none;" class="mb-3">
-              <%= f.search_field :text_filter_value, placeholder: "検索値を入力してください", class: "w-100 form-control" %>
+              <%= f.search_field :text_filter_value, placeholder: "検索値を入力してください", class: "w-100 form-control", disabled: true %>
             </div>
             <%= f.submit "フィルターを追加", class: "btn btn-outline-secondary w-100", id: "add_filter_button" %>
           </div>
